@@ -1,9 +1,10 @@
 import "./App.css";
 import Home from "./components/Home";
 import Navbar from "./components/Navbvar";
-import UserSignUp from './components/UserSignUp'
+import UserSignUp from "./components/UserSignUp";
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import UserSignIn from "./components/UserSignIn";
 
 function App() {
   return (
@@ -13,11 +14,14 @@ function App() {
         <Route exact path="/">
           <Home />
         </Route>
-        <Route path="/user/login">
-          <UserSignUp/>
+        <Route path="/user/signup">
+          <UserSignUp />
         </Route>
-      </Switch> 
-    </Router> 
+        <Route path="/user/login">
+          <UserSignIn />
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 
