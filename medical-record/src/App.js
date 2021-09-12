@@ -3,13 +3,12 @@ import Home from "./components/Home";
 import Navbar from "./components/Navbvar";
 import UserSignUp from './components/UserSignUp'
 
-import {BrowserRouter as Router,Route,Switch} from 'react-router-dom'
-
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 function App() {
   return (
     <Router className="App">
-      <Navbar/>
+      <Navbar />
       <Switch>
         <Route exact path="/">
           <Home />
