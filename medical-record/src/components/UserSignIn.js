@@ -22,6 +22,9 @@ const UserSignIn = () => {
   };
   return (
     <div>
+      <div id="signupLeftImage">
+        <img id="design" src={signUpLogo} alt="signupImage" />
+      </div>
       <div className={type === "login" ? "fadeIn" : "fadeOut"} id="logInform">
         <h2 id="heading1">Login Now</h2>
         <div id="details1">
