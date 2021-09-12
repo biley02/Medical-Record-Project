@@ -23,7 +23,7 @@ const UserSignUp=()=>{
     return(
         <div id="signup">
             <div id="signupLeftImage">
-                <image id="design" src={signUpLogo} alt="signupImage"/>
+                <img id="design" src={signUpLogo} alt="signupImage"/>
             </div>
             <div className={type==='signup'?'fadeIn':'fadeOut'} id='signUpForm'>
                 <h2 id="heading">Register Your Account!</h2>
