@@ -1,5 +1,7 @@
 import React from "react";
 import "../styles/home.css";
+import img_aboutus from "../img/aboutus-logo-1 (1).png";
+import Service from "./Service";
 
 const Home = () => {
   return (
@@ -26,7 +28,7 @@ const Home = () => {
               <div className="card">
                 <img
                   className="card-img-top img-fluid"
-                  src="/img/aboutus-logo-1 (1).png"
+                  src={img_aboutus}
                   alt=""
                 />
               </div>
@@ -38,18 +40,22 @@ const Home = () => {
         <div className="line-mf"></div>
         <div className="container">
           <div className="row about-us">
-            <div className="col-md-7">
-              <div className="cover">
-                <div className="line-mf1"></div>
+            <div className="col-md-4">
+              <div className="card">
+                <img
+                  className="card-img-top img-fluid"
+                  src={img_aboutus}
+                  alt=""
+                />
               </div>
             </div>
+            <div className="col-md-2"></div>
 
-            <div className="col-md-5">
+            <div className="col-md-6">
               <h1>
                 {" "}
                 <span>About us</span>{" "}
               </h1>
-              <div></div>
 
               <br />
 
@@ -86,126 +92,48 @@ const Home = () => {
             </div>
           </div>
           <div className="row">
-            <div className="col-md-4">
-              <div
-                style={{ backgroundColor: "rgb(211, 247, 247)" }}
-                className="service-box"
-              >
-                <div className="service-ico">
-                  <span className="ico-circle">
-                    <i className="fa fa-plus-circle"></i>
-                  </span>
-                </div>
-                <div className="service-content">
-                  <h2 className="s-title">Emergency</h2>
-                  <p className="s-description text-center">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            <Service
+              title="Emergency"
+              card_img="fa fa-plus-circle"
+              desc="Lorem ipsum dolor sit amet consectetur adipisicing elit.
                     Magni adipisci eaque autem fugiat! Quia, provident vitae!
-                    Magni tempora perferendis eum non provident.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div
-                style={{ backgroundColor: "rgb(211, 247, 247)" }}
-                className="service-box"
-              >
-                <div className="service-ico">
-                  <span className="ico-circle">
-                    <i className="fa fa-ambulance"></i>
-                  </span>
-                </div>
-                <div className="service-content">
-                  <h2 className="s-title">Ambulance</h2>
-                  <p className="s-description text-center">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Magni tempora perferendis eum non provident."
+            />
+            <Service
+              title="Ambulance"
+              card_img="fa fa-ambulance"
+              desc="Lorem ipsum dolor sit amet consectetur adipisicing elit.
                     Magni adipisci eaque autem fugiat! Quia, provident vitae!
-                    Magni tempora perferendis eum non provident.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div
-                style={{ backgroundColor: "rgb(211, 247, 247)" }}
-                className="service-box"
-              >
-                <div className="service-ico">
-                  <span className="ico-circle">
-                    <i className="fa fa-stethoscope"></i>
-                  </span>
-                </div>
-                <div className="service-content">
-                  <h2 className="s-title">Checkup</h2>
-                  <p className="s-description text-center">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Magni tempora perferendis eum non provident."
+            />
+            <Service
+              title="Checkup"
+              card_img="fa fa-stethoscope"
+              desc="Lorem ipsum dolor sit amet consectetur adipisicing elit.
                     Magni adipisci eaque autem fugiat! Quia, provident vitae!
-                    Magni tempora perferendis eum non provident.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div
-                style={{ backgroundColor: "rgb(211, 247, 247)" }}
-                className="service-box"
-              >
-                <div className="service-ico">
-                  <span className="ico-circle">
-                    <i className="fa fa-user-md"></i>
-                  </span>
-                </div>
-                <div className="service-content">
-                  <h2 className="s-title">Top Doctors</h2>
-                  <p className="s-description text-center">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Magni tempora perferendis eum non provident."
+            />
+            <Service
+              title="Top Doctors"
+              card_img="fa fa-user-md"
+              desc="Lorem ipsum dolor sit amet consectetur adipisicing elit.
                     Magni adipisci eaque autem fugiat! Quia, provident vitae!
-                    Magni tempora perferendis eum non provident.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div
-                style={{ backgroundColor: "rgb(211, 247, 247)" }}
-                className="service-box"
-              >
-                <div className="service-ico">
-                  <span className="ico-circle">
-                    <i className="fa fa-credit-card"></i>
-                  </span>
-                </div>
-                <div className="service-content">
-                  <h2 className="s-title">Low Price</h2>
-                  <p className="s-description text-center">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Magni tempora perferendis eum non provident."
+            />
+            <Service
+              title="Low Price"
+              card_img="fa fa-credit-card"
+              desc="Lorem ipsum dolor sit amet consectetur adipisicing elit.
                     Magni adipisci eaque autem fugiat! Quia, provident vitae!
-                    Magni tempora perferendis eum non provident.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div
-                style={{ backgroundColor: "rgb(211, 247, 247)" }}
-                className="service-box"
-              >
-                <div className="service-ico">
-                  <span className="ico-circle">
-                    <i className="fa fa-medkit"></i>
-                  </span>
-                </div>
-                <div className="service-content">
-                  <h2 className="s-title">Affordable</h2>
-                  <p className="s-description text-center">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Magni tempora perferendis eum non provident."
+            />
+            <Service
+              title="Affordable"
+              card_img="fa fa-medkit"
+              desc="Lorem ipsum dolor sit amet consectetur adipisicing elit.
                     Magni adipisci eaque autem fugiat! Quia, provident vitae!
-                    Magni tempora perferendis eum non provident.
-                  </p>
-                </div>
-              </div>
-            </div>
+                    Magni tempora perferendis eum non provident."
+            />
           </div>
         </div>
       </section>
