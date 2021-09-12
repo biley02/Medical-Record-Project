@@ -7,6 +7,7 @@ import signUpLogo from '../img/signupLogo.png'
 
 const type='signup'
 const UserSignUp=()=>{
+    
     const [userSignUpDetails,setUserSignUpDetails]=useState({name:'',email:'',phoneNumber:'',password:'',confirmPassword:''})
     
     const handleChange=(e)=>{
