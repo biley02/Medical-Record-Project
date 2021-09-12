@@ -1,10 +1,30 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import '../styles/navbar.css'
 import navLogo from '../img/medical1.png'
 
-import { Link } from 'react-router-dom'
+import { Link,useLocation } from 'react-router-dom'
 
 const Navbar=()=>{
+
+    const [logoutRoute,setLogOutRoute]=useState('#')
+
+    const location=useLocation().pathname
+    
+    useEffect(()=>{
+        if(location.substr(0,5)==='/user')
+        {
+            setLogOutRoute('/user/logout')
+            return
+        }
+        else if(location.substr(0,9)==='/hospital')
+        {
+            setLogOutRoute('/hospital/logout')
+            return
+        }
+        setLogOutRoute('#')
+        
+    },[location])
+
     return (
         <div id="containers" data-target="#Navbar">
     <nav className="navbar smart-scroll navbar-expand-lg navbar-light fixed-top" id="Navbar">
@@ -29,7 +49,7 @@ const Navbar=()=>{
                     </div>
                   </li>
                 {/* <li class="nav-item"><a class="nav-link" href="/user/logout">LOGOUT</a></li> */}
-                <li className="nav-item"><Link className="nav-link" to="/user/logout">LOGOUT</Link></li>
+                <li className="nav-item"><Link className="nav-link" to={logoutRoute}>LOGOUT</Link></li>
             </ul>
         </div>
     </nav>
