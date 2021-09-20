@@ -16,6 +16,7 @@ function App() {
         <Route exact path="/">
           <Home />
         </Route>
+
         <Route path="/user/signup">
           <UserSignUp />
         </Route>
@@ -23,11 +24,10 @@ function App() {
           <UserSignIn />
         </Route>
         <Route path="/user/profile">
-          <UserSideComponent/>
+          <UserSideComponent />
         </Route>
       </Switch>
-      <Footer>
-      </Footer>
+      <Footer></Footer>
     </Router>
   );
 }
