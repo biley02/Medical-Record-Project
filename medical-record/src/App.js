@@ -5,6 +5,7 @@ import UserSignUp from "./components/UserSignUp";
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import UserSignIn from "./components/UserSignIn";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -21,6 +22,8 @@ function App() {
           <UserSignIn />
         </Route>
       </Switch>
+      <Footer>
+      </Footer>
     </Router>
   );
 }
