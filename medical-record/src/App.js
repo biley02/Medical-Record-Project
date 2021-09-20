@@ -6,6 +6,7 @@ import UserSignUp from "./components/UserSignUp";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import UserSignIn from "./components/UserSignIn";
 import Footer from "./components/Footer";
+import UserSideComponent from "./components/UserSideComponent";
 
 function App() {
   return (
@@ -20,6 +21,9 @@ function App() {
         </Route>
         <Route path="/user/login">
           <UserSignIn />
+        </Route>
+        <Route path="/user/profile">
+          <UserSideComponent/>
         </Route>
       </Switch>
       <Footer>
