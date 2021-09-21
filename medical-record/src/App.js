@@ -22,10 +22,10 @@ function App() {
         <Route path="/user/login">
           <UserSignIn />
         </Route>
-        <Route path="/user/profile">
-          <UserSideComponent/>
-        </Route>
       </Switch>
+      <Route path="/user/profile">
+        <UserSideComponent/>
+      </Route>
       <Footer>
       </Footer>
     </Router>
