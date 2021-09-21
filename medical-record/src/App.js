@@ -24,10 +24,11 @@ function App() {
           <UserSignIn />
         </Route>
         <Route path="/user/profile">
-          <UserSideComponent />
+          <UserSideComponent/>
         </Route>
       </Switch>
-      <Footer></Footer>
+
+      <Footer/>
     </Router>
   );
 }

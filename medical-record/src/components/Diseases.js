@@ -7,7 +7,7 @@ const DpModal = () => {
 
   return (
     <div>
-      <button onClick={() => setModalIsOpen(true)}>Add New</button>
+      <button className='dropdown-item' onClick={() => setModalIsOpen(true)}>Add New</button>
       <Modal
         isOpen={modalIsOpen}
         shouldCloseOnOverlayClick={false}
