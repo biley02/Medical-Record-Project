@@ -25,9 +25,14 @@ const UserSideComponent = () => {
     console.log("close nav tab");
   };
 
+  const myFunctionMobile=()=>{
+    document.getElementById("myDropdownMobile").classList.toggle("show");
+  }
+
   // console.log(path)
 
   return (
+    <>
     <div className="desktop-view">
       <div className="container-fluid profile-body">
         <div className="row">
@@ -140,6 +145,71 @@ const UserSideComponent = () => {
         </div>
       </div>
     </div>
+    <div className="mobile-view">
+      <div className="container-fluid profile-body">
+        <div className="row">
+          <div className="col-lg-2 col-sm-4 col-12 order-3 order-sm-1" id="pSec1">
+            <div id="leftPanel">
+              <div className="lists active-list">
+                <a href="/user/profile">Profile</a>
+								<img src={defaultDp} className="Icons profile-icon"/>
+              </div>
+
+              <div className="lists dropdown">
+                  <a href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+										aria-haspopup="true" aria-expanded="false" onclick={()=>{myFunctionMobile()}}>
+										Diseases
+									</a>
+                  <img src={diseaseImage} className="Icons"/>
+                  <div id="myDropdownMobile" className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <button className='dropdown-item'>
+                      Add New
+                    </button>
+                  </div>
+              </div>
+
+              <div className="lists">
+                <a href="#">Appointments</a>
+                <img src={AppointmentImage} className="Icons"/>
+              </div>
+
+              <div className="lists">
+                <a href="#">Progress Report</a>
+                <img src={progressImage} className="Icons"/>
+              </div>
+
+              <div className="lists">
+                <a href="#">Message</a>
+                <img src={messageImage} className="Icons"/>
+              </div>
+
+              <div className="lists">
+                <a href="#">Settings</a>
+                <img src={settingsImage} className="Icons"/>
+              </div>
+
+            </div>
+          </div>
+          {path==='/user/profile'||'/user/hospitalSearch'?'':''}
+
+          <div className="col-lg-2 col-sm-0 col-12 order-2 order-sm-3" id="pSec3">
+            <div id="mySidenav" className="sidenav">
+              <div id="Dr">
+                <p className="sidenavHeader">Hospitals</p>
+                <a className="closebtn" onclick={''}><i
+									className="fa fa-angle-left sideNav " aria-hidden="true"></i></a>
+              </div>
+            </div>
+            <div id="Dr-sec3">
+								<button className="sideNavButton" onclick={''}>
+									<a>Hospitals</a><img src={doctorIcon}
+										className="Icons doctor-icon"/></button>
+						</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </>
   );
 };
 
