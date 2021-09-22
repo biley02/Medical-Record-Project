@@ -1,9 +1,10 @@
-/* body {
+body {
     margin: 0;
     padding: 0;
-    overflow-y: scroll;
+    /*box-sizing:border-box;*/
+    overflow-y: hidden;
     overflow-x: hidden;
-} */
+}
 #logo {
     width: 45%;
     height: 45%;
@@ -137,7 +138,7 @@ ul li {
     background-color: #5ca0ff;
     float: left;
 }
-#signUp {
+#signup {
     display: flex;
     margin-top: 0;
     width: 100vw;
@@ -170,7 +171,7 @@ ul li {
     transition: 1s !important;
 }
 
-#signUpform {
+#signUpForm {
     margin: 5vh auto;
     width: 50vw;
     height: 100vh;
@@ -232,7 +233,7 @@ top:8px;
     left: 0;
 }
 .inputDetails {
-    /* display: inline-block; */
+    display: inline-block;
     width: 80%;
     height: 4.5vh;
     padding-left: 20px;
@@ -344,7 +345,7 @@ border:2px solid blue;
     }
 }
 @media screen and (max-width: 1050px) {
-    #signUpform {
+    #signUpForm {
         margin: 6vh auto;
     }
     .inputDetails {
@@ -379,7 +380,7 @@ border:2px solid blue;
     #design {
         margin-top: 26vh;
     }
-    #signUpform {
+    #signUpForm {
         margin: 5vh auto;
     }
     #heading {
@@ -400,7 +401,7 @@ border:2px solid blue;
     }
 }
 @media screen and (max-width: 670px) {
-    #signUpform {
+    #signUpForm {
         margin: 5vh auto;
     }
     #heading {
@@ -445,7 +446,7 @@ border:2px solid blue;
     #Form {
         width: 100vw;
     }
-    #signUpform {
+    #signUpForm {
         width: 100vw;
         align-items: center;
         text-align: left;
