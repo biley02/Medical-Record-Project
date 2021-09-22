@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import UserSignIn from "./components/UserSignIn";
 import Footer from "./components/Footer";
 import UserSideComponent from "./components/UserSideComponent";
+import UserDiseaseComponent from "./components/UserDiseaseComponent";
 
 function App() {
   return (
@@ -24,6 +25,9 @@ function App() {
           <UserSignIn />
         </Route>
         <Route path="/user/profile">
+          <UserSideComponent/>
+        </Route>
+        <Route path='/user/disease'>
           <UserSideComponent/>
         </Route>
       </Switch>
