@@ -12,6 +12,9 @@ import settingsImage from "../img/Settings.png";
 import diseaseImage from "../img/disease.png";
 
 import Diseases from "./Diseases";
+import UserMiddleComponent from "./UserMiddleComponent";
+import UserDiseaseComponent from "./UserDiseaseComponent";
+
 
 const UserSideComponent = () => {
   const pathname = useLocation().pathname;
@@ -175,11 +178,20 @@ const UserSideComponent = () => {
                   </div>
                 </div>
               </div>
-              <div class="lists">
+              <div className="lists">
                 <a href="#">Settings</a>
-                <img src={settingsImage} class="Icons" />
+                <img src={settingsImage} className="Icons" />
               </div>
             </div>
+          </div>
+          {path==='/user/profile'?<UserMiddleComponent/>:''}
+          {path==='/user/disease'?<UserDiseaseComponent/>:''}
+          <div className="col-lg-2 col-sm-0 col-12 order-2 order-sm-3" id="pSec3">
+              <div id="Dr"><a>Doctors </a><img src={doctorIcon} className="Icons doctor-icon"/></div>
+              <form method="POST" action="/user/hospitalSearch" id="search-form">
+                <input type="text" placeholder='Search...' className="mobile-preview shadow floating-animate" id='id_search1' />
+                <button id="id_search_button1">click</button>
+              </form>
           </div>
         </div>
       </div>
@@ -229,7 +241,8 @@ const UserSideComponent = () => {
 
             </div>
           </div>
-          {path==='/user/profile'||'/user/hospitalSearch'?'':''}
+          {path==='/user/profile'?<UserMiddleComponent/>:''}
+          {path==='/user/disease'?<UserDiseaseComponent/>:''}
 
           <div className="col-lg-2 col-sm-0 col-12 order-2 order-sm-3" id="pSec3">
             <div id="mySidenav" className="sidenav">

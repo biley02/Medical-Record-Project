@@ -139,6 +139,7 @@ body {
     background: unset;
     cursor: pointer;
 }
+
 #heading2 {
     font-size: 90%;
     font-weight: bold;
@@ -351,7 +352,7 @@ body {
 /* mobile view */
 @media (max-width: 576px) {
     #sub1 {
-        height: 62vh;
+        /* height: 62vh; */
         box-shadow: none;
     }
     #patientDetails {
@@ -469,7 +470,7 @@ body {
 @media (min-width: 420px) and (max-width: 540px) {
     #sub1 {
         margin-bottom: 0.5%;
-        height: 60vh;
+        /* height: 60vh; */
     }
     /* #Dr{
     position:relative;
