@@ -1,5 +1,4 @@
 import React from "react"
-
 import "../styles/footer.css"
 import footerLogo from "../img/medical1.png"
 
