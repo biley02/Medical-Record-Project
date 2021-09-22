@@ -12,6 +12,8 @@ import settingsImage from "../img/Settings.png";
 import diseaseImage from "../img/disease.png";
 
 import Diseases from "./Diseases";
+import UserMiddleComponent from "./UserMiddleComponent";
+import UserMiddleComponentMobile from "./UserMiddleComponentMobile";
 
 const UserSideComponent = () => {
   const pathname = useLocation().pathname;
@@ -181,6 +183,7 @@ const UserSideComponent = () => {
               </div>
             </div>
           </div>
+          {path==='/user/profile'||'/user/hospitalSearch'?<UserMiddleComponent/>:''}
         </div>
       </div>
     </div>
@@ -229,7 +232,7 @@ const UserSideComponent = () => {
 
             </div>
           </div>
-          {path==='/user/profile'||'/user/hospitalSearch'?'':''}
+          {path==='/user/profile'?<UserMiddleComponent/>:''}
 
           <div className="col-lg-2 col-sm-0 col-12 order-2 order-sm-3" id="pSec3">
             <div id="mySidenav" className="sidenav">

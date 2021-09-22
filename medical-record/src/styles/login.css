@@ -19,7 +19,7 @@
 	line-height:50.95px;
 	letter-spacing: 0.03em;
 	margin-bottom: 3vh;
-	margin-left: 16vw;
+	/* margin-left: 16vw; */
 }
 #logInText{
 	text-align:center;
@@ -90,7 +90,7 @@
 	}
 	#heading1{
 		margin-left: inherit;
-		text-align: center;
+		/* text-align: center; */
 		margin-left: 0;
 	}
 }
