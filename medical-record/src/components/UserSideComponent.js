@@ -13,7 +13,7 @@ import diseaseImage from "../img/disease.png";
 
 import Diseases from "./Diseases";
 import UserMiddleComponent from "./UserMiddleComponent";
-import UserMiddleComponentMobile from "./UserMiddleComponentMobile";
+
 
 const UserSideComponent = () => {
   const pathname = useLocation().pathname;
