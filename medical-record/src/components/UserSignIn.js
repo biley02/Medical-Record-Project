@@ -25,9 +25,10 @@ const UserSignIn = () => {
       <div id="signupLeftImage">
         <img id="design" src={signUpLogo} alt="signupImage" />
       </div>
-      <div className={type === "login" ? "fadeIn" : "fadeOut"} id="logInform">
-        <h2 id="heading1">Login Now</h2>
-        <div id="details1">
+      <div className={type === "login" ? "fadeIn" : "fadeOut"} id="loginForm">
+        <h2 id="heading2">Login Now</h2>
+        <div id="Form1">
+          <div id="details1">
           <form onSubmit={loginSubmit}>
             <label className="label2">Your email*</label>
             <input
@@ -56,6 +57,8 @@ const UserSignIn = () => {
               Login
             </button>
           </form>
+        </div>
+
         </div>
       </div>
     </div>
