@@ -242,6 +242,7 @@ const UserSideComponent = () => {
             </div>
           </div>
           {path==='/user/profile'?<UserMiddleComponent/>:''}
+          {path==='/user/disease'?<UserDiseaseComponent/>:''}
 
           <div className="col-lg-2 col-sm-0 col-12 order-2 order-sm-3" id="pSec3">
             <div id="mySidenav" className="sidenav">
