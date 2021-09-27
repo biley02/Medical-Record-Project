@@ -2,12 +2,14 @@ import React, { useState } from "react";
 // import "../styles/modal.css";
 import Modal from "react-modal";
 
-const DpModal = () => {
+const Diseases = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   return (
     <div>
-      <button className='dropdown-item' onClick={() => setModalIsOpen(true)}>Add New</button>
+      <button className="dropdown-item" onClick={() => setModalIsOpen(true)}>
+        Add New
+      </button>
       <Modal
         isOpen={modalIsOpen}
         shouldCloseOnOverlayClick={false}
@@ -46,4 +48,4 @@ const DpModal = () => {
   );
 };
 
-export default DpModal;
+export default Diseases;
