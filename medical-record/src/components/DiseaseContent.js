@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import pdfImage from '../img/pdf-image.png'
+
 const DiseaseContent = ({ id }) => {
   const [disease, setDisease] = useState({
     name: "Disease",
@@ -10,7 +12,6 @@ const DiseaseContent = ({ id }) => {
     medicine: [{ originalName: "Doc1", filename: "india" }],
   });
   return (
-    <div>
       <div className="col-lg-8 col-sm-8 col-12 order-1 order-sm-2" id="pSec9">
         <div className="disease-back-link">
           <a href="/user/profile">
@@ -38,7 +39,7 @@ const DiseaseContent = ({ id }) => {
                 >
                   <img
                     className="pdf-img align-self-center mr-3"
-                    src="../img/pdf-image.png"
+                    src={pdfImage}
                     alt="Generic placeholder image"
                     style={{ width: "80px" }}
                   />
@@ -73,7 +74,7 @@ const DiseaseContent = ({ id }) => {
               >
                 <img
                   className="pdf-img align-self-center mr-3"
-                  src="../img/pdf-image.png"
+                  src={pdfImage}
                   alt="Generic placeholder image"
                   style={{ width: "80px" }}
                 />
@@ -121,7 +122,7 @@ const DiseaseContent = ({ id }) => {
           </div>
         </div>
       </div>
-    </div>
+   
   );
 };
 
