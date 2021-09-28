@@ -29,7 +29,7 @@ function App() {
           <UserSideComponent />
         </Route>
         <Route path="/user/disease">
-          <DiseaseContent />
+          <UserSideComponent />
         </Route>
       </Switch>
 

@@ -13,7 +13,7 @@ import diseaseImage from "../img/disease.png";
 
 import Diseases from "./Diseases";
 import UserMiddleComponent from "./UserMiddleComponent";
-import UserDiseaseComponent from "./UserDiseaseComponent";
+import DiseaseContent from "./DiseaseContent";
 
 
 const UserSideComponent = () => {
@@ -185,7 +185,7 @@ const UserSideComponent = () => {
             </div>
           </div>
           {path==='/user/profile'?<UserMiddleComponent/>:''}
-          {path==='/user/disease'?<UserDiseaseComponent/>:''}
+          {path==='/user/disease'?<DiseaseContent/>:''}
           <div className="col-lg-2 col-sm-0 col-12 order-2 order-sm-3" id="pSec3">
               <div id="Dr"><a>Doctors </a><img src={doctorIcon} className="Icons doctor-icon"/></div>
               <form method="POST" action="/user/hospitalSearch" id="search-form">
@@ -242,7 +242,7 @@ const UserSideComponent = () => {
             </div>
           </div>
           {path==='/user/profile'?<UserMiddleComponent/>:''}
-          {path==='/user/disease'?<UserDiseaseComponent/>:''}
+          {path==='/user/disease'?<DiseaseContent/>:''}
 
           <div className="col-lg-2 col-sm-0 col-12 order-2 order-sm-3" id="pSec3">
             <div id="mySidenav" className="sidenav">
