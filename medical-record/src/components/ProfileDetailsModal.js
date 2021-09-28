@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
 
+import profileEditIcon from '../img/profile-edit-icon.png'
+
 const ProfileDetailsModal = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   return (
     <div>
-      <button onClick={() => setModalIsOpen(true)}>Add New</button>
+      <button id="myBtnEdit" onClick={()=>setModalIsOpen(true)}>
+        <img src={profileEditIcon}></img>
+      </button>
       <Modal
         isOpen={modalIsOpen}
         shouldCloseOnOverlayClick={false}

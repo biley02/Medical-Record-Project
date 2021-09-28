@@ -6,6 +6,8 @@ import camera from '../img/camera.png'
 import profileEditIcon from '../img/profile-edit-icon.png'
 
 import '../styles/userProfile.css'
+import DpModal from './DpModal'
+import ProfileDetailsModal from './ProfileDetailsModal'
 
 const UserMiddleComponent=()=>{
 
@@ -19,7 +21,7 @@ const UserMiddleComponent=()=>{
                     <a href="#"><img src={ProfilePic}  id="profileImg"/></a>
                     :<a href="#"><img src="../uploads/<%=user.email%>/profilePic/<%=user.profilePic%>"  id="profileImg"/></a>
                     }
-                    <img src={camera} id="Camera"></img>
+                    <DpModal/>
                 </div>
                 <div className="name-id">
                     <h5 id="name">
@@ -33,9 +35,7 @@ const UserMiddleComponent=()=>{
                 <div id="patientDetails">
                     <div className="heading-and-edit-icon">
                         <h3 id="heading2">Patient Details</h3>
-                        <button id="myBtnEdit">
-                            <img src={profileEditIcon}></img>
-                        </button>
+                        <ProfileDetailsModal/>
                     </div>
                     <label for="bloodGroup" class="detailLevels">Blood Group :{user.bloodGroup?user.bloodGroup:''}</label><br/>
                     <label for="Adress" class="detailLevels">Address :{user.adress?user.adress:''}</label><br/>

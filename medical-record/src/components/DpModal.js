@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
 
+import camera from '../img/camera.png'
+
 const DpModal = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   return (
     <div>
-      <button onClick={() => setModalIsOpen(true)}>Add New</button>
+      <img src={camera} id="Camera" onClick={()=>{setModalIsOpen(true)}}></img>
       <Modal
         isOpen={modalIsOpen}
         shouldCloseOnOverlayClick={false}
