@@ -1,49 +1,41 @@
 import React, { useState } from "react";
-import Modal from "react-modal";
+
+import { FaTimes } from 'react-icons/fa';
+
+import '../styles/modal.css'
 
 import camera from '../img/camera.png'
 
 const DpModal = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
+
   return (
-    <div>
+    <>
       <img src={camera} id="Camera" onClick={()=>{setModalIsOpen(true)}}></img>
-      <Modal
-        isOpen={modalIsOpen}
-        shouldCloseOnOverlayClick={false}
-        onRequestClose={() => setModalIsOpen(false)}
-      >
-        <div>
-          <form
-            class="form-group"
-            method="POST"
-            action="/user/profile/picupload"
-            enctype="multipart/form-data"
-          >
-            <label>Upload Image</label>
-            <div class="input-group">
-              <span class="input-group-btn">
-                <span class="btn btn-default btn-file">
-                  Browse…{" "}
-                  <input type="file" id="profilePic" name="profilePic" />
+      <div className={`${modalIsOpen?'modal-overlay show-modal' : 'modal-overlay'}`}>
+      <div className='dp-modal-container'>
+        {/* <h3>Change Profile Picture</h3> */}
+        <button className='close-modal-btn' onClick={()=>{setModalIsOpen(false)}}>
+          <FaTimes></FaTimes>
+        </button>
+        <form className="form-group"   enctype="multipart/form-data">
+          <label>
+            Uplaod Image
+          </label>
+          <div>
+              <span>
+                <span >
+                    Browse… <input type="file" id="profilePic"/><br/><br/>
                 </span>
               </span>
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Choose a file"
-                readonly
-              />
-            </div>
-            <button type="save" class="save-dp-edit">
-              Save
-            </button>
-          </form>
-          <button onClick={() => setModalIsOpen(false)}>Close</button>
-        </div>
-      </Modal>
-    </div>
+              <input type="text" placeholder="Choose a file" readonly></input>
+              <button type="save">Save</button>
+          </div>
+        </form>
+      </div>
+      </div>
+    </>
   );
 };
 
