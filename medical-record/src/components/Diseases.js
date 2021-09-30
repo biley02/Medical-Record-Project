@@ -15,9 +15,9 @@ const Diseases = () => {
         shouldCloseOnOverlayClick={false}
         onRequestClose={() => setModalIsOpen(false)}
       >
-        <div id="myModal-dp-edit" className="modal-dp-edit">
-          <div className="modal-content-dp-edit">
-            <span className="close-dp-edit">&times;</span>
+        <div id="myModal-add-disease" className="modal-add-disease">
+          <div className="modal-content-add-disease">
+            <span className="close-add-disease">&times;</span>
             <div className="col-md-6">
               <form
                 className="form-group"
@@ -35,7 +35,7 @@ const Diseases = () => {
                   </span>
                 </div>
                 <img id="img-upload" style={{ maxWidth: "30%" }} />
-                <button type="save" className="save-dp-edit">
+                <button type="save" className="save-add-disease">
                   Save
                 </button>
               </form>

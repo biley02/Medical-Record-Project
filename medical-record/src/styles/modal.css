@@ -31,6 +31,18 @@ Modal
   place-items: center;
   position: relative;
 }
+
+.add-details-modal-container {
+  background: white;
+  border-radius: var(--radius);
+  width: 60vw;
+  height: 50vh;
+  max-width: var(--fixed-width);
+  text-align: center;
+  display: grid;
+  place-items: center;
+  position: relative;
+}
 .close-modal-btn {
   position: absolute;
   top: 1rem;
@@ -46,11 +58,21 @@ Modal
   .dp-modal-container {
     width: 70vw;
   }
+
+  .add-details-modal-container{
+    height: 50vh;
+    width: 70vw;
+  }
 }
 
 @media screen and (max-width:600px)
 {
   .dp-modal-container {
+    width: 90vw;
+  }
+
+  .add-details-modal-container{
+    height: 55vh;
     width: 90vw;
   }
 }
