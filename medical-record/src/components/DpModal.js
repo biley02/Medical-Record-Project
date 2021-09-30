@@ -9,6 +9,7 @@ import camera from '../img/camera.png'
 const DpModal = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
+
   return (
     <>
       <img src={camera} id="Camera" onClick={()=>{setModalIsOpen(true)}}></img>
