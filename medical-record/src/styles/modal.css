@@ -43,6 +43,18 @@ Modal
   place-items: center;
   position: relative;
 }
+
+.add-diseases-modal-container {
+  background: white;
+  border-radius: var(--radius);
+  width: 30vw;
+  height: 70vh;
+  max-width: var(--fixed-width);
+  text-align: center;
+  display: grid;
+  place-items: center;
+  position: relative;
+}
 .close-modal-btn {
   position: absolute;
   top: 1rem;
