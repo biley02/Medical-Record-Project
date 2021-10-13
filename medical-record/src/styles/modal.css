@@ -43,6 +43,18 @@ Modal
   place-items: center;
   position: relative;
 }
+
+.add-diseases-modal-container {
+  background: white;
+  border-radius: var(--radius);
+  width: 38vw;
+  height: 55vh;
+  max-width: var(--fixed-width);
+  text-align: center;
+  display: grid;
+  place-items: center;
+  position: relative;
+}
 .close-modal-btn {
   position: absolute;
   top: 1rem;
@@ -63,6 +75,10 @@ Modal
     height: 70vh;
     width: 60vw;
   }
+  .add-diseases-modal-container{
+    height: 55vh;
+    width: 60vw;
+  }
 }
 
 @media screen and (max-width:600px)
@@ -73,6 +89,11 @@ Modal
 
   .add-details-modal-container{
     height: 75vh;
+    width: 90vw;
+  }
+
+  .add-diseases-modal-container{
+    height: 55vh;
     width: 90vw;
   }
 }

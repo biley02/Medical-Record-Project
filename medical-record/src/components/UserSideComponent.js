@@ -10,10 +10,14 @@ import messageImage from "../img/message.png";
 import doctorIcon from "../img/doctor-icon.png";
 import settingsImage from "../img/Settings.png";
 import diseaseImage from "../img/disease.png";
-
-import Diseases from "./Diseases";
 import UserMiddleComponent from "./UserMiddleComponent";
 import DiseaseContent from "./DiseaseContent";
+
+
+import { FaTimes } from 'react-icons/fa';
+
+import '../styles/modal.css'
+
 
 
 const UserSideComponent = () => {
@@ -72,12 +76,48 @@ const UserSideComponent = () => {
   }
 
   // console.log(path)
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   return (
     <>
+      <div className={`${modalIsOpen?'modal-overlay show-modal' : 'modal-overlay'}`}>
+      <div className='add-diseases-modal-container'>
+        {/* <h3>Change Profile Picture</h3> */}
+        <button className='close-modal-btn' onClick={()=>setModalIsOpen(false)}>
+          <FaTimes></FaTimes>
+        </button>
+        <form className="form-group"   enctype="multipart/form-data">
+          <label>
+            Add Diseases
+          </label>
+          <div>
+            <label className="label1" htmlFor="userName">
+              Disease Name
+            </label>    
+            <input /><br/><br/>
+          </div>
+          <div>
+              <span>
+                <span >
+                    Add Documents... <input type="file" id="profilePic"/><br/><br/>
+                </span>
+              </span>
+          </div>
+          <div>
+              <span>
+                <span >
+                    Add Medicine... <input type="file" id="profilePic"/><br/><br/>
+                </span>
+              </span>
+          </div>
+          <button type="save">Save</button>
+        </form>
+      </div>
+      </div>
     <div className="desktop-view">
       <div className="container-fluid profile-body">
         <div className="row">
+ 
           <div
             className="col-lg-2 col-sm-4 col-12 order-3 order-sm-1"
             id="pSec1"
@@ -115,7 +155,9 @@ const UserSideComponent = () => {
                   aria-labelledby="dropdownMenuLink"
                 >
                   <a className="dropdown-item">
-                    <Diseases />
+                    <button className="dropdown-item" onClick={()=>setModalIsOpen(true)}>
+                      Add New
+                    </button>
                   </a>
                 </div>
               </div>
@@ -214,7 +256,9 @@ const UserSideComponent = () => {
                   <img src={diseaseImage} className="Icons"/>
                   <div id="myDropdownMobile" className={isShowDropDown?'dropdown-menu show':'dropdown-menu'} aria-labelledby="dropdownMenuLink">
                     <button className='dropdown-item'>
-                      <Diseases/>
+                    <button className="dropdown-item" onClick={()=>setModalIsOpen(true)}>
+                      Add New
+                    </button>
                     </button>
                   </div>
               </div>
