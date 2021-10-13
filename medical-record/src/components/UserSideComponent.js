@@ -78,14 +78,6 @@ const UserSideComponent = () => {
   // console.log(path)
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  const openDiseaseModal=()=>{
-    setModalIsOpen(true);
-  }
-
-  const closeDiseaseModal=()=>{
-    setModalIsOpen(false);
-  }
-
   return (
     <>
       <div className={`${modalIsOpen?'modal-overlay show-modal' : 'modal-overlay'}`}>
@@ -96,17 +88,29 @@ const UserSideComponent = () => {
         </button>
         <form className="form-group"   enctype="multipart/form-data">
           <label>
-            Uplaod Image
+            Add Diseases
           </label>
+          <div>
+            <label className="label1" htmlFor="userName">
+              Disease Name
+            </label>    
+            <input /><br/><br/>
+          </div>
           <div>
               <span>
                 <span >
-                    Browse… <input type="file" id="profilePic"/><br/><br/>
+                    Add Documents... <input type="file" id="profilePic"/><br/><br/>
                 </span>
               </span>
-              <input type="text" placeholder="Choose a file" readonly></input>
-              <button type="save">Save</button>
           </div>
+          <div>
+              <span>
+                <span >
+                    Add Medicine... <input type="file" id="profilePic"/><br/><br/>
+                </span>
+              </span>
+          </div>
+          <button type="save">Save</button>
         </form>
       </div>
       </div>
