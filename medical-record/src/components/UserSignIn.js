@@ -21,7 +21,7 @@ const UserSignIn = () => {
     setloginDetails({ email: "", password: "" });
   };
   return (
-    <div>
+    <div id="ini">
       <div id="signupLeftImage">
         <img id="design" src={signUpLogo} alt="signupImage" />
       </div>
@@ -29,7 +29,7 @@ const UserSignIn = () => {
         <h2 id="heading2">Login Now</h2>
         <div id="Form1">
           <div id="details1">
-          <form onSubmit={loginSubmit}>
+          <form onSubmit={loginSubmit} id="d1">
             <label className="label2">Your email*</label>
             <input
               type="email"
