@@ -33,7 +33,7 @@ module.exports.document_get=async(req,res)=>{
     }
     //const diseases=await Disease.populate().execPopulate()
     // console.log('dieases',disease)
-    res.render("./hospitalViews/profile",{
+    res.render({
         path:'/hospital/document',
         disease,
         user,
@@ -41,6 +41,7 @@ module.exports.document_get=async(req,res)=>{
         custom_flash:null, 
         
     })
+    // res.status(200).send("Hello")
    }
 
     
@@ -90,7 +91,7 @@ module.exports.patientDiseases_get=async(req,res)=>{
     }
     const diseases=await user.populate('disease','name').execPopulate()
     //console.log('dieases',diseases)
-    res.render("./hospitalViews/profile",{
+    res.render({
         path:'/hospital/diseases',
         user:user,
         diseases,
@@ -98,6 +99,7 @@ module.exports.patientDiseases_get=async(req,res)=>{
         custom_flash:null, 
         
     })
+    // res.status(200).send("Hello")
    }
 
     
@@ -126,18 +128,20 @@ module.exports.patient_get= async (req,res)=>{
         res.redirect('/hospital/profile')
     }
     const diseases=await user.populate('disease','name').execPopulate()
-    res.render("./hospitalViews/profile",{
+    res.render({
         path:'/hospital/patient',
         user:user,
         patients, foundUser:null,access:null, 
         custom_flash:null, 
         diseases       
     })
+    // res.status(200).send("Hello")
 }
 
 
 module.exports.signup_get = (req, res) => {
-    res.render("./hospitalViews/signup", { type:"signup" }); 
+    res.render( { type:"signup" }); 
+    // res.status(200).send("Hello")
 
 }
 
@@ -147,13 +151,14 @@ module.exports.profile_get = async (req, res) => {
     const patients = await Relations.find({'isPermitted': true, 'hospitalId': req.hospital._id},"userId").populate('userId','name'); 
     
     // console.log("patientssssss",patients)
-    res.render("./hospitalViews/profile",
+    res.render(
     {path:'/hospital/profile',
     patients:patients, 
     foundUser:null,
     access:null, 
     custom_flash:null, 
       })
+    // res.status(200).send("Hello")
 }
 
 
@@ -253,7 +258,8 @@ module.exports.signup_post = async (req, res) => {
     }
 }
 module.exports.login_get = (req, res) => {
-    res.render("./hospitalViews/signup", { type:"login" }); 
+    res.render( { type:"login" }); 
+    // res.status(200).send("Hello")
 }
 
 module.exports.login_post = async (req, res) => {
@@ -412,7 +418,8 @@ module.exports.patient_search = async (req, res) =>
         //    console.log('searched patient',access);
         //    console.log("Found patient that I am passing into the ejs file", result);
            const custom_flash = "User found"; 
-            res.render("./hospitalViews/profile", {path:'/hospital/search', patients:patients,access:access, foundUser:result, custom_flash:custom_flash });
+            res.render( {path:'/hospital/search', patients:patients,access:access, foundUser:result, custom_flash:custom_flash });
+            // res.status(200).send("Hello")
             return 
 
         }

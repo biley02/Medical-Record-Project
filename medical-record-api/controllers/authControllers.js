@@ -76,7 +76,7 @@ module.exports.userHospital_get= async (req,res)=>{
         req.flash('error_msg','user not found')
         res.redirect('/user/profile')
     }
-    res.render("./userViews/profile",{
+    res.send({
         path:'/user/userHospital',
         hospitals,
         hospital
@@ -87,15 +87,18 @@ module.exports.userHospital_get= async (req,res)=>{
 
 // controller actions
 module.exports.signup_get = (req, res) => {
-    res.render('./userViews/signup',{
-        type: 'signup'
-    })
+    console.log("signup")
+    // res.render({
+    //     type: 'signup'
+    // })
+    res.status(200).send("Hello")
 }
 
 module.exports.login_get = (req, res) => {
-    res.render('./userViews/signup',{
+    res.send({
         type: 'login'
     })
+    // res.status(200).send("Hello")
 }
 
 module.exports.signup_post = async (req, res) => {
@@ -371,19 +374,20 @@ module.exports.disease_get=async(req,res)=>{
     // console.log('user',req.user)
     res.locals.user= await req.user.populate('disease').execPopulate()
     // console.log('diseases',Userdiseases)
-    res.render('./userViews/profile', {
+    res.send( {
         path: '/user/disease',
         hospitals,
         disease
       })
     //   console.log("in disease page")
+    // res.status(200).send("Hello")
     }
 
 module.exports.profile_get = async (req, res) => {
     //res.locals.user = req.user
     res.locals.user = await req.user.populate('disease').execPopulate()
     // console.log('user id',req.user)
-    // console.log("locals",res.locals.user)
+    console.log("locals",res.locals.user)
     // console.log('id',req.user._id)
     // const user=req.user
     const hospitals = await Relations.find({'userId':req.user._id,'isPermitted':true}).populate('hospitalId','hospitalName')
@@ -391,13 +395,8 @@ module.exports.profile_get = async (req, res) => {
     // console.log('hospitals',nominee)
     // const profilePath=path.join(__dirname,`../../public/uploads/${user.email}/${user.profilePic}`)
     // console.log(profilePath)
-    res.render('./userViews/profile', {
-        path: '/user/profile',
-        hospitals:hospitals,
-        nominee,
-        // profilePath
-      })
-    //   console.log("in profile page")
+      console.log("in profile page")
+    // res.status(200).send("Hello")
     }
 
 module.exports.logout_get = async (req, res) => {
@@ -413,17 +412,19 @@ module.exports.logout_get = async (req, res) => {
 // }
 
 module.exports.getForgotPasswordForm = async (req, res) => {
-    res.render('./userViews/forgotPassword')
+    // res.render('./userViews/forgotPassword')
+    res.send("hello")
 }
 
 module.exports.getPasswordResetForm = async (req, res) => {
     const userID=req.params.id;
     const user = await User.findOne({ _id: userID })
     const resetToken = req.params.token
-    res.render('./userViews/resetPassword', {
+    res.send( {
         userID,
         resetToken,
     })
+    // res.status(200).send("Hello")
 }
 
 module.exports.forgotPassword = async (req, res) => {
@@ -511,11 +512,12 @@ module.exports.hospitalSearch_get=async(req,res)=>{
     const nominee= await req.user.populate('nominee').execPopulate()
     // console.log('nomineeeee',nominee)
     res.locals.user=req.user
-    res.render("./userViews/Profile",{
+    res.send({
         hospitals,
         nominee,
         path:'/user/userHospitalD'
     })
+    // res.status(200).send("Hello")
 }
 module.exports.hospitalSearch_post=async(req,res)=>{
     const hospitalName = req.body.hname
@@ -546,11 +548,11 @@ module.exports.hospitalSearch_post=async(req,res)=>{
             const nominee= await req.user.populate('nominee').execPopulate()
             // console.log(hospitals)
             // console.log(hospitals)
-            res.render("./userViews/profile", {
-            path:'/user/hospitalSearch', 
+            res.send( {
             hospitals, 
             nominee,
             hospital })
+            
             return 
 
         }

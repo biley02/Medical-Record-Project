@@ -56,26 +56,26 @@ function checkFileType(file, cb) {
 }
 
 
-router.get('/document',requireAuth,hospitalController.document_get)
+// router.get('/document',requireAuth,hospitalController.document_get)
 
-router.get('/diseases',requireAuth,hospitalController.patientDiseases_get)
-router.get('/signup',redirectIfLoggedIn, hospitalController.signup_get)
+// router.get('/diseases',requireAuth,hospitalController.patientDiseases_get)
+// router.get('/signup',redirectIfLoggedIn, hospitalController.signup_get)
 router.post('/signup', hospitalController.signup_post)
-router.get('/relation/:shortId',requireAuth,hospitalController.relation_post)
-router.get('/nominee/:shortId',requireAuth,hospitalController.mail_to_nominee)
-router.get('/login', redirectIfLoggedIn, hospitalController.login_get)
-router.get('/verify/:id', hospitalController.emailVerify_get)
-router.get('/logout', requireAuth, hospitalController.logout_get)
+// router.get('/relation/:shortId',requireAuth,hospitalController.relation_post)
+// router.get('/nominee/:shortId',requireAuth,hospitalController.mail_to_nominee)
+// router.get('/login', redirectIfLoggedIn, hospitalController.login_get)
+// router.get('/verify/:id', hospitalController.emailVerify_get)
+// router.get('/logout', requireAuth, hospitalController.logout_get)
 router.post('/search', requireAuth, hospitalController.patient_search)
 router.post('/login', hospitalController.login_post)
-router.get('/verifyRelation/:id',hospitalController.relationVerify_get)
-router.get('/verifyNominee/:id',hospitalController.nomineeVerify_get) 
+// router.get('/verifyRelation/:id',hospitalController.relationVerify_get)
+// router.get('/verifyNominee/:id',hospitalController.nomineeVerify_get) 
 
 router.post('/profile/editDetails',requireAuth, hospitalController.editDetails_post)
 
-router.get('/profile', requireAuth, hospitalController.profile_get)
+// router.get('/profile', requireAuth, hospitalController.profile_get)
 
-router.get('/patient',requireAuth,hospitalController.patient_get)
+// router.get('/patient',requireAuth,hospitalController.patient_get)
 router.post(
     '/profile/picupload',
     requireAuth,
