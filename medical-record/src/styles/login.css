@@ -5,29 +5,34 @@ body {
     overflow-y: hidden;
     overflow-x: hidden;
 }
-
+#ini{
+	display: flex;
+	flex-direction: row;
+}
 #loginForm{
-	top:20vh;
-	position:relative;
+	display: flex;
+	flex-direction:column;
+	justify-content:center;
+	align-items:center;
+	/* position:relative; */
 	width:50vw;
 	height:100vh;
-	align-items: center;
-	text-align: left;
-	margin-left: 50vw;
+	/* margin-left: 50vw; */
 }
 
 #details1{
+	display: flex;
+	flex-direction: column;
+	
     /* align-items: center; */
-    margin: 0 20%;
 }
 #heading2{
-	top:25vh;
-	font-family:Product Sans;
+	font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 	font-weight: bold;
-	font-size:250% !important;
+	font-size:3.5vw !important; 
 	line-height:50.95px;
 	letter-spacing: 0.03em;
-	margin-bottom: 3vh;
+	margin-bottom: 4.5vh;
 	/* margin-left: 16vw; */
 }
 #logInText{
@@ -37,23 +42,27 @@ body {
 	font-family:Product Sans;
 }
  .label2{
- 	display:block;
- 	font-size:1.1em;
+ 	display:flex;
+ 	font-size:1.2rem;
+	 
  }
  #submitbtn1{
- 	display:block;
+ 	display:flex;
  	margin-top:3px;
- 	width:24vw;
- 	height:6.5vh;
- 	background: #458FF6;
+ 	height:6vh;
+	width:19vw;
+ 	background: #3a80f0;
     border-radius: 6px;
     outline:none;
     border:none;
     color:#FFFFFF;
-    font-family:Inter;
-    text-align:center;
-	font-size:1.1em;
+    font-family:Geneva, Verdana, sans-serif;
+    align-items:center;
+	justify-content:center;
+	font-size:1.3vw;
 	cursor: pointer;
+	 box-shadow: 
+         0 3px 10px rgb(0 0 0 / 0.2);
   }
   .signuplink-section{
     margin: 0 20% 0 15%;
@@ -89,7 +98,7 @@ body {
 		margin: 0;
 	}
 
-	#submitbtn1{
+	/* #submitbtn1{
 		width: 95%;
 	}
 	#heading2{
@@ -97,11 +106,7 @@ body {
 		text-align: center;
 		margin-left: 0;
 	}
-	#heading2{
-		margin-left: inherit;
-		/* text-align: center; */
-		margin-left: 0;
-	}
+ */
 	#loginForm{
 		margin-left:0vw;
 	}
@@ -114,6 +119,7 @@ body {
 	#loginForm{
 		margin-left:0vw;
 	}
+	
 }
 @media screen and (max-width: 710px){
 	#signUpopt {
@@ -121,6 +127,14 @@ body {
 	}
 	#signUpLink{
 		font-size: 1rem;
+	}
+	#submitbtn1{
+		width: 98%;
+		margin-top: 2vh;
+		font-size: 2vw !important;
+	}
+	.LoginEmail {
+		font-size: 3.5vw !important;
 	}
 
  }
@@ -135,6 +149,7 @@ body {
 	.signuplink-section{
 		display: grid;
 	}
+	
 
 }
 @media screen and (max-width: 500px) {
@@ -150,10 +165,12 @@ body {
     }
 	#details1{
         margin: 0 11vw 1.5vh;
+		font-size:5vw !important
 	}
 	#submitbtn1{
-		width: 98%;
+		width: 100%;
 		margin-top: 2vh;
+		font-size: 4vw !important;
 	}
 	.signuplink-section{
 		display: block;
@@ -164,7 +181,7 @@ body {
 		 margin-top: 5vh;
 	 }
 	#heading2{
-        font-size: 200%;
+        font-size: 8vw !important;
     }
    
 } 
@@ -179,6 +196,9 @@ body {
 		margin-top: 1vh;
 	}
 	#submitbtn1{
-		width: 90%;
+		width: 100%;
 	}
+	#heading2{
+        font-size: 8vw !important;
+    }
 }

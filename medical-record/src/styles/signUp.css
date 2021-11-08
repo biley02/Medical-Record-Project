@@ -234,15 +234,16 @@ top:8px;
 }
 .inputDetails {
     display: inline-block;
-    width: 80%;
-    height: 4.5vh;
+    /* width: 80%; */
+    width:19vw;
+    height: 5.5vh;
     padding-left: 20px;
     padding-right: 39px;
     border-radius: 6px;
     outline: none;
     border: 1px solid #8692a6;
     margin-bottom: 1vh;
-    font-size: 90%;
+    font-size: 1.1vw;
 }
 #eyeIcon {
     margin-left: -45px;
