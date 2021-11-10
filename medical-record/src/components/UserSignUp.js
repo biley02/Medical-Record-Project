@@ -4,7 +4,12 @@ import "../styles/signUp.css";
 import "../styles/passwordStrength.css";
 
 import signUpLogo from "../img/signupLogo.png";
+import axios from "axios";
+import { Redirect } from "react-router";
+import {useHistory} from 'react-router-dom'
 
+
+const baseUrl='https://localhost:8080/user'
 const type = "signup";
 const UserSignUp = () => {
   const [userSignUpDetails, setUserSignUpDetails] = useState({
@@ -15,14 +20,24 @@ const UserSignUp = () => {
     confirmPassword: "",
   });
 
+  let history=useHistory()
+
   const handleChange = (e) => {
     const value = e.target.value;
     const name = e.target.name;
     setUserSignUpDetails({ ...userSignUpDetails, [name]: value });
   };
-  const signupSubmit = (e) => {
+  const signupSubmit = async (e) => {
     e.preventDefault();
     console.log("form submitted", userSignUpDetails);
+
+    // await axios.post(`${baseUrl}/signup`,{userSignUpDetails})
+    axios
+      .post(`http://localhost:8080/user/signup`,userSignUpDetails)
+      .then((response) => {
+        console.log('response.data',response)
+      }).catch((error)=>{console.log(error)});
+    
     setUserSignUpDetails({
       name: "",
       email: "",
@@ -30,7 +45,9 @@ const UserSignUp = () => {
       password: "",
       confirmPassword: "",
     });
+    history.push('/user/login') 
   };
+  
   return (
     <div id="signup">
       <div id="signupLeftImage">
