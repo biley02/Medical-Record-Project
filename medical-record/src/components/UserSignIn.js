@@ -4,11 +4,19 @@ import signUpLogo from "../img/signupLogo.png";
 import "../styles/login.css";
 import "../styles/signUp.css";
 import "../styles/passwordStrength.css";
+import "../styles/alert.css"
+
+import { useGlobalContext } from "../context/Context";
+
+
 
 const UserSignIn = () => {
   const type = "login";
 
   const [loginDetails, setloginDetails] = useState({ email: "", password: "" });
+  const {alert,Alert,showAlert,setAlert}= useGlobalContext()
+
+   
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -21,7 +29,12 @@ const UserSignIn = () => {
     setloginDetails({ email: "", password: "" });
   };
   return (
+     <>
+    <div className={alert.show?'top-alert':''}>
+    {alert.show && <Alert {...alert} removeAlert={showAlert} />}
+    </div>
     <div id="ini">
+      
       <div id="signupLeftImage">
         <img id="design" src={signUpLogo} alt="signupImage" />
       </div>
@@ -62,6 +75,7 @@ const UserSignIn = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
