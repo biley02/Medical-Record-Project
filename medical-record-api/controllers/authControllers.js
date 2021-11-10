@@ -13,6 +13,13 @@ const { nanoId } = require("nanoid")
 const mongoose=require('mongoose')
 
 const maxAge = 30 * 24 * 60 * 60
+const error_msg={show:false,type:'',msg:''}
+
+const setError=(type='',show=true,msg='')=>{
+    error_msg.type=type
+    error_msg.show=show
+    error_msg.msg=msg
+}
 
 
 module.exports.editDetails_post=async(req,res)=>{
@@ -108,10 +115,11 @@ module.exports.signup_post = async (req, res) => {
     console.log(password,confirmPassword)
     
     if (password != confirmPassword) {
-        // req.flash('error_msg', 'Passwords do not match. Try again')
-        console.log('password doesnot match')
-        res.status(400).redirect('/user/login')
-        return
+        
+        setError('danger',true,'Password do not match, Tru again');
+        // console.log('password doesnot match')
+        // console.log(error_msg)
+        return res.send(error_msg)
     }
 
     try {
@@ -119,37 +127,26 @@ module.exports.signup_post = async (req, res) => {
         console.log('userexists', userExists)
        
         if (userExists) {
-            // // req.flash(
-            //     'success_msg',
-            //     'This email is already registered. Try logging in'
-            // )
+            setError('success',false,'user already exists, try loging in')
             console.log('user exists')
-            return res.redirect('/user/login')
+            return res.send(error_msg)
         }
         const short_id =  generateShortId(name,phoneNumber);
         console.log("Short ID generated is: ", short_id)
         const user = new User({ email, name, password, phoneNumber, short_id ,nominee})
         let saveUser = await user.save()
         console.log(saveUser);
-        // req.flash(
-        //     'success_msg',
-        //     'Registration successful. Check your inbox to verify your email'
-        // )
         signupMail(saveUser, req.hostname, req.protocol)
-        //res.send(saveUser)
-        res.redirect('/user/login')
+        setError('sucess',false,'Registration successful. Check your inbox to verify your email')
+        return res.send(error_msg)
+        
     } catch (err) {
         const errors = handleErrors(err)
         // console.log(errors)
 
         var message = 'Could not signup. '.concat((errors['email'] || ""), (errors['password'] || ""), (errors['phoneNumber'] || ""),(errors['name'] || "")  )
         console.log(errors)
-        //res.json(errors);
-        // req.flash(
-        //     'error_msg',
-        //     message
-        // )
-        res.status(400).redirect('/user/signup')
+        res.send('danger',true,message)
     }
 }
 module.exports.emailVerify_get = async (req, res) => {
