@@ -2,12 +2,14 @@
 var express = require('express');
 var app = express();
 const path = require('path')
+const cors=require('cors')
 
 const mongoose = require('mongoose')
 const connect_flash = require('connect-flash')
 const session = require('express-session')
 const cookieParser = require('cookie-parser')
 
+app.use(cors())
 app.use(express.json())
 // app.use(express.static('public'))
 app.use(cookieParser())

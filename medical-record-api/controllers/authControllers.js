@@ -37,7 +37,7 @@ module.exports.editDetails_post=async(req,res)=>{
         phoneNumber
     }).save()
     if (!nominee) {
-        req.flash('error_msg', 'Unable to save the details')
+        // req.flash('error_msg', 'Unable to save the details')
         return res.redirect('/user/profile')
     }
     console.log('nominee',nominee)
@@ -45,14 +45,14 @@ module.exports.editDetails_post=async(req,res)=>{
     req.user.nominee = nominee._id
     await user.save()
     // console.log("user saved",user)
-    req.flash('success_msg','Details about the user has been saved')
+    // req.flash('success_msg','Details about the user has been saved')
       
 
     res.redirect('/user/profile')
     }
     catch(e){
         // console.log("error",e)
-        req.flash('error_msg','error while editing profile details')
+        // req.flash('error_msg','error while editing profile details')
         res.redirect('/user/profile')
     }
 }
@@ -73,7 +73,7 @@ module.exports.userHospital_get= async (req,res)=>{
     // console.log('relation',hospitals)
     if(!hospital)
     {
-        req.flash('error_msg','user not found')
+        // req.flash('error_msg','user not found')
         res.redirect('/user/profile')
     }
     res.send({
@@ -102,41 +102,39 @@ module.exports.login_get = (req, res) => {
 }
 
 module.exports.signup_post = async (req, res) => {
-    const { name, email, password, confirmPwd, phoneNumber } = req.body
+    console.log("in sign up route",req.body);
+    const { name, email, password, confirmPassword, phoneNumber } = req.body
     const nominee=null
-    // console.log("in sign up route",req.body);
-    if (password != confirmPwd) {
-        req.flash('error_msg', 'Passwords do not match. Try again')
+    console.log(password,confirmPassword)
+    
+    if (password != confirmPassword) {
+        // req.flash('error_msg', 'Passwords do not match. Try again')
+        console.log('password doesnot match')
         res.status(400).redirect('/user/login')
         return
     }
 
     try {
         const userExists = await User.findOne({ email })
-        // console.log('userexists', userExists)
-        /*if(userExists && userExists.active== false)
-    {
-      req.flash("success_msg",`${userExists.name}, we have sent you a link to verify your account kindly check your mail`)
-
-      signupMail(userExists,req.hostname,req.protocol)
-      return res.redirect("/signup")
-    }*/
+        console.log('userexists', userExists)
+       
         if (userExists) {
-            req.flash(
-                'success_msg',
-                'This email is already registered. Try logging in'
-            )
+            // // req.flash(
+            //     'success_msg',
+            //     'This email is already registered. Try logging in'
+            // )
+            console.log('user exists')
             return res.redirect('/user/login')
         }
         const short_id =  generateShortId(name,phoneNumber);
-        // console.log("Short ID generated is: ", short_id)
+        console.log("Short ID generated is: ", short_id)
         const user = new User({ email, name, password, phoneNumber, short_id ,nominee})
         let saveUser = await user.save()
-        // console.log(saveUser);
-        req.flash(
-            'success_msg',
-            'Registration successful. Check your inbox to verify your email'
-        )
+        console.log(saveUser);
+        // req.flash(
+        //     'success_msg',
+        //     'Registration successful. Check your inbox to verify your email'
+        // )
         signupMail(saveUser, req.hostname, req.protocol)
         //res.send(saveUser)
         res.redirect('/user/login')
@@ -145,11 +143,12 @@ module.exports.signup_post = async (req, res) => {
         // console.log(errors)
 
         var message = 'Could not signup. '.concat((errors['email'] || ""), (errors['password'] || ""), (errors['phoneNumber'] || ""),(errors['name'] || "")  )
+        console.log(errors)
         //res.json(errors);
-        req.flash(
-            'error_msg',
-            message
-        )
+        // req.flash(
+        //     'error_msg',
+        //     message
+        // )
         res.status(400).redirect('/user/signup')
     }
 }
@@ -161,10 +160,10 @@ module.exports.emailVerify_get = async (req, res) => {
         // console.log(token)
         jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
             if (err) {
-                req.flash(
-                    'error_msg',
-                    ' Your verify link had expired. We have sent you another verification link'
-                )
+                // req.flash(
+                //     'error_msg',
+                //     ' Your verify link had expired. We have sent you another verification link'
+                // )
                 signupMail(expiredTokenUser, req.hostname, req.protocol)
                 return res.redirect('/user/login')
             }
@@ -178,13 +177,13 @@ module.exports.emailVerify_get = async (req, res) => {
                 })
                 if (!activeUser) {
                     // console.log('Error occured while verifying')
-                    req.flash('error_msg', 'Error occured while verifying')
+                    // req.flash('error_msg', 'Error occured while verifying')
                     res.redirect('/')
                 } else {
-                    req.flash(
-                        'success_msg',
-                        'User has been verified and can login now'
-                    )
+                    // req.flash(
+                    //     'success_msg',
+                    //     'User has been verified and can login now'
+                    // )
                     // console.log('The user has been verified.')
                     // console.log('active', activeUser)
                     res.redirect('/user/login')
@@ -218,16 +217,16 @@ module.exports.login_post = async (req, res) => {
             if(timeDiff<=10800000)
             {
                 // console.log("Email already sent check it")
-                req.flash(
-                    'error_msg',
-                    `${userExists.name}, we have already sent you a verify link please check your email`)
+                // req.flash(
+                //     'error_msg',
+                //     `${userExists.name}, we have already sent you a verify link please check your email`)
                 res.redirect('/user/login')
                 return
             }
-            req.flash(
-                'success_msg',
-                `${userExists.name}, your verify link has expired we have sent you another email please check you mailbox`
-            )
+            // req.flash(
+            //     'success_msg',
+            //     `${userExists.name}, your verify link has expired we have sent you another email please check you mailbox`
+            // )
             signupMail(userExists, req.hostname, req.protocol)
             await User.findByIdAndUpdate(userExists._id, { updatedAt: new Date() });
             // console.log('userExists',userExists)
@@ -241,10 +240,10 @@ module.exports.login_post = async (req, res) => {
         // console.log(user);
         //signupMail(saveUser)
     //    console.log("logged in")
-        req.flash('success_msg', 'Successfully logged in')
+        // req.flash('success_msg', 'Successfully logged in')
         res.status(200).redirect('/user/profile')
     } catch (err) {
-        req.flash('error_msg', 'Invalid Credentials')
+        // req.flash('error_msg', 'Invalid Credentials')
         // console.log(err)
         res.redirect('/user/login')
     }
@@ -265,12 +264,12 @@ module.exports.upload_post = async (req, res) => {
         // console.log(obj.document[0].filename)
         if(Object.keys(obj).length===0)
         {
-            req.flash('error_msg','You may have not submitted any file or the file type may not be supported. Please try jpg,jpeg,pdf files')
+            // req.flash('error_msg','You may have not submitted any file or the file type may not be supported. Please try jpg,jpeg,pdf files')
             return res.redirect('/user/profile')
         }
         if(name==='')
         {
-            req.flash('error_msg','Disease name cant be empty')
+            // req.flash('error_msg','Disease name cant be empty')
             return res.redirect('/user/profile')
         }
         const userDisease= await req.user.populate('disease','name').execPopulate()
@@ -311,7 +310,7 @@ module.exports.upload_post = async (req, res) => {
                 existDisease.document.push(document)
             }
             await existDisease.save()
-            req.flash('success_msg','Disease name already exists, file succesfully uploaded')
+            // req.flash('success_msg','Disease name already exists, file succesfully uploaded')
             return res.redirect('/user/profile')
         }
         
@@ -346,19 +345,19 @@ module.exports.upload_post = async (req, res) => {
         // console.log('medicine',medicine)
         
         if (!newDisease) {
-            req.flash('error_msg', 'Unable to save the disease details, Please check the file format. Supported file formats are:jpeg,jpg,png,gif,pdf')
+            // req.flash('error_msg', 'Unable to save the disease details, Please check the file format. Supported file formats are:jpeg,jpg,png,gif,pdf')
             return res.redirect('/user/profile')
         }
         req.user.disease.push(newDisease)
         await req.user.save()
 
         // console.log(newDisease)
-        req.flash('success_msg', 'Sucessfully uploaded disease details.')
+        // req.flash('success_msg', 'Sucessfully uploaded disease details.')
         return res.redirect('/user/profile')
     } catch (err) {
         // console.log("error")
         // console.error(err)
-        req.flash('error_msg', 'Something went wrong')
+        // req.flash('error_msg', 'Something went wrong')
         return res.redirect('/user/profile')
     }
 }
@@ -403,7 +402,7 @@ module.exports.logout_get = async (req, res) => {
     // res.cookie('jwt', '', { maxAge: 1 });
     // const cookie = req.cookies.jwt
     res.clearCookie('jwt')
-    req.flash('success_msg', 'Successfully logged out')
+    // req.flash('success_msg', 'Successfully logged out')
     res.redirect('/user/login')
 } 
 
@@ -431,7 +430,7 @@ module.exports.forgotPassword = async (req, res) => {
     const email=req.body.email
     const user = await User.findOne({ email })
     if (!user) {
-        req.flash('error_msg', 'No user found')
+        // req.flash('error_msg', 'No user found')
         return res.redirect('/user/login')
     }
     // console.log(user)
@@ -448,17 +447,17 @@ module.exports.forgotPassword = async (req, res) => {
         await user.save({ validateBeforeSave: false })
         try {
             passwordMail(user,resetToken,req.hostname, req.protocol)
-            req.flash('success_msg', 'Email sent,please check email')
+            // req.flash('success_msg', 'Email sent,please check email')
             res.redirect('/user/forgotPassword')
         } catch (err) {
             user.passwordResetToken = undefined
             user.passwordResetExpires = undefined
             await user.save({ validateBeforeSave: false })
-            req.flash('error_msg', 'Unable to send mail')
+            // req.flash('error_msg', 'Unable to send mail')
             res.redirect('/user/forgotPassword')
         }
     } else {
-        req.flash('error_msg', 'Mail already send,please wait for sometime to send again')
+        // req.flash('error_msg', 'Mail already send,please wait for sometime to send again')
         res.redirect('/user/forgotPassword')
     }
 }
@@ -477,11 +476,11 @@ module.exports.resetPassword = async (req, res) => {
             passwordResetExpires: { $gt: Date.now() },
         })
         if (!user) {
-            req.flash('error_msg', 'No user found')
+            // req.flash('error_msg', 'No user found')
             return res.redirect('/user/login')
         }
         if(req.body.password!==req.body.cpassword){
-          req.flash('error_msg','Passwords dont match') 
+        //   req.flash('error_msg','Passwords dont match') 
           return res.redirect(`resetPassword/${id}/${token}`)
         }else{
             
@@ -525,7 +524,7 @@ module.exports.hospitalSearch_post=async(req,res)=>{
 
     if (!hospitalName)
     {
-        req.flash("error_msg", "Enter a value")
+        // req.flash("error_msg", "Enter a value")
         res.redirect("/user/profile")
         return 
     }
@@ -535,14 +534,14 @@ module.exports.hospitalSearch_post=async(req,res)=>{
     //    console.log('resukts',hospital)
         if (hospital.length === 0)
         {
-            req.flash("error_msg", "No such hospital exists")
+            // req.flash("error_msg", "No such hospital exists")
             res.redirect("/user/profile")
             return 
 
         }  
         else
         {
-            req.flash("success_msg", "Hospital found")
+            // req.flash("success_msg", "Hospital found")
             res.locals.user = await req.user.populate('disease').execPopulate()
             const hospitals = await Relations.find({'userId':req.user._id,'isPermitted':true}).populate('hospitalId','hospitalName')
             const nominee= await req.user.populate('nominee').execPopulate()
@@ -561,7 +560,7 @@ module.exports.hospitalSearch_post=async(req,res)=>{
     catch
     {
     //  console.log("Internal error while searching for hospital"); 
-     req.flash("error_msg", "error while searching for hospital")
+    //  req.flash("error_msg", "error while searching for hospital")
      res.redirect("/user/profile"); 
     }
     
@@ -577,7 +576,7 @@ module.exports.download=async(req,res)=>{
     // console.log(reqPath) 
     res.download(reqPath, (error)=>{
         if(error){
-            req.flash("error_msg", "error while downloading")
+            // req.flash("error_msg", "error while downloading")
             // console.trace(error)
             return res.redirect('/user/profile')
         }
@@ -591,7 +590,7 @@ module.exports.picupload_post=async(req,res)=>{
     User.findOneAndUpdate({_id: user._id}, {$set:{profilePic:picPath}}, {new: true}, (err, doc) => {
         if (err) {
             // console.log("Something wrong when updating data!");
-            req.flash("error_msg", "Something wrong when updating data!")
+            // req.flash("error_msg", "Something wrong when updating data!")
             res.redirect('/user/profile')
         }
         
