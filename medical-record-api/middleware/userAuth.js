@@ -6,7 +6,8 @@ require('dotenv').config()
 const requireAuth = (req, res, next) => {
     try{
     const token = req.cookies.jwt
-    //console.log(token);
+    console.log("tokens",token);
+    console.log("req",req)
     // check json web token exists & is verified
     if (token) {
         jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
@@ -26,7 +27,7 @@ const requireAuth = (req, res, next) => {
                 }
                 //else to profile
                 req.user = user
-                //console.log("current user", req.user)
+                console.log("current user", req.user)
 
                 next()
             }

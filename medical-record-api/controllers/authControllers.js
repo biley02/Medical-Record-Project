@@ -98,162 +98,142 @@ module.exports.login_get = (req, res) => {
 };
 
 module.exports.signup_post = async (req, res) => {
-  console.log("in sign up route", req.body);
-  const { name, email, password, confirmPassword, phoneNumber } = req.body;
-  const nominee = null;
-  console.log(password, confirmPassword);
-
-  if (password != confirmPassword) {
-    // req.flash('error_msg', 'Passwords do not match. Try again')
-    console.log("password doesnot match");
-    res.status(400).redirect("/user/login");
-    return;
-  }
-
-  try {
-    const userExists = await User.findOne({ email });
-    console.log("userexists", userExists);
-
-    if (userExists) {
-      // // req.flash(
-      //     'success_msg',
-      //     'This email is already registered. Try logging in'
-      // )
-      console.log("user exists");
-      return res.redirect("/user/login");
+    console.log("in sign up route",req.body);
+    const { name, email, password, confirmPassword, phoneNumber } = req.body
+    const nominee=null
+    console.log(password,confirmPassword)
+    
+    if (password != confirmPassword) {
+        
+        setError('danger',true,'Password do not match, Tru again');
+        // console.log('password doesnot match')
+        // console.log(error_msg)
+        return res.send(error_msg)
     }
-    const short_id = generateShortId(name, phoneNumber);
-    console.log("Short ID generated is: ", short_id);
-    const user = new User({
-      email,
-      name,
-      password,
-      phoneNumber,
-      short_id,
-      nominee,
-    });
-    let saveUser = await user.save();
-    console.log(saveUser);
-    // req.flash(
-    //     'success_msg',
-    //     'Registration successful. Check your inbox to verify your email'
-    // )
-    signupMail(saveUser, req.hostname, req.protocol);
-    //res.send(saveUser)
-    res.redirect("/user/login");
-  } catch (err) {
-    const errors = handleErrors(err);
-    // console.log(errors)
 
-    var message = "Could not signup. ".concat(
-      errors["email"] || "",
-      errors["password"] || "",
-      errors["phoneNumber"] || "",
-      errors["name"] || ""
-    );
-    console.log(errors);
-    //res.json(errors);
-    // req.flash(
-    //     'error_msg',
-    //     message
-    // )
-    res.status(400).redirect("/user/signup");
-  }
-};
-module.exports.emailVerify_get = async (req, res) => {
-  try {
-    const userID = req.params.id;
-    const expiredTokenUser = await User.findOne({ _id: userID });
-    const token = req.query.tkn;
-    // console.log(token)
-    jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
-      if (err) {
-        // req.flash(
-        //     'error_msg',
-        //     ' Your verify link had expired. We have sent you another verification link'
-        // )
-        signupMail(expiredTokenUser, req.hostname, req.protocol);
-        return res.redirect("/user/login");
-      }
-      const user = await User.findOne({ _id: decoded.id });
-      if (!user) {
-        // console.log('user not found')
-        res.redirect("/");
-      } else {
-        const activeUser = await User.findByIdAndUpdate(user._id, {
-          active: true,
-        });
-        if (!activeUser) {
-          // console.log('Error occured while verifying')
-          // req.flash('error_msg', 'Error occured while verifying')
-          res.redirect("/");
-        } else {
-          // req.flash(
-          //     'success_msg',
-          //     'User has been verified and can login now'
-          // )
-          // console.log('The user has been verified.')
-          // console.log('active', activeUser)
-          res.redirect("/user/login");
+    try {
+        const userExists = await User.findOne({ email })
+        // console.log('userexists', userExists)
+       
+        if (userExists) {
+            setError('success',false,'user already exists, try loging in')
+            // console.log('user exists')
+            return res.send(error_msg)
         }
-      }
-    });
-  } catch (e) {
-    // console.log(e)
-    //signupMail(user,req.hostname,req.protocol)
-    res.redirect("/user/login");
-  }
-};
+        const short_id =  generateShortId(name,phoneNumber);
+        console.log("Short ID generated is: ", short_id)
+        const user = new User({ email, name, password, phoneNumber, short_id ,nominee})
+        let saveUser = await user.save()
+        // console.log(saveUser);
+        signupMail(saveUser, req.hostname, req.protocol)
+        setError('sucess',false,'Registration successful. Check your inbox to verify your email')
+        return res.send(error_msg)
+        
+    } catch (err) {
+        const errors = handleErrors(err)
+        // console.log(errors)
+
+        var message = 'Could not signup. '.concat((errors['email'] || ""), (errors['password'] || ""), (errors['phoneNumber'] || ""),(errors['name'] || "")  )
+        console.log(errors)
+        res.send('danger',true,message)
+    }
+}
+module.exports.emailVerify_get = async (req, res) => {
+    try {
+        const userID = req.params.id
+        const expiredTokenUser = await User.findOne({ _id: userID })
+        const token = req.query.tkn
+        // console.log(token)
+        jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+            if (err) {
+                // req.flash(
+                //     'error_msg',
+                //     ' Your verify link had expired. We have sent you another verification link'
+                // )
+                signupMail(expiredTokenUser, req.hostname, req.protocol)
+                return res.redirect('/user/login')
+            }
+            const user = await User.findOne({ _id: decoded.id })
+            if (!user) {
+                // console.log('user not found')
+                res.redirect('/')
+            } else {
+                const activeUser = await User.findByIdAndUpdate(user._id, {
+                    active: true,
+                })
+                if (!activeUser) {
+                    // console.log('Error occured while verifying')
+                    // req.flash('error_msg', 'Error occured while verifying')
+                    res.redirect('/')
+                } else {
+                    // req.flash(
+                    //     'success_msg',
+                    //     'User has been verified and can login now'
+                    // )
+                    // console.log('The user has been verified.')
+                    // console.log('active', activeUser)
+                    res.redirect('/user/login')
+                }
+            }
+        })
+    } catch (e) {
+        // console.log(e)
+        //signupMail(user,req.hostname,req.protocol)
+        res.redirect('/user/login')
+    }
+}
 
 module.exports.login_post = async (req, res) => {
-  const { email, password } = req.body;
-  // console.log('in Login route')
-  //  console.log('req.body',req.body)
-  try {
-    const user = await User.login(email, password);
-    // console.log("user",user)
+    const { email, password } = req.body
+    console.log('in Login route')
+     console.log('req.body',req.body)
+    try {
 
-    const userExists = await User.findOne({ email });
+        const user = await User.login(email, password)
+        // console.log("user",user)
+
+        const userExists = await User.findOne({ email })  
     //    console.log("userexsits",userExists)
+       
 
-    if (!userExists.active) {
-      const currDate = new Date();
-      const initialUpdatedAt = userExists.updatedAt;
-      const timeDiff = Math.abs(
-        currDate.getTime() - initialUpdatedAt.getTime()
-      );
-      if (timeDiff <= 10800000) {
-        // console.log("Email already sent check it")
-        // req.flash(
-        //     'error_msg',
-        //     `${userExists.name}, we have already sent you a verify link please check your email`)
-        res.redirect("/user/login");
-        return;
-      }
-      // req.flash(
-      //     'success_msg',
-      //     `${userExists.name}, your verify link has expired we have sent you another email please check you mailbox`
-      // )
-      signupMail(userExists, req.hostname, req.protocol);
-      await User.findByIdAndUpdate(userExists._id, { updatedAt: new Date() });
-      // console.log('userExists',userExists)
-      res.redirect("/user/login");
-      return;
-    }
+        if (!userExists.active) {
+            const currDate = new Date();
+            const initialUpdatedAt = userExists.updatedAt;
+            const timeDiff = Math.abs(currDate.getTime() - initialUpdatedAt.getTime());
+            if(timeDiff<=10800000)
+            {
+                setError('danger',true,`${userExists.name}, we have already sent you a verify link please check your email`)
+                
+                return res.send(error_msg)
+            }
+           
+            setError('danger',true,`${userExists.name}, your verify link has expired we have sent you another email please check you mailbox`)
+            signupMail(userExists, req.hostname, req.protocol)
+            await User.findByIdAndUpdate(userExists._id, { updatedAt: new Date() });
+            // console.log('userExists',userExists)
+            res.redirect('/user/login')
+            return
+        }
+       
+        const token = user.generateAuthToken(maxAge)
+        console.log("token in login",token)
 
-    const token = user.generateAuthToken(maxAge);
-
-    res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
-    // console.log(user);
-    //signupMail(saveUser)
+        res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 })
+        console.log("jwt cookie from backend",req.cookies.jwt)
+        res.json({token})
+        // console.log(user);
+        //signupMail(saveUser)
     //    console.log("logged in")
-    // req.flash('success_msg', 'Successfully logged in')
-    res.status(200).redirect("/user/profile");
-  } catch (err) {
-    // req.flash('error_msg', 'Invalid Credentials')
-    // console.log(err)
-    res.redirect("/user/login");
-  }
+         setError('success',false,'Successfully Logged in')
+       
+        res.status(200).send(error_msg)
+    } catch (err) {
+        
+        setError('danger',true,'Invalid Credentials')
+        // console.log(err)
+        res.send(error_msg)
+    }
+  
 };
 
 module.exports.upload_post = async (req, res) => {
@@ -335,12 +315,21 @@ module.exports.upload_post = async (req, res) => {
     }
     await newDisease.save();
 
-    // console.log('documents',document)
-    // console.log('medicine',medicine)
-
-    if (!newDisease) {
-      // req.flash('error_msg', 'Unable to save the disease details, Please check the file format. Supported file formats are:jpeg,jpg,png,gif,pdf')
-      return res.redirect("/user/profile");
+module.exports.profile_get = async (req, res) => {
+    //res.locals.user = req.user
+    res.locals.user = await req.user.populate('disease').execPopulate()
+    console.log('user id',req.user)
+    console.log("locals",res.locals.user)
+    // console.log('id',req.user._id)
+    // const user=req.user
+    const hospitals = await Relations.find({'userId':req.user._id,'isPermitted':true}).populate('hospitalId','hospitalName')
+    const nominee= await req.user.populate('nominee').execPopulate()// to be optimised by gaurav
+    // console.log('hospitals',nominee)
+    // const profilePath=path.join(__dirname,`../../public/uploads/${user.email}/${user.profilePic}`)
+    // console.log(profilePath)
+      console.log("in profile page")
+      res.status(200).send(res.locals.user)
+    // res.status(200).send("Hello")
     }
     req.user.disease.push(newDisease);
     await req.user.save();

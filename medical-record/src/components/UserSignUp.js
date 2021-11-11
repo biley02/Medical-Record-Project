@@ -2,14 +2,17 @@ import React, { useState } from "react";
 import "../styles/login.css";
 import "../styles/signUp.css";
 import "../styles/passwordStrength.css";
+import "../styles/alert.css"
 
 import signUpLogo from "../img/signupLogo.png";
 import axios from "axios";
 import { Redirect } from "react-router";
 import {useHistory} from 'react-router-dom'
 
+import { useGlobalContext } from "../context/Context";
 
-const baseUrl='https://localhost:8080/user'
+
+const baseUrl='http://localhost:8080/user'
 const type = "signup";
 const UserSignUp = () => {
   const [userSignUpDetails, setUserSignUpDetails] = useState({
@@ -20,7 +23,11 @@ const UserSignUp = () => {
     confirmPassword: "",
   });
 
+  const {alert,Alert,showAlert}= useGlobalContext()
+
+
   let history=useHistory()
+
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -29,13 +36,26 @@ const UserSignUp = () => {
   };
   const signupSubmit = async (e) => {
     e.preventDefault();
-    console.log("form submitted", userSignUpDetails);
+    // console.log("form submitted", userSignUpDetails);
 
     // await axios.post(`${baseUrl}/signup`,{userSignUpDetails})
+    
     axios
-      .post(`http://localhost:8080/user/signup`,userSignUpDetails)
+      .post(`${baseUrl}/signup`,userSignUpDetails)
       .then((response) => {
-        console.log('response.data',response)
+        console.log('from server data',response.data)
+        const error=response.data;
+        // console.log(error)
+        if(error.show===true)
+        {
+          console.log('danger error',error)
+          showAlert(true,error.type,error.msg)
+          return
+        }
+    
+        showAlert(true,'success',error.msg)
+        history.push('/user/login') 
+
       }).catch((error)=>{console.log(error)});
     
     setUserSignUpDetails({
@@ -45,11 +65,17 @@ const UserSignUp = () => {
       password: "",
       confirmPassword: "",
     });
-    history.push('/user/login') 
+
+    
   };
   
   return (
+    <>
+    <div className={alert.show?'top-alert':''}>
+      {alert.show && <Alert {...alert} removeAlert={showAlert} />}
+      </div>
     <div id="signup">
+      
       <div id="signupLeftImage">
         <img id="design" src={signUpLogo} alt="signupImage" />
       </div>
@@ -162,6 +188,7 @@ const UserSignUp = () => {
         
       </div>
     </div>
+    </>
   );
 };
 

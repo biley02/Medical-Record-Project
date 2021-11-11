@@ -56,6 +56,19 @@ ul li {
     right: 8vw;
 }
 
+.alert {
+    margin-bottom: 1rem;
+    height: 1.25rem;
+    display: grid;
+    align-items: center;
+    text-align: center;
+    font-size: 0.7rem;
+    border-radius: 0.25rem;
+    letter-spacing: var(--spacing);
+    text-transform: capitalize;
+  }
+  
+
 @media (max-width: 412px) {
     ul li {
         margin-left: -3.5vw;

@@ -1,18 +1,20 @@
 // Require express and create an instance of it
 var express = require('express');
-var app = express();
 const path = require('path')
 const cors=require('cors')
-
 const mongoose = require('mongoose')
 const connect_flash = require('connect-flash')
 const session = require('express-session')
 const cookieParser = require('cookie-parser')
 
-app.use(cors())
+var app = express();
 app.use(express.json())
-// app.use(express.static('public'))
 app.use(cookieParser())
+
+app.use(cors({ origin: true, credentials: true }));
+
+// app.use(express.static('public'))
+
 // using dotenv module for environment
 require('dotenv').config()
 
@@ -22,6 +24,7 @@ mongoose
     .connect(process.env.MONGODB_URL, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
+        
     })
     .then(() => console.log('Connected to mongo server'))
     .catch((err) => console.error(err))
@@ -31,7 +34,7 @@ mongoose
     // console.log(publicDirectory);
     app.use(express.static(publicDirectory))   
 
-    app.use(express.urlencoded({ extended: true }))
+    app.use(express.urlencoded({ extended: false }))
 
     app.use(
         session({

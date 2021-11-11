@@ -1,0 +1,14 @@
+.alert-danger {
+    color: #721c24;
+    background: #f8d7da;
+  }
+  .alert-success {
+    color: #155724;
+    background: #d4edda;
+  }
+
+  .top-alert{
+      margin-top:3%;
+      font-size: larger;
+      margin-bottom: 0;
+  }
