@@ -1,112 +1,101 @@
-const User = require('../models/User')
-const Hospital = require('../models/Hospital')
-const jwt = require('jsonwebtoken')
-const { signupMail,passwordMail } = require('../config/nodemailer')
-const path = require('path')
-const Disease = require('../models/Disease')
-const Nominee = require('../models/Nominee')
-const Relations=require('../models/Relations')
-const { handleErrors,generateShortId } = require('../utilities/Utilities'); 
-const crypto = require('crypto')
-require('dotenv').config()
-const { nanoId } = require("nanoid")
-const mongoose=require('mongoose')
+const User = require("../models/User");
+const Hospital = require("../models/Hospital");
+const jwt = require("jsonwebtoken");
+const { signupMail, passwordMail } = require("../config/nodemailer");
+const path = require("path");
+const Disease = require("../models/Disease");
+const Nominee = require("../models/Nominee");
+const Relations = require("../models/Relations");
+const { handleErrors, generateShortId } = require("../utilities/Utilities");
+const crypto = require("crypto");
+require("dotenv").config();
+const { nanoId } = require("nanoid");
+const mongoose = require("mongoose");
 
-const maxAge = 30 * 24 * 60 * 60
-const error_msg={show:false,type:'',msg:''}
+const maxAge = 30 * 24 * 60 * 60;
 
-const setError=(type='',show=true,msg='')=>{
-    error_msg.type=type
-    error_msg.show=show
-    error_msg.msg=msg
-}
-
-
-module.exports.editDetails_post=async(req,res)=>{
-    try{
-    console.log("details",req.body)
-    const name =req.body.nomineeName
-    const email=req.body.nomineeEmail
-    const phoneNumber=req.body.nomineePhn
+module.exports.editDetails_post = async (req, res) => {
+  try {
+    console.log("details", req.body);
+    const name = req.body.nomineeName;
+    const email = req.body.nomineeEmail;
+    const phoneNumber = req.body.nomineePhn;
     // console.log("name,phn,email",name,email,phoneNumber)
     // console.log("name,phn,email",name,email,phoneNumber)
-    
-    const address= req.body.address
-    const bloodGroup= req.body.bloodGroup
-    const user=req.user
-    user.address=address
-    user.bloodGroup=bloodGroup
+
+    const address = req.body.address;
+    const bloodGroup = req.body.bloodGroup;
+    const user = req.user;
+    user.address = address;
+    user.bloodGroup = bloodGroup;
     //await user.save()
-    console.log(user)
-    let nominee = await new Nominee({ 
-        name,
-        email,
-        phoneNumber
-    }).save()
+    console.log(user);
+    let nominee = await new Nominee({
+      name,
+      email,
+      phoneNumber,
+    }).save();
     if (!nominee) {
-        // req.flash('error_msg', 'Unable to save the details')
-        return res.redirect('/user/profile')
+      // req.flash('error_msg', 'Unable to save the details')
+      return res.redirect("/user/profile");
     }
-    console.log('nominee',nominee)
-    
-    req.user.nominee = nominee._id
-    await user.save()
+    console.log("nominee", nominee);
+
+    req.user.nominee = nominee._id;
+    await user.save();
     // console.log("user saved",user)
     // req.flash('success_msg','Details about the user has been saved')
-      
 
-    res.redirect('/user/profile')
-    }
-    catch(e){
-        // console.log("error",e)
-        // req.flash('error_msg','error while editing profile details')
-        res.redirect('/user/profile')
-    }
-}
+    res.redirect("/user/profile");
+  } catch (e) {
+    // console.log("error",e)
+    // req.flash('error_msg','error while editing profile details')
+    res.redirect("/user/profile");
+  }
+};
 
+module.exports.userHospital_get = async (req, res) => {
+  const hsopitalId = req.query;
+  const params = new URLSearchParams(hsopitalId);
+  const newId = params.get("id");
+  // console.log(newId);
+  res.locals.user = await req.user.populate("disease").execPopulate();
+  //const newId=JSON.parse(userId,true)
+  const hospital = await Hospital.findOne({ _id: newId });
+  //    console.log('user details',userHospital)
 
-module.exports.userHospital_get= async (req,res)=>{
-    const hsopitalId=req.query
-    const params=new URLSearchParams(hsopitalId)
-    const newId=params.get('id')
-    // console.log(newId);
-    res.locals.user = await req.user.populate('disease').execPopulate()
-    //const newId=JSON.parse(userId,true)
-    const hospital=await Hospital.findOne({'_id':newId});
-//    console.log('user details',userHospital)
-    
-    //  console.log("hospital", user)
-    const hospitals = await Relations.find({'userId':req.user._id,'isPermitted':true},"hospitalId").populate('hospitalId','hospitalName')
-    // console.log('relation',hospitals)
-    if(!hospital)
-    {
-        // req.flash('error_msg','user not found')
-        res.redirect('/user/profile')
-    }
-    res.send({
-        path:'/user/userHospital',
-        hospitals,
-        hospital
-    })
-}
-
-
+  //  console.log("hospital", user)
+  const hospitals = await Relations.find(
+    { userId: req.user._id, isPermitted: true },
+    "hospitalId"
+  ).populate("hospitalId", "hospitalName");
+  // console.log('relation',hospitals)
+  if (!hospital) {
+    // req.flash('error_msg','user not found')
+    res.redirect("/user/profile");
+  }
+  res.send({
+    path: "/user/userHospital",
+    hospitals,
+    hospital,
+  });
+};
 
 // controller actions
 module.exports.signup_get = (req, res) => {
-    console.log("signup")
-    // res.render({
-    //     type: 'signup'
-    // })
-    res.status(200).send("Hello")
-}
+  console.log("signup");
+  // res.render({
+  //     type: 'signup'
+  // })
+  res.status(200).send("Hello");
+};
 
 module.exports.login_get = (req, res) => {
-    res.send({
-        type: 'login'
-    })
-    // res.status(200).send("Hello")
-}
+  res.send({
+    type: "login",
+  });
+  // res.status(200).send("Hello")
+};
 
 module.exports.signup_post = async (req, res) => {
     console.log("in sign up route",req.body);
@@ -244,140 +233,87 @@ module.exports.login_post = async (req, res) => {
         // console.log(err)
         res.send(error_msg)
     }
-}
+  
+};
 
 module.exports.upload_post = async (req, res) => {
+  // console.log("in uploads",req.body)
 
-    // console.log("in uploads",req.body)
-    
-    try {
-        
-        let { name } = req.body
-       
-        const files = req.files
-        dname=name.toLowerCase()
-        const obj = JSON.parse(JSON.stringify(files))
-        // console.log("files",obj)
-        // console.log(obj.document[0].filename)
-        if(Object.keys(obj).length===0)
-        {
-            // req.flash('error_msg','You may have not submitted any file or the file type may not be supported. Please try jpg,jpeg,pdf files')
-            return res.redirect('/user/profile')
-        }
-        if(name==='')
-        {
-            // req.flash('error_msg','Disease name cant be empty')
-            return res.redirect('/user/profile')
-        }
-        const userDisease= await req.user.populate('disease','name').execPopulate()
-        // console.log('disease',userDisease)
-        const existName=userDisease.disease.find(data=>
-            data.name===dname
-        )
-        // console.log('disease',existName)
+  try {
+    let { name } = req.body;
 
-        const document={
-        originalName:'',
-        filename:''
-        }
-        const medicine={
-        originalName:'',
-        filename:''
-        }
+    const files = req.files;
+    dname = name.toLowerCase();
+    const obj = JSON.parse(JSON.stringify(files));
+    // console.log("files",obj)
+    // console.log(obj.document[0].filename)
+    if (Object.keys(obj).length === 0) {
+      // req.flash('error_msg','You may have not submitted any file or the file type may not be supported. Please try jpg,jpeg,pdf files')
+      return res.redirect("/user/profile");
+    }
+    if (name === "") {
+      // req.flash('error_msg','Disease name cant be empty')
+      return res.redirect("/user/profile");
+    }
+    const userDisease = await req.user
+      .populate("disease", "name")
+      .execPopulate();
+    // console.log('disease',userDisease)
+    const existName = userDisease.disease.find((data) => data.name === dname);
+    // console.log('disease',existName)
 
+    const document = {
+      originalName: "",
+      filename: "",
+    };
+    const medicine = {
+      originalName: "",
+      filename: "",
+    };
 
-        if(existName)
-        {
-            
-            const existDisease= await Disease.findById({'_id':existName._id})
-            // console.log('exist disease',existDisease)
-          
-            if(obj.medicine)
-            {
-                //medicine[0]._id= mongoose.Types.ObjectId()
-                medicine.originalName=obj.medicine[0].originalname
-                medicine.filename=`/uploads/${req.user.email}/${dname}/${obj.medicine[0].filename}`
-                existDisease.medicine.push(medicine)
-            }
-            if(obj.document)
-            {
-                //document[0]._id=mongoose.Types.ObjectId()
-                document.originalName=obj.document[0].originalname
-                document.filename=`/uploads/${req.user.email}/${dname}/${obj.document[0].filename}`
-                existDisease.document.push(document)
-            }
-            await existDisease.save()
-            // req.flash('success_msg','Disease name already exists, file succesfully uploaded')
-            return res.redirect('/user/profile')
-        }
-        
-        /*let images = files.map((file) => {
+    if (existName) {
+      const existDisease = await Disease.findById({ _id: existName._id });
+      // console.log('exist disease',existDisease)
+
+      if (obj.medicine) {
+        //medicine[0]._id= mongoose.Types.ObjectId()
+        medicine.originalName = obj.medicine[0].originalname;
+        medicine.filename = `/uploads/${req.user.email}/${dname}/${obj.medicine[0].filename}`;
+        existDisease.medicine.push(medicine);
+      }
+      if (obj.document) {
+        //document[0]._id=mongoose.Types.ObjectId()
+        document.originalName = obj.document[0].originalname;
+        document.filename = `/uploads/${req.user.email}/${dname}/${obj.document[0].filename}`;
+        existDisease.document.push(document);
+      }
+      await existDisease.save();
+      // req.flash('success_msg','Disease name already exists, file succesfully uploaded')
+      return res.redirect("/user/profile");
+    }
+
+    /*let images = files.map((file) => {
             return `/uploads/${req.user.email}/${file.filename}`
         })*/
-       
 
-           
-        let newDisease = await new Disease({ 
-            name
-        }).save()
-        if(obj.medicine)
-        {
-            medicine.originalName=obj.medicine[0].originalname
-            medicine.filename=`/uploads/${req.user.email}/${dname}/${obj.medicine[0].filename}`
-            newDisease.medicine.push(medicine)
-            
-           // medicine.push(`/uploads/${req.user.email}/${dname}/${obj.medicine[0].filename}`)
-        }
-        if(obj.document)
-        {
-            document.originalName=obj.document[0].originalname
-            document.filename=`/uploads/${req.user.email}/${dname}/${obj.document[0].filename}`
-            newDisease.document.push(document)
-            //await newDisease.save()
-            //document.push( `/uploads/${req.user.email}/${dname}/${obj.document[0].filename}`)
-        }
-        await newDisease.save()
+    let newDisease = await new Disease({
+      name,
+    }).save();
+    if (obj.medicine) {
+      medicine.originalName = obj.medicine[0].originalname;
+      medicine.filename = `/uploads/${req.user.email}/${dname}/${obj.medicine[0].filename}`;
+      newDisease.medicine.push(medicine);
 
-        // console.log('documents',document)
-        // console.log('medicine',medicine)
-        
-        if (!newDisease) {
-            // req.flash('error_msg', 'Unable to save the disease details, Please check the file format. Supported file formats are:jpeg,jpg,png,gif,pdf')
-            return res.redirect('/user/profile')
-        }
-        req.user.disease.push(newDisease)
-        await req.user.save()
-
-        // console.log(newDisease)
-        // req.flash('success_msg', 'Sucessfully uploaded disease details.')
-        return res.redirect('/user/profile')
-    } catch (err) {
-        // console.log("error")
-        // console.error(err)
-        // req.flash('error_msg', 'Something went wrong')
-        return res.redirect('/user/profile')
+      // medicine.push(`/uploads/${req.user.email}/${dname}/${obj.medicine[0].filename}`)
     }
-}
-
-
-module.exports.disease_get=async(req,res)=>{
-    const userId=req.query
-    const params=new URLSearchParams(userId)
-    const id=params.get('id')
-    const disease=await Disease.findOne({_id:id})
-    // console.log("disease",disease)
-    const hospitals = await Relations.find({'userId':req.user._id,'isPermitted':true}).populate('hospitalId','hospitalName')    
-    // console.log('user',req.user)
-    res.locals.user= await req.user.populate('disease').execPopulate()
-    // console.log('diseases',Userdiseases)
-    res.send( {
-        path: '/user/disease',
-        hospitals,
-        disease
-      })
-    //   console.log("in disease page")
-    // res.status(200).send("Hello")
+    if (obj.document) {
+      document.originalName = obj.document[0].originalname;
+      document.filename = `/uploads/${req.user.email}/${dname}/${obj.document[0].filename}`;
+      newDisease.document.push(document);
+      //await newDisease.save()
+      //document.push( `/uploads/${req.user.email}/${dname}/${obj.document[0].filename}`)
     }
+    await newDisease.save();
 
 module.exports.profile_get = async (req, res) => {
     //res.locals.user = req.user
@@ -395,204 +331,256 @@ module.exports.profile_get = async (req, res) => {
       res.status(200).send(res.locals.user)
     // res.status(200).send("Hello")
     }
+    req.user.disease.push(newDisease);
+    await req.user.save();
+
+    // console.log(newDisease)
+    // req.flash('success_msg', 'Sucessfully uploaded disease details.')
+    return res.redirect("/user/profile");
+  } catch (err) {
+    // console.log("error")
+    // console.error(err)
+    // req.flash('error_msg', 'Something went wrong')
+    return res.redirect("/user/profile");
+  }
+};
+
+module.exports.disease_get = async (req, res) => {
+  const userId = req.query;
+  const params = new URLSearchParams(userId);
+  const id = params.get("id");
+  const disease = await Disease.findOne({ _id: id });
+  // console.log("disease",disease)
+  const hospitals = await Relations.find({
+    userId: req.user._id,
+    isPermitted: true,
+  }).populate("hospitalId", "hospitalName");
+  // console.log('user',req.user)
+  res.locals.user = await req.user.populate("disease").execPopulate();
+  // console.log('diseases',Userdiseases)
+  res.send({
+    path: "/user/disease",
+    hospitals,
+    disease,
+  });
+  //   console.log("in disease page")
+  // res.status(200).send("Hello")
+};
+
+module.exports.profile_get = async (req, res) => {
+  //res.locals.user = req.user
+  res.locals.user = await req.user.populate("disease").execPopulate();
+  // console.log('user id',req.user)
+  console.log("locals", res.locals.user);
+  // console.log('id',req.user._id)
+  // const user=req.user
+  const hospitals = await Relations.find({
+    userId: req.user._id,
+    isPermitted: true,
+  }).populate("hospitalId", "hospitalName");
+  const nominee = await req.user.populate("nominee").execPopulate(); // to be optimised by gaurav
+  // console.log('hospitals',nominee)
+  // const profilePath=path.join(__dirname,`../../public/uploads/${user.email}/${user.profilePic}`)
+  // console.log(profilePath)
+  console.log("in profile page");
+  // res.status(200).send("Hello")
+};
 
 module.exports.logout_get = async (req, res) => {
-    // res.cookie('jwt', '', { maxAge: 1 });
-    // const cookie = req.cookies.jwt
-    res.clearCookie('jwt')
-    // req.flash('success_msg', 'Successfully logged out')
-    res.redirect('/user/login')
-} 
+  // res.cookie('jwt', '', { maxAge: 1 });
+  // const cookie = req.cookies.jwt
+  res.clearCookie("jwt");
+  // req.flash('success_msg', 'Successfully logged out')
+  res.redirect("/user/login");
+};
 
 // module.exports.upload_get =async (req, res) => {
 //   res.render("multer")
 // }
 
 module.exports.getForgotPasswordForm = async (req, res) => {
-    // res.render('./userViews/forgotPassword')
-    res.send("hello")
-}
+  // res.render('./userViews/forgotPassword')
+  res.send("hello");
+};
 
 module.exports.getPasswordResetForm = async (req, res) => {
-    const userID=req.params.id;
-    const user = await User.findOne({ _id: userID })
-    const resetToken = req.params.token
-    res.send( {
-        userID,
-        resetToken,
-    })
-    // res.status(200).send("Hello")
-}
+  const userID = req.params.id;
+  const user = await User.findOne({ _id: userID });
+  const resetToken = req.params.token;
+  res.send({
+    userID,
+    resetToken,
+  });
+  // res.status(200).send("Hello")
+};
 
 module.exports.forgotPassword = async (req, res) => {
-    const email=req.body.email
-    const user = await User.findOne({ email })
-    if (!user) {
-        // req.flash('error_msg', 'No user found')
-        return res.redirect('/user/login')
+  const email = req.body.email;
+  const user = await User.findOne({ email });
+  if (!user) {
+    // req.flash('error_msg', 'No user found')
+    return res.redirect("/user/login");
+  }
+  // console.log(user)
+  const userID = user._id;
+
+  const dt = new Date(user.passwordResetExpires).getTime();
+  if (
+    (user.passwordResetToken && dt > Date.now()) ||
+    !user.passwordResetToken
+  ) {
+    const resetToken = user.createPasswordResetToken();
+    // console.log(user.passwordResetExpires)
+    // console.log(user.passwordResetToken)
+    await user.save({ validateBeforeSave: false });
+    try {
+      passwordMail(user, resetToken, req.hostname, req.protocol);
+      // req.flash('success_msg', 'Email sent,please check email')
+      res.redirect("/user/forgotPassword");
+    } catch (err) {
+      user.passwordResetToken = undefined;
+      user.passwordResetExpires = undefined;
+      await user.save({ validateBeforeSave: false });
+      // req.flash('error_msg', 'Unable to send mail')
+      res.redirect("/user/forgotPassword");
     }
-    // console.log(user)
-    const userID = user._id
-    
-    const dt = new Date(user.passwordResetExpires).getTime()
-    if (
-        (user.passwordResetToken && dt > Date.now()) ||
-        !user.passwordResetToken
-    ) {
-        const resetToken = user.createPasswordResetToken()
-        // console.log(user.passwordResetExpires)
-        // console.log(user.passwordResetToken)
-        await user.save({ validateBeforeSave: false })
-        try {
-            passwordMail(user,resetToken,req.hostname, req.protocol)
-            // req.flash('success_msg', 'Email sent,please check email')
-            res.redirect('/user/forgotPassword')
-        } catch (err) {
-            user.passwordResetToken = undefined
-            user.passwordResetExpires = undefined
-            await user.save({ validateBeforeSave: false })
-            // req.flash('error_msg', 'Unable to send mail')
-            res.redirect('/user/forgotPassword')
-        }
-    } else {
-        // req.flash('error_msg', 'Mail already send,please wait for sometime to send again')
-        res.redirect('/user/forgotPassword')
-    }
-}
+  } else {
+    // req.flash('error_msg', 'Mail already send,please wait for sometime to send again')
+    res.redirect("/user/forgotPassword");
+  }
+};
 
 module.exports.resetPassword = async (req, res) => {
-    try {
-        const token=req.params.token
-        const id=req.params.id
-        const hashedToken = crypto
-            .createHash('sha256')
-            .update(req.params.token)
-            .digest('hex')
-        const user = await User.findOne({
-            _id: req.params.id,
-            passwordResetToken: hashedToken,
-            passwordResetExpires: { $gt: Date.now() },
-        })
-        if (!user) {
-            // req.flash('error_msg', 'No user found')
-            return res.redirect('/user/login')
-        }
-        if(req.body.password!==req.body.cpassword){
-        //   req.flash('error_msg','Passwords dont match') 
-          return res.redirect(`resetPassword/${id}/${token}`)
-        }else{
-            
-        user.password = req.body.password
-        user.passwordResetToken = undefined
-        user.passwordResetExpires = undefined
-        await user.save()
-        const JWTtoken = await user.generateAuthToken(maxAge)
-        // user = user.toJSON()
-        res.cookie('jwt', JWTtoken, {
-            maxAge: 24 * 60 * 60 * 1000,
-            httpOnly: false,
-        })
-        res.redirect('/user/profile')
- 
-        }
-   } catch (err) {
-        res.send(err)
+  try {
+    const token = req.params.token;
+    const id = req.params.id;
+    const hashedToken = crypto
+      .createHash("sha256")
+      .update(req.params.token)
+      .digest("hex");
+    const user = await User.findOne({
+      _id: req.params.id,
+      passwordResetToken: hashedToken,
+      passwordResetExpires: { $gt: Date.now() },
+    });
+    if (!user) {
+      // req.flash('error_msg', 'No user found')
+      return res.redirect("/user/login");
     }
-}
-module.exports.hospitalSearch_get=async(req,res)=>{
-    const userId=req.query
-    const params=new URLSearchParams(userId)
-    const id=params.get('id')
-    const hospitals=await Hospital.find({ _id:id})
-    // console.log(hospitals)
-    // res.send(hospital)
-    const nominee= await req.user.populate('nominee').execPopulate()
-    // console.log('nomineeeee',nominee)
-    res.locals.user=req.user
-    res.send({
+    if (req.body.password !== req.body.cpassword) {
+      //   req.flash('error_msg','Passwords dont match')
+      return res.redirect(`resetPassword/${id}/${token}`);
+    } else {
+      user.password = req.body.password;
+      user.passwordResetToken = undefined;
+      user.passwordResetExpires = undefined;
+      await user.save();
+      const JWTtoken = await user.generateAuthToken(maxAge);
+      // user = user.toJSON()
+      res.cookie("jwt", JWTtoken, {
+        maxAge: 24 * 60 * 60 * 1000,
+        httpOnly: false,
+      });
+      res.redirect("/user/profile");
+    }
+  } catch (err) {
+    res.send(err);
+  }
+};
+module.exports.hospitalSearch_get = async (req, res) => {
+  const userId = req.query;
+  const params = new URLSearchParams(userId);
+  const id = params.get("id");
+  const hospitals = await Hospital.find({ _id: id });
+  // console.log(hospitals)
+  // res.send(hospital)
+  const nominee = await req.user.populate("nominee").execPopulate();
+  // console.log('nomineeeee',nominee)
+  res.locals.user = req.user;
+  res.send({
+    hospitals,
+    nominee,
+    path: "/user/userHospitalD",
+  });
+  // res.status(200).send("Hello")
+};
+module.exports.hospitalSearch_post = async (req, res) => {
+  const hospitalName = req.body.hname;
+  // console.log(hospitalName)
+
+  if (!hospitalName) {
+    // req.flash("error_msg", "Enter a value")
+    res.redirect("/user/profile");
+    return;
+  }
+  try {
+    const hospital = await Hospital.find({ hospitalName: hospitalName });
+    //    console.log('resukts',hospital)
+    if (hospital.length === 0) {
+      // req.flash("error_msg", "No such hospital exists")
+      res.redirect("/user/profile");
+      return;
+    } else {
+      // req.flash("success_msg", "Hospital found")
+      res.locals.user = await req.user.populate("disease").execPopulate();
+      const hospitals = await Relations.find({
+        userId: req.user._id,
+        isPermitted: true,
+      }).populate("hospitalId", "hospitalName");
+      const nominee = await req.user.populate("nominee").execPopulate();
+      // console.log(hospitals)
+      // console.log(hospitals)
+      res.send({
         hospitals,
         nominee,
-        path:'/user/userHospitalD'
-    })
-    // res.status(200).send("Hello")
-}
-module.exports.hospitalSearch_post=async(req,res)=>{
-    const hospitalName = req.body.hname
-    // console.log(hospitalName) 
+        hospital,
+      });
 
-    if (!hospitalName)
-    {
-        // req.flash("error_msg", "Enter a value")
-        res.redirect("/user/profile")
-        return 
+      return;
     }
-    try
-    {
-        const hospital = await Hospital.find({hospitalName:hospitalName})
-    //    console.log('resukts',hospital)
-        if (hospital.length === 0)
-        {
-            // req.flash("error_msg", "No such hospital exists")
-            res.redirect("/user/profile")
-            return 
-
-        }  
-        else
-        {
-            // req.flash("success_msg", "Hospital found")
-            res.locals.user = await req.user.populate('disease').execPopulate()
-            const hospitals = await Relations.find({'userId':req.user._id,'isPermitted':true}).populate('hospitalId','hospitalName')
-            const nominee= await req.user.populate('nominee').execPopulate()
-            // console.log(hospitals)
-            // console.log(hospitals)
-            res.send( {
-            hospitals, 
-            nominee,
-            hospital })
-            
-            return 
-
-        }
-
-    }
-    catch
-    {
-    //  console.log("Internal error while searching for hospital"); 
+  } catch {
+    //  console.log("Internal error while searching for hospital");
     //  req.flash("error_msg", "error while searching for hospital")
-     res.redirect("/user/profile"); 
+    res.redirect("/user/profile");
+  }
+};
+module.exports.download = async (req, res) => {
+  const downloadpdf = req.query;
+  const params = new URLSearchParams(downloadpdf);
+  const pathp = params.get("pdfdownload");
+  var parts = pathp.split("/");
+  var result = parts[parts.length - 1]; //to get the file name
+  const type = req.params.type; //to get the type wheather 'medical/documnet'
+  let reqPath = path.join(
+    __dirname,
+    `../../public/${pathp}/../${type}/${result}`
+  );
+  // console.log(reqPath)
+  res.download(reqPath, (error) => {
+    if (error) {
+      // req.flash("error_msg", "error while downloading")
+      // console.trace(error)
+      return res.redirect("/user/profile");
     }
-    
-}
-module.exports.download=async(req,res)=>{
-    const downloadpdf=req.query
-    const params=new URLSearchParams(downloadpdf)
-    const pathp=params.get('pdfdownload')
-    var parts = pathp.split("/");
-    var result = parts[parts.length - 1]//to get the file name
-    const type=req.params.type//to get the type wheather 'medical/documnet'
-    let reqPath = path.join(__dirname, `../../public/${pathp}/../${type}/${result}`)
-    // console.log(reqPath) 
-    res.download(reqPath, (error)=>{
-        if(error){
-            // req.flash("error_msg", "error while downloading")
-            // console.trace(error)
-            return res.redirect('/user/profile')
-        }
-        res.end()
-      })
+    res.end();
+  });
+};
+module.exports.picupload_post = async (req, res) => {
+  const user = req.user;
+  const picPath = user.profilePic;
+  User.findOneAndUpdate(
+    { _id: user._id },
+    { $set: { profilePic: picPath } },
+    { new: true },
+    (err, doc) => {
+      if (err) {
+        // console.log("Something wrong when updating data!");
+        // req.flash("error_msg", "Something wrong when updating data!")
+        res.redirect("/user/profile");
+      }
 
-}
-module.exports.picupload_post=async(req,res)=>{
-    const user=req.user
-    const picPath=user.profilePic
-    User.findOneAndUpdate({_id: user._id}, {$set:{profilePic:picPath}}, {new: true}, (err, doc) => {
-        if (err) {
-            // console.log("Something wrong when updating data!");
-            // req.flash("error_msg", "Something wrong when updating data!")
-            res.redirect('/user/profile')
-        }
-        
-        // console.log(doc);
-    });
-    res.redirect('/user/profile')
-}
+      // console.log(doc);
+    }
+  );
+  res.redirect("/user/profile");
+};
