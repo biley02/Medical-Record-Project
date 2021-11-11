@@ -14,6 +14,15 @@ const mongoose=require('mongoose')
 
 const maxAge = 30 * 24 * 60 * 60
 
+const error_msg={type:'',show:false,msg:''}
+
+const setError=(type='',show=false,msg='')=>{
+    error_msg.type=type
+    error_msg.show=show
+    error_msg.msg=msg
+
+}
+
 
 module.exports.editDetails_post=async(req,res)=>{
     try{
@@ -99,13 +108,12 @@ module.exports.login_get = (req, res) => {
 }
 
 module.exports.signup_post = async (req, res) => {
-    const { name, email, password, confirmPwd, phoneNumber } = req.body
+    const { name, email, password, confirmPassword, phoneNumber } = req.body
     const nominee=null
     // console.log("in sign up route",req.body);
-    if (password != confirmPwd) {
-        req.flash('error_msg', 'Passwords do not match. Try again')
-        res.status(400).redirect('/user/login')
-        return
+    if (password != confirmPassword) {
+       setError('danger',true,'Password do not match')
+        return res.send(error_msg)
     }
 
     try {
@@ -119,24 +127,18 @@ module.exports.signup_post = async (req, res) => {
       return res.redirect("/signup")
     }*/
         if (userExists) {
-            req.flash(
-                'success_msg',
-                'This email is already registered. Try logging in'
-            )
-            return res.redirect('/user/login')
+            setError('success',false,'user already exists try login in')
+            return res.send(error_msg)
         }
         const short_id =  generateShortId(name,phoneNumber);
         // console.log("Short ID generated is: ", short_id)
         const user = new User({ email, name, password, phoneNumber, short_id ,nominee})
         let saveUser = await user.save()
         // console.log(saveUser);
-        req.flash(
-            'success_msg',
-            'Registration successful. Check your inbox to verify your email'
-        )
+        setError('success',false,'user registered mail has been sent')
         signupMail(saveUser, req.hostname, req.protocol)
         //res.send(saveUser)
-        res.redirect('/user/login')
+        res.send(error_msg)
     } catch (err) {
         const errors = handleErrors(err)
         // console.log(errors)
@@ -215,35 +217,32 @@ module.exports.login_post = async (req, res) => {
             if(timeDiff<=10800000)
             {
                 // console.log("Email already sent check it")
-                req.flash(
-                    'error_msg',
-                    `${userExists.name}, we have already sent you a verify link please check your email`)
-                res.redirect('/user/login')
-                return
+                setError('danger',true,'email has been sent please verify')
+                
+                return res.send(error_msg)
             }
-            req.flash(
-                'success_msg',
-                `${userExists.name}, your verify link has expired we have sent you another email please check you mailbox`
-            )
+            // req.flash(
+            //     'success_msg',
+            //     `${userExists.name}, your verify link has expired we have sent you another email please check you mailbox`
+            // )
+            setError('danger',true,`${userExists.name}, your verify link has expired we have sent you another email please check you mailbox`)
             signupMail(userExists, req.hostname, req.protocol)
             await User.findByIdAndUpdate(userExists._id, { updatedAt: new Date() });
             // console.log('userExists',userExists)
-            res.redirect('/user/login')
-            return
+            // res.redirect('/user/login')
+            return res.send(error_msg)
         }
        
         const token = user.generateAuthToken(maxAge)
 
         res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 })
-        // console.log(user);
-        //signupMail(saveUser)
-    //    console.log("logged in")
-        req.flash('success_msg', 'Successfully logged in')
-        res.status(200).redirect('/user/profile')
+
+        setError('success',false,'successfully logged in')
+        res.send(error_msg)
     } catch (err) {
-        req.flash('error_msg', 'Invalid Credentials')
+       setError('danger',true,'invalid credentials')
         // console.log(err)
-        res.redirect('/user/login')
+        res.send(error_msg)
     }
 }
 
@@ -381,23 +380,24 @@ module.exports.disease_get=async(req,res)=>{
 
 module.exports.profile_get = async (req, res) => {
     //res.locals.user = req.user
-    res.locals.user = await req.user.populate('disease').execPopulate()
+    // res.locals.user = await req.user.populate('disease').execPopulate()
     // console.log('user id',req.user)
     // console.log("locals",res.locals.user)
     // console.log('id',req.user._id)
     // const user=req.user
-    const hospitals = await Relations.find({'userId':req.user._id,'isPermitted':true}).populate('hospitalId','hospitalName')
-    const nominee= await req.user.populate('nominee').execPopulate()// to be optimised by gaurav
+    // const hospitals = await Relations.find({'userId':req.user._id,'isPermitted':true}).populate('hospitalId','hospitalName')
+    // const nominee= await req.user.populate('nominee').execPopulate()// to be optimised by gaurav
     // console.log('hospitals',nominee)
     // const profilePath=path.join(__dirname,`../../public/uploads/${user.email}/${user.profilePic}`)
     // console.log(profilePath)
-    res.render('./userViews/profile', {
-        path: '/user/profile',
-        hospitals:hospitals,
-        nominee,
-        // profilePath
-      })
+    // res.render('./userViews/profile', {
+    //     path: '/user/profile',
+    //     hospitals:hospitals,
+    //     nominee,
+    //     // profilePath
+    //   })
     //   console.log("in profile page")
+    res.send('hello')
     }
 
 module.exports.logout_get = async (req, res) => {
