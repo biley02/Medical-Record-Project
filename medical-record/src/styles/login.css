@@ -8,6 +8,7 @@ body {
 #ini{
 	display: flex;
 	flex-direction: row;
+	background-color: #ffffff;
 }
 #loginForm{
 	display: flex;
@@ -17,6 +18,11 @@ body {
 	/* position:relative; */
 	width:50vw;
 	height:100vh;
+	background-image: url('../img/signup-dots.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+	background-color: #ffffff;
+	background-size: 98vw 92vh;
 	/* margin-left: 50vw; */
 }
 
@@ -47,7 +53,7 @@ body {
 	 
  }
  #submitbtn1{
- 	display:flex;
+ 	display:block;
  	margin-top:3px;
  	height:6vh;
 	width:19vw;
@@ -56,7 +62,7 @@ body {
     outline:none;
     border:none;
     color:#FFFFFF;
-    font-family:Geneva, Verdana, sans-serif;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     align-items:center;
 	justify-content:center;
 	font-size:1.3vw;

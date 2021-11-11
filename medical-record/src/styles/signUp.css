@@ -13,6 +13,7 @@ body {
 #containers {
     height: 9vh;
     width: 100%;
+    background-color: #ffffff;
     box-shadow: -3px -16px 50px 12px rgba(18, 118, 210, 0.44);
 }
 #Navbar {
@@ -74,6 +75,7 @@ ul li {
     }
     #containers {
         height: 8vh;
+        
     }
 }
 @media (max-width: 991px) {
@@ -186,17 +188,17 @@ ul li {
 
 #signUpForm {
     margin: 5vh auto;
+    margin-left: 3vh;
     width: 50vw;
     height: 100vh;
 }
 #heading {
-    /*text-align: center;*/
+    text-align: center;
     font-family: Product Sans;
     font-weight: bold;
-    font-size: 200%;
+    font-size: 3vw;
     letter-spacing: 0.03em;
     margin-bottom: 2vh;
-    margin-left: 11vw;
 }
 #signUpText {
     text-align: center;
@@ -322,7 +324,7 @@ border:2px solid blue;
 #submitbtn {
     display: block;
     margin-top: 3px;
-    width: 80%;
+    width: 19vw;
     height: 5.5vh;
     background: #458ff6;
     border-radius: 6px;
