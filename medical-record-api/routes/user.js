@@ -92,7 +92,7 @@ router.post("/signup", authController.signup_post);
 router.get("/login", redirectIfLoggedIn, authController.login_get);
 router.post("/login", authController.login_post);
 router.get("/logout", requireAuth, authController.logout_get);
-router.get("/profile",  authController.profile_get);
+router.get("/profile",requireAuth,  authController.profile_get);
 router.post("/profile/editDetails", authController.editDetails_post);
 
 router.post(

@@ -397,6 +397,9 @@ module.exports.profile_get = async (req, res) => {
     //     // profilePath
     //   })
     //   console.log("in profile page")
+    // const token=req.cookies.jwt
+    // console.log('token backend',token)
+    console.log(req.user)
     res.send('hello')
     }
 
