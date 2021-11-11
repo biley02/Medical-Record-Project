@@ -84,7 +84,7 @@ const UserSideComponent = () => {
   //profile details from backend
   useEffect(async()=>{
     const response=await axios.get(`${baseUrl}/profile`)
-    console.log('response from server',response.data.args)
+    console.log('response from server',response.data)
   },[])
 
   // console.log(path)
