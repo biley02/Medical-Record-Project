@@ -20,6 +20,7 @@ import '../styles/modal.css'
 
 import { useGlobalContext } from "../context/Context";
 import axios from "axios";
+axios.defaults.withCredentials=true
 
 const baseUrl='http://localhost:8080/user'
 
@@ -28,7 +29,9 @@ const UserSideComponent = () => {
   const pathname = useLocation().pathname;
   const [path, setPath] = useState("");
 
-  const {Alert,alert,setAlert,showAlert}=useGlobalContext()
+  const {Alert,alert,setAlert,showAlert,userToken}=useGlobalContext()
+
+  const tmp_token=useState(userToken)
 
   const [isShowDropDown,setIsShowDropDown]=useState(false)
 
@@ -82,9 +85,11 @@ const UserSideComponent = () => {
   }
 
   //profile details from backend
-  useEffect(async()=>{
-    const response=await axios.get(`${baseUrl}/profile`)
-    console.log('response from server',response.data)
+ 
+  useEffect(()=>{
+    axios.get('http://localhost:8080/user/profile',{withCredentials:true}).then((res)=>{
+      console.log(res.data)
+    })
   },[])
 
   // console.log(path)
