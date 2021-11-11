@@ -124,18 +124,18 @@ module.exports.signup_post = async (req, res) => {
 
     try {
         const userExists = await User.findOne({ email })
-        console.log('userexists', userExists)
+        // console.log('userexists', userExists)
        
         if (userExists) {
             setError('success',false,'user already exists, try loging in')
-            console.log('user exists')
+            // console.log('user exists')
             return res.send(error_msg)
         }
         const short_id =  generateShortId(name,phoneNumber);
         console.log("Short ID generated is: ", short_id)
         const user = new User({ email, name, password, phoneNumber, short_id ,nominee})
         let saveUser = await user.save()
-        console.log(saveUser);
+        // console.log(saveUser);
         signupMail(saveUser, req.hostname, req.protocol)
         setError('sucess',false,'Registration successful. Check your inbox to verify your email')
         return res.send(error_msg)
@@ -196,8 +196,8 @@ module.exports.emailVerify_get = async (req, res) => {
 
 module.exports.login_post = async (req, res) => {
     const { email, password } = req.body
-    // console.log('in Login route')
-    //  console.log('req.body',req.body)
+    console.log('in Login route')
+     console.log('req.body',req.body)
     try {
 
         const user = await User.login(email, password)
@@ -213,17 +213,12 @@ module.exports.login_post = async (req, res) => {
             const timeDiff = Math.abs(currDate.getTime() - initialUpdatedAt.getTime());
             if(timeDiff<=10800000)
             {
-                // console.log("Email already sent check it")
-                // req.flash(
-                //     'error_msg',
-                //     `${userExists.name}, we have already sent you a verify link please check your email`)
-                res.redirect('/user/login')
-                return
+                setError('danger',true,`${userExists.name}, we have already sent you a verify link please check your email`)
+                
+                return res.send(error_msg)
             }
-            // req.flash(
-            //     'success_msg',
-            //     `${userExists.name}, your verify link has expired we have sent you another email please check you mailbox`
-            // )
+           
+            setError('danger',true,`${userExists.name}, your verify link has expired we have sent you another email please check you mailbox`)
             signupMail(userExists, req.hostname, req.protocol)
             await User.findByIdAndUpdate(userExists._id, { updatedAt: new Date() });
             // console.log('userExists',userExists)
@@ -232,17 +227,22 @@ module.exports.login_post = async (req, res) => {
         }
        
         const token = user.generateAuthToken(maxAge)
+        console.log("token in login",token)
 
         res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 })
+        console.log("jwt cookie from backend",req.cookies.jwt)
+        res.json({token})
         // console.log(user);
         //signupMail(saveUser)
     //    console.log("logged in")
-        // req.flash('success_msg', 'Successfully logged in')
-        res.status(200).redirect('/user/profile')
+         setError('success',false,'Successfully Logged in')
+       
+        res.status(200).send(error_msg)
     } catch (err) {
-        // req.flash('error_msg', 'Invalid Credentials')
+        
+        setError('danger',true,'Invalid Credentials')
         // console.log(err)
-        res.redirect('/user/login')
+        res.send(error_msg)
     }
 }
 
@@ -382,7 +382,7 @@ module.exports.disease_get=async(req,res)=>{
 module.exports.profile_get = async (req, res) => {
     //res.locals.user = req.user
     res.locals.user = await req.user.populate('disease').execPopulate()
-    // console.log('user id',req.user)
+    console.log('user id',req.user)
     console.log("locals",res.locals.user)
     // console.log('id',req.user._id)
     // const user=req.user
@@ -392,6 +392,7 @@ module.exports.profile_get = async (req, res) => {
     // const profilePath=path.join(__dirname,`../../public/uploads/${user.email}/${user.profilePic}`)
     // console.log(profilePath)
       console.log("in profile page")
+      res.status(200).send(res.locals.user)
     // res.status(200).send("Hello")
     }
 
