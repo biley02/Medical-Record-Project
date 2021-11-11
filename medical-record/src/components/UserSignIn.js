@@ -5,9 +5,13 @@ import "../styles/login.css";
 import "../styles/signUp.css";
 import "../styles/passwordStrength.css";
 import "../styles/alert.css"
+import axios from 'axios'
 
 import { useGlobalContext } from "../context/Context";
+import { useHistory } from "react-router-dom";
 
+
+const baseUrl='http://localhost:8080/user'
 
 
 const UserSignIn = () => {
@@ -16,17 +20,26 @@ const UserSignIn = () => {
   const [loginDetails, setloginDetails] = useState({ email: "", password: "" });
   const {alert,Alert,showAlert,setAlert}= useGlobalContext()
 
-   
+   const history=useHistory()
 
   const handleChange = (e) => {
     const value = e.target.value;
     const field = e.target.name;
     setloginDetails({ ...loginDetails, [field]: value });
   };
-  const loginSubmit = (e) => {
+  const loginSubmit =async (e) => {
     e.preventDefault();
     console.log("form submitted", loginDetails);
+    const response=await axios.post(`${baseUrl}/login`,loginDetails)
+    // console.log(response)
+    const error=response.data;
+    if(error.show===true)
+    {
+      return showAlert(error.show,error.type,error.msg)
+    }
     setloginDetails({ email: "", password: "" });
+    showAlert(true,error.type,error.msg)
+    history.push('/user/profile')
   };
   return (
      <>

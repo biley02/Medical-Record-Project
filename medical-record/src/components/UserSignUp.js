@@ -12,7 +12,7 @@ import {useHistory} from 'react-router-dom'
 import { useGlobalContext } from "../context/Context";
 
 
-const baseUrl='https://localhost:8080/user'
+const baseUrl='http://localhost:8080/user'
 const type = "signup";
 const UserSignUp = () => {
   const [userSignUpDetails, setUserSignUpDetails] = useState({
@@ -41,7 +41,7 @@ const UserSignUp = () => {
     // await axios.post(`${baseUrl}/signup`,{userSignUpDetails})
     
     axios
-      .post(`http://localhost:8080/user/signup`,userSignUpDetails)
+      .post(`${baseUrl}/signup`,userSignUpDetails)
       .then((response) => {
         console.log('from server data',response.data)
         const error=response.data;

@@ -18,11 +18,17 @@ import { FaTimes } from 'react-icons/fa';
 
 import '../styles/modal.css'
 
+import { useGlobalContext } from "../context/Context";
+import axios from "axios";
+
+const baseUrl='http://localhost:8080/user'
 
 
 const UserSideComponent = () => {
   const pathname = useLocation().pathname;
   const [path, setPath] = useState("");
+
+  const {Alert,alert,setAlert,showAlert}=useGlobalContext()
 
   const [isShowDropDown,setIsShowDropDown]=useState(false)
 
@@ -75,6 +81,12 @@ const UserSideComponent = () => {
     }
   }
 
+  //profile details from backend
+  useEffect(async()=>{
+    const response=await axios.get(`${baseUrl}/profile`)
+    console.log('response from server',response.data.args)
+  },[])
+
   // console.log(path)
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -114,6 +126,9 @@ const UserSideComponent = () => {
         </form>
       </div>
       </div>
+    <div className={alert.show?'top-alert':''}>
+      {alert.show && <Alert {...alert} removeAlert={showAlert} />}
+    </div>
     <div className="desktop-view">
       <div className="container-fluid profile-body">
         <div className="row">
