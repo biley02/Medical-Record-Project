@@ -6,8 +6,8 @@ require('dotenv').config()
 const requireAuth = (req, res, next) => {
     try{
     const token = req.cookies.jwt
-    console.log("tokens",token);
-    console.log("req",req)
+    // console.log("tokens",token);
+    // console.log("req",req)
     // check json web token exists & is verified
     if (token) {
         jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {

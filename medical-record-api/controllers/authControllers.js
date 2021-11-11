@@ -13,7 +13,13 @@ const { nanoId } = require("nanoid");
 const mongoose = require("mongoose");
 
 const maxAge = 30 * 24 * 60 * 60;
+const error_msg={type:'',show:false,msg:''}
 
+const setError=(type='',show=false,msg='')=>{
+    error_msg.type=type
+    error_msg.show=show
+    error_msg.msg=msg
+}
 module.exports.editDetails_post = async (req, res) => {
   try {
     console.log("details", req.body);
@@ -211,8 +217,8 @@ module.exports.login_post = async (req, res) => {
             signupMail(userExists, req.hostname, req.protocol)
             await User.findByIdAndUpdate(userExists._id, { updatedAt: new Date() });
             // console.log('userExists',userExists)
-            res.redirect('/user/login')
-            return
+            
+            return res.send(error_msg)
         }
        
         const token = user.generateAuthToken(maxAge)
@@ -220,7 +226,6 @@ module.exports.login_post = async (req, res) => {
 
         res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 })
         console.log("jwt cookie from backend",req.cookies.jwt)
-        res.json({token})
         // console.log(user);
         //signupMail(saveUser)
     //    console.log("logged in")
