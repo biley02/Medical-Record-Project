@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router";
+import { useHistory, useLocation } from "react-router";
+
 
 import "../styles/userProfile.css";
 
@@ -30,6 +31,7 @@ const UserSideComponent = () => {
   const [path, setPath] = useState("");
 
   const {Alert,alert,setAlert,showAlert,userToken}=useGlobalContext()
+  const history=useHistory()
 
   const tmp_token=useState(userToken)
 
@@ -83,6 +85,18 @@ const UserSideComponent = () => {
       }
     }
   }
+
+  useEffect(()=>{
+    axios.get(`${baseUrl}/login`).then((res)=>{
+      const error=res.data;
+      console.log('error',error)
+      if(error.show===true)
+      {
+        showAlert(true,error.type,error.msg)
+        return history.push('/user/login')
+      }
+    })
+  },[])
 
   //profile details from backend
  
