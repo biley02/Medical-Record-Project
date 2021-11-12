@@ -96,15 +96,25 @@ module.exports.userHospital_get= async (req,res)=>{
 
 // controller actions
 module.exports.signup_get = (req, res) => {
-    res.render('./userViews/signup',{
-        type: 'signup'
-    })
+    const token=req.cookies.jwt
+    console.log('check user logged in or not')
+    if(token)
+    {
+        setError('success',true,'User already Loged in,please logout to register new user')
+        return res.send(error_msg)
+    }
 }
 
 module.exports.login_get = (req, res) => {
-    res.render('./userViews/signup',{
-        type: 'login'
-    })
+    // console.log(req.cookies.jwt)
+    const token=req.cookies.jwt
+    if(token)
+    {
+        setError('success',false,'User already Loged in')
+        return res.send(error_msg)
+    }
+    setError('danger',true,'User not loged in')
+    return res.send(error_msg)
 }
 
 module.exports.signup_post = async (req, res) => {
@@ -399,16 +409,20 @@ module.exports.profile_get = async (req, res) => {
     //   console.log("in profile page")
     // const token=req.cookies.jwt
     // console.log('token backend',token)
-    console.log(req.user)
+    // console.log(req.user)
     res.send('hello')
     }
 
 module.exports.logout_get = async (req, res) => {
     // res.cookie('jwt', '', { maxAge: 1 });
     // const cookie = req.cookies.jwt
+    console.log('user logged out')
     res.clearCookie('jwt')
-    req.flash('success_msg', 'Successfully logged out')
-    res.redirect('/user/login')
+    
+    setError('success',true,'Successfully logged out')
+    res.send(error_msg)
+    // req.flash('success_msg', 'Successfully logged out')
+    // res.redirect('/user/login')
 } 
 
 // module.exports.upload_get =async (req, res) => {

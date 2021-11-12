@@ -27,7 +27,7 @@ const requireAuth = (req, res, next) => {
                 }
                 //else to profile
                 req.user = user
-                console.log("current user", req.user)
+                // console.log("current user", req.user)
 
                 next()
             }
@@ -47,7 +47,7 @@ const redirectIfLoggedIn = (req, res, next) => {
     if (token)
     {
         req.flash("error_msg", "You are already logged in.")
-        res.redirect("/user/profile")
+        // res.redirect("/user/profile")
     }
     else
     {
