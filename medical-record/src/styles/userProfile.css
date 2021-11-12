@@ -144,6 +144,12 @@ body {
     font-size: 90%;
     font-weight: bold;
 }
+
+#heading2-edit-details{
+    font-size: 100%;
+    margin-bottom: 0;
+    font-weight: bolder;
+}
 .detailLevels {
     font-size: 14px;
     margin-bottom: 4px;

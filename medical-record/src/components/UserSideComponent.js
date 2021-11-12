@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router";
+import { useHistory, useLocation } from "react-router";
+
 
 import "../styles/userProfile.css";
 
@@ -10,15 +11,29 @@ import messageImage from "../img/message.png";
 import doctorIcon from "../img/doctor-icon.png";
 import settingsImage from "../img/Settings.png";
 import diseaseImage from "../img/disease.png";
-
-import Diseases from "./Diseases";
 import UserMiddleComponent from "./UserMiddleComponent";
-import UserDiseaseComponent from "./UserDiseaseComponent";
+import DiseaseContent from "./DiseaseContent";
+
+
+import { FaTimes } from 'react-icons/fa';
+
+import '../styles/modal.css'
+
+import { useGlobalContext } from "../context/Context";
+import axios from "axios";
+axios.defaults.withCredentials=true
+
+const baseUrl='http://localhost:8080/user'
 
 
 const UserSideComponent = () => {
   const pathname = useLocation().pathname;
   const [path, setPath] = useState("");
+
+  const {Alert,alert,setAlert,showAlert,userToken}=useGlobalContext()
+  const history=useHistory()
+
+  const tmp_token=useState(userToken)
 
   const [isShowDropDown,setIsShowDropDown]=useState(false)
 
@@ -71,13 +86,72 @@ const UserSideComponent = () => {
     }
   }
 
+  useEffect(()=>{
+    axios.get(`${baseUrl}/login`).then((res)=>{
+      const error=res.data;
+      console.log('error',error)
+      if(error.show===true)
+      {
+        showAlert(true,error.type,error.msg)
+        return history.push('/user/login')
+      }
+    })
+  },[])
+
+  //profile details from backend
+ 
+  useEffect(()=>{
+    axios.get('http://localhost:8080/user/profile',{withCredentials:true}).then((res)=>{
+      console.log(res.data)
+    })
+  },[])
+
   // console.log(path)
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   return (
     <>
+      <div className={`${modalIsOpen?'modal-overlay show-modal' : 'modal-overlay'}`}>
+      <div className='add-diseases-modal-container'>
+        {/* <h3>Change Profile Picture</h3> */}
+        <button className='close-modal-btn' onClick={()=>setModalIsOpen(false)}>
+          <FaTimes></FaTimes>
+        </button>
+        <form className="form-group"   enctype="multipart/form-data">
+          <label>
+            Add Diseases
+          </label>
+          <div>
+            <label className="label1" htmlFor="userName">
+              Disease Name
+            </label>    
+            <input /><br/><br/>
+          </div>
+          <div>
+              <span>
+                <span >
+                    Add Documents... <input type="file" id="profilePic"/><br/><br/>
+                </span>
+              </span>
+          </div>
+          <div>
+              <span>
+                <span >
+                    Add Medicine... <input type="file" id="profilePic"/><br/><br/>
+                </span>
+              </span>
+          </div>
+          <button type="save">Save</button>
+        </form>
+      </div>
+      </div>
+    <div className={alert.show?'top-alert':''}>
+      {alert.show && <Alert {...alert} removeAlert={showAlert} />}
+    </div>
     <div className="desktop-view">
       <div className="container-fluid profile-body">
         <div className="row">
+ 
           <div
             className="col-lg-2 col-sm-4 col-12 order-3 order-sm-1"
             id="pSec1"
@@ -115,7 +189,9 @@ const UserSideComponent = () => {
                   aria-labelledby="dropdownMenuLink"
                 >
                   <a className="dropdown-item">
-                    <Diseases />
+                    <button className="dropdown-item" onClick={()=>setModalIsOpen(true)}>
+                      Add New
+                    </button>
                   </a>
                 </div>
               </div>
@@ -185,7 +261,7 @@ const UserSideComponent = () => {
             </div>
           </div>
           {path==='/user/profile'?<UserMiddleComponent/>:''}
-          {path==='/user/disease'?<UserDiseaseComponent/>:''}
+          {path==='/user/disease'?<DiseaseContent/>:''}
           <div className="col-lg-2 col-sm-0 col-12 order-2 order-sm-3" id="pSec3">
               <div id="Dr"><a>Doctors </a><img src={doctorIcon} className="Icons doctor-icon"/></div>
               <form method="POST" action="/user/hospitalSearch" id="search-form">
@@ -214,7 +290,9 @@ const UserSideComponent = () => {
                   <img src={diseaseImage} className="Icons"/>
                   <div id="myDropdownMobile" className={isShowDropDown?'dropdown-menu show':'dropdown-menu'} aria-labelledby="dropdownMenuLink">
                     <button className='dropdown-item'>
-                      <Diseases/>
+                    <button className="dropdown-item" onClick={()=>setModalIsOpen(true)}>
+                      Add New
+                    </button>
                     </button>
                   </div>
               </div>
@@ -242,7 +320,7 @@ const UserSideComponent = () => {
             </div>
           </div>
           {path==='/user/profile'?<UserMiddleComponent/>:''}
-          {path==='/user/disease'?<UserDiseaseComponent/>:''}
+          {path==='/user/disease'?<DiseaseContent/>:''}
 
           <div className="col-lg-2 col-sm-0 col-12 order-2 order-sm-3" id="pSec3">
             <div id="mySidenav" className="sidenav">
