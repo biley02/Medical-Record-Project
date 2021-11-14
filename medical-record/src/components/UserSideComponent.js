@@ -98,11 +98,12 @@ const UserSideComponent = () => {
     })
   },[])
 
+
   //profile details from backend
  
   useEffect(()=>{
     axios.get('http://localhost:8080/user/profile',{withCredentials:true}).then((res)=>{
-      console.log(res.data)
+      console.log('user details at frontend',res.data)
     })
   },[])
 
