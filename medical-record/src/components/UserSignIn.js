@@ -96,6 +96,10 @@ const UserSignIn = () => {
             </button>
           </form>
         </div>
+        <div class="signuplink-section">
+          <p id="signUpopt">Don't have an account?</p>
+        <a href="/user/signup" className="toggle" id="signUpLink" style={{textDecoration:'none !important'}}>Create account</a>
+        </div> 
 
         </div>
       </div>

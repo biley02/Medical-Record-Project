@@ -35,6 +35,11 @@ ul li {
     letter-spacing: 0.1em;
     margin-left: 3vw;
 }
+
+p.nav-link {
+    cursor: pointer;
+}
+
 #inputNav {
     width: 20vw;
     padding: 2.5%;
@@ -250,7 +255,7 @@ top:8px;
 .inputDetails {
     display: inline-block;
     /* width: 80%; */
-    width:19vw;
+    width:95%;
     height: 5.5vh;
     padding-left: 20px;
     padding-right: 39px;
@@ -324,7 +329,7 @@ border:2px solid blue;
 #submitbtn {
     display: block;
     margin-top: 3px;
-    width: 19vw;
+    width: 95%;
     height: 5.5vh;
     background: #458ff6;
     border-radius: 6px;
@@ -337,7 +342,14 @@ border:2px solid blue;
     cursor: pointer;
 }
 .loginlink-section {
-    margin-left: 26%;
+    margin-left: 6%;
+}
+.toggle{
+    color: #007bff;
+    
+}
+a:hover{
+    color:#007bff
 }
 #login {
     margin-top: 1.5vh;
