@@ -1,47 +1,129 @@
 import React, { useState } from "react";
-import Modal from "react-modal";
+
+import '../styles/modal.css'
+
+import camera from '../img/camera.png'
 
 const DpModal = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
+
   return (
-    <div>
-      <button onClick={() => setModalIsOpen(true)}>Add New</button>
-      <Modal
-        isOpen={modalIsOpen}
-        shouldCloseOnOverlayClick={false}
-        onRequestClose={() => setModalIsOpen(false)}
+    <>
+      <img
+        src={camera}
+        id="Camera"
+        alt="Profile"
+        onClick={() => {
+          setModalIsOpen(true);
+        }}
+      ></img>
+      {/* <div
+        className={`${
+          modalIsOpen ? "modal-overlay show-modal" : "modal-overlay"
+        }`}
       >
-        <div>
-          <form
-            class="form-group"
-            method="POST"
-            action="/user/profile/picupload"
-            enctype="multipart/form-data"
+        <div className="dp-modal-container">
+         
+          <button
+            className="close-modal-btn"
+            onClick={() => {
+              setModalIsOpen(false);
+            }}
           >
-            <label>Upload Image</label>
-            <div class="input-group">
-              <span class="input-group-btn">
-                <span class="btn btn-default btn-file">
-                  Browse…{" "}
-                  <input type="file" id="profilePic" name="profilePic" />
+            <FaTimes></FaTimes>
+          </button>
+          <form className="form-group" enctype="multipart/form-data">
+            <label>Uplaod Image</label>
+            <div>
+              <span>
+                <span>
+                  Browse… <input type="file" id="profilePic" />
+                  <br />
+                  <br />
                 </span>
               </span>
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Choose a file"
-                readonly
-              />
+              <input type="text" placeholder="Choose a file" readonly></input>
+              <button type="save">Save</button>
             </div>
-            <button type="save" class="save-dp-edit">
-              Save
-            </button>
           </form>
-          <button onClick={() => setModalIsOpen(false)}>Close</button>
         </div>
-      </Modal>
-    </div>
+      </div> */}
+
+      <div
+        className={`${
+          modalIsOpen ? "modal-overlay show-modal" : "modal-overlay"
+        }`}
+      >
+        <div className="add-diseases-modal-container">
+          <form
+            className="form-group"
+            // id="open-modal"
+            enctype="multipart/form-data"
+          >
+            <div className="mod">
+              <button
+                href="#"
+                title="Close"
+                className="link-2"
+                onClick={() => setModalIsOpen(false)}
+              ></button>
+              <h1 className="modal__title">Edit Profile</h1>
+              <div>
+                {/* <label className="form__name" htmlFor="userName">
+                  Disease Name
+                </label> */}
+                <label htmlFor="name" className="lb">
+                  Edit name
+                </label>
+                <input
+                  type="text"
+                  className="form__input"
+                  id="name"
+                  placeholder="Name"
+                  required=""
+                />
+                <br />
+                <br />
+              </div>
+              <div>
+                <br />
+
+                <input
+                  type="file"
+                  id="actual-btn"
+                  hidden
+                  accept="image/*"
+                />
+                <label htmlFor="actual-btn" className="lb1">
+                  Profile picture
+                </label>
+                <span id="file-chosen">No file chosen</span>
+              </div>
+              <div>
+                <br />
+
+                {/* <input type="file" id="actual-btn" hidden />
+                <label htmlFor="actual-btn" className="lb2">
+                  Add presciptions
+                </label>
+                <span id="file-chosen">No file chosen</span> */}
+                {/* <span>
+                  <span class="form__med">
+                    Add Medicine... <input type="file" id="profilePic" />
+                    <br />
+                    <br />
+                  </span>
+                </span> */}
+              </div>
+              <button className="accept" type="save">
+                Save &rarr;<i className="uil uil-expand-arrows"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </>
   );
 };
 

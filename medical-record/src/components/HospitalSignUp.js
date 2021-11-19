@@ -1,96 +1,39 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import axios from 'axios'
 import "../styles/login.css";
 import "../styles/signUp.css";
 import "../styles/passwordStrength.css";
-import "../styles/alert.css"
 
 import signUpLogo from "../img/signupLogo.png";
-import axios from "axios";
-import { Redirect } from "react-router";
-import {useHistory} from 'react-router-dom'
 
-import { useGlobalContext } from "../context/Context";
-
-
-const baseUrl='http://localhost:8080/user'
 const type = "signup";
-const UserSignUp = () => {
+const HospitalSignUp = () => {
   const [userSignUpDetails, setUserSignUpDetails] = useState({
     name: "",
     email: "",
-    phoneNumber: "",
+    licenseNumber: "",
     password: "",
     confirmPassword: "",
   });
-
-  const {alert,Alert,showAlert}= useGlobalContext()
-
-
-  let history=useHistory()
-
- 
-
-  useEffect(()=>{
-    axios.get(`${baseUrl}/login`).then((res)=>{
-     //  console.log(res.data)
-     const error=res.data
-     if(error.show===false)
-     {
-       showAlert(true,error.type,error.msg)
-       return history.push('/user/profile')
-     }
-    }).catch((e)=>{console.log(e)})
-  },[])
-
-  
 
   const handleChange = (e) => {
     const value = e.target.value;
     const name = e.target.name;
     setUserSignUpDetails({ ...userSignUpDetails, [name]: value });
   };
-  const signupSubmit = async (e) => {
+  const signupSubmit = (e) => {
     e.preventDefault();
-    // console.log("form submitted", userSignUpDetails);
-
-    // await axios.post(`${baseUrl}/signup`,{userSignUpDetails})
-    
-    axios
-      .post(`${baseUrl}/signup`,userSignUpDetails)
-      .then((response) => {
-        console.log('from server data',response.data)
-        const error=response.data;
-        // console.log(error)
-        if(error.show===true)
-        {
-          console.log('danger error',error)
-          showAlert(true,error.type,error.msg)
-          return
-        }
-    
-        showAlert(true,'success',error.msg)
-        history.push('/user/login') 
-
-      }).catch((error)=>{console.log(error)});
-    
+    console.log("form submitted", userSignUpDetails);
     setUserSignUpDetails({
       name: "",
       email: "",
-      phoneNumber: "",
+      licenseNumber: "",
       password: "",
       confirmPassword: "",
     });
-
-    
   };
-  
   return (
-    <>
-    <div className={alert.show?'top-alert':''}>
-      {alert.show && <Alert {...alert} removeAlert={showAlert} />}
-      </div>
     <div id="signup">
-      
       <div id="signupLeftImage">
         <img id="design" src={signUpLogo} alt="signupImage" />
       </div>
@@ -100,7 +43,7 @@ const UserSignUp = () => {
           <div id="details">
             <form onSubmit={signupSubmit}>
               <label className="label1" htmlFor="name">
-                Name*
+                Hospital Name*
               </label>
               <br />
               <input
@@ -129,17 +72,17 @@ const UserSignUp = () => {
                 required
               ></input>
               <br />
-              <label className="label1" htmlFor="phoneNumber">
-                Phone Number*
+              <label className="label1" htmlFor="licenseNumber">
+                License Number*
               </label>
               <br />
               <input
                 className="inputDetails"
                 id="SignUpPhone"
                 type="tel"
-                placeholder="Your Phone Number "
-                name="phoneNumber"
-                value={userSignUpDetails.phoneNumber}
+                placeholder="License Number "
+                name="licenseNumber"
+                value={userSignUpDetails.licenseNumber}
                 onChange={handleChange}
                 required
               ></input>
@@ -203,8 +146,7 @@ const UserSignUp = () => {
         
       </div>
     </div>
-    </>
   );
 };
 
-export default UserSignUp;
+export default HospitalSignUp;
