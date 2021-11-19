@@ -1,38 +1,94 @@
-import React, { useState } from "react";
-import axios from 'axios'
+import React, { useEffect, useState } from "react";
 import "../styles/login.css";
 import "../styles/signUp.css";
 import "../styles/passwordStrength.css";
+import "../styles/alert.css"
 
 import signUpLogo from "../img/signupLogo.png";
+import axios from "axios";
+import { Redirect } from "react-router";
+import {useHistory} from 'react-router-dom'
 
+import { useGlobalContext } from "../context/Context";
+
+
+const baseUrl='http://localhost:8080/user'
 const type = "signup";
-const HospitalSignUp = () => {
+const UserSignUp = () => {
   const [userSignUpDetails, setUserSignUpDetails] = useState({
     name: "",
     email: "",
-    licenseNumber: "",
+    registrationNumber: "",
     password: "",
     confirmPassword: "",
   });
+
+  const {alert,Alert,showAlert}= useGlobalContext()
+
+
+  let history=useHistory()
+
+ 
+
+  useEffect(()=>{
+    axios.get(`${baseUrl}/login`).then((res)=>{
+     //  console.log(res.data)
+     const error=res.data
+     if(error.show===false)
+     {
+       showAlert(true,error.type,error.msg)
+       return history.push('/user/profile')
+     }
+    }).catch((e)=>{console.log(e)})
+  },[])
+
+  
 
   const handleChange = (e) => {
     const value = e.target.value;
     const name = e.target.name;
     setUserSignUpDetails({ ...userSignUpDetails, [name]: value });
   };
-  const signupSubmit = (e) => {
+  const signupSubmit = async (e) => {
     e.preventDefault();
-    console.log("form submitted", userSignUpDetails);
+    // console.log("form submitted", userSignUpDetails);
+
+    // await axios.post(`${baseUrl}/signup`,{userSignUpDetails})
+    
+    axios
+      .post(`${baseUrl}/signup`,userSignUpDetails)
+      .then((response) => {
+        console.log('from server data',response.data)
+        const error=response.data;
+        // console.log(error)
+        if(error.show===true)
+        {
+          console.log('danger error',error)
+          showAlert(true,error.type,error.msg)
+          return
+        }
+    
+        showAlert(true,'success',error.msg)
+        history.push('/user/login') 
+
+      }).catch((error)=>{console.log(error)});
+    
     setUserSignUpDetails({
       name: "",
       email: "",
-      licenseNumber: "",
+      registrationNumber: "",
       password: "",
       confirmPassword: "",
     });
+
+    
   };
+  
   return (
+    <>
+    <div className={alert.show?'top-alert':''}>
+      {alert.show && <Alert {...alert} removeAlert={showAlert} />}
+      </div>
     <div id="signup">
       <div id="signupLeftImage">
         <img id="design" src={signUpLogo} alt="signupImage" />
@@ -50,7 +106,7 @@ const HospitalSignUp = () => {
                 className="inputDetails"
                 id="SignUpName"
                 type="text"
-                placeholder="Write your name "
+                placeholder="Hospital name "
                 name="name"
                 value={userSignUpDetails.name}
                 onChange={handleChange}
@@ -72,17 +128,17 @@ const HospitalSignUp = () => {
                 required
               ></input>
               <br />
-              <label className="label1" htmlFor="licenseNumber">
-                License Number*
+              <label className="label1" htmlFor="registrationNumber">
+                Registration Number*
               </label>
               <br />
               <input
                 className="inputDetails"
                 id="SignUpPhone"
                 type="tel"
-                placeholder="License Number "
-                name="licenseNumber"
-                value={userSignUpDetails.licenseNumber}
+                placeholder="Registration Number"
+                name="registrationNumber"
+                value={userSignUpDetails.registrationNumber}
                 onChange={handleChange}
                 required
               ></input>
@@ -140,13 +196,18 @@ const HospitalSignUp = () => {
               >
                 Register
               </button>
+              <div class="loginlink-section">
+                <p id="login">Already have an account?</p>
+    	          <a href="/hospital/login" className="toggle" id="loginLink" style={{textDecoration:'none !important'}}>Login</a>
+              </div>
             </form>
           </div>
         </div>
         
       </div>
     </div>
+    </>
   );
 };
 
-export default HospitalSignUp;
+export default UserSignUp;

@@ -11,6 +11,7 @@ import UserDiseaseComponent from "./components/UserDiseaseComponent";
 import DiseaseContent from "./components/DiseaseContent";
 import HospitalSignIn from "./components/HospitalSignIn";
 import HospitalSignUp from "./components/HospitalSignUp"
+import HospitalProfile from './hospitalComponents/profile'
 
 function App() {
   return (
@@ -39,6 +40,9 @@ function App() {
         </Route>
         <Route path="/hospital/signup">
           <HospitalSignUp />
+        </Route>
+        <Route path="/hospital/profile">
+          <HospitalProfile />
         </Route>
       </Switch>
 
