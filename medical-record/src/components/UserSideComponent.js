@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router";
+import { useHistory, useLocation } from "react-router";
+
 
 import "../styles/userProfile.css";
 
@@ -19,6 +20,7 @@ import "../styles/modal.css";
 
 import { useGlobalContext } from "../context/Context";
 import axios from "axios";
+axios.defaults.withCredentials=true
 
 const baseUrl = "http://localhost:8080/user";
 
@@ -26,7 +28,10 @@ const UserSideComponent = () => {
   const pathname = useLocation().pathname;
   const [path, setPath] = useState("");
 
-  const { Alert, alert, setAlert, showAlert } = useGlobalContext();
+  const {Alert,alert,setAlert,showAlert,userToken}=useGlobalContext()
+  const history=useHistory()
+
+  const tmp_token=useState(userToken)
 
   const [isShowDropDown, setIsShowDropDown] = useState(false);
 
@@ -81,11 +86,25 @@ const UserSideComponent = () => {
     }
   };
 
+  useEffect(()=>{
+    axios.get(`${baseUrl}/login`).then((res)=>{
+      const error=res.data;
+      console.log('error',error)
+      if(error.show===true)
+      {
+        showAlert(true,error.type,error.msg)
+        return history.push('/user/login')
+      }
+    })
+  },[])
+
   //profile details from backend
-  useEffect(async () => {
-    const response = await axios.get(`${baseUrl}/profile`);
-    console.log("response from server", response.data.args);
-  }, []);
+ 
+  useEffect(()=>{
+    axios.get('http://localhost:8080/user/profile',{withCredentials:true}).then((res)=>{
+      console.log(res.data)
+    })
+  },[])
 
   // console.log(path)
   const [modalIsOpen, setModalIsOpen] = useState(false);

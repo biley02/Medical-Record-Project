@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/login.css";
 import "../styles/signUp.css";
 import "../styles/passwordStrength.css";
@@ -28,6 +28,21 @@ const UserSignUp = () => {
 
   let history=useHistory()
 
+ 
+
+  useEffect(()=>{
+    axios.get(`${baseUrl}/login`).then((res)=>{
+     //  console.log(res.data)
+     const error=res.data
+     if(error.show===false)
+     {
+       showAlert(true,error.type,error.msg)
+       return history.push('/user/profile')
+     }
+    }).catch((e)=>{console.log(e)})
+  },[])
+
+  
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -75,7 +90,6 @@ const UserSignUp = () => {
       {alert.show && <Alert {...alert} removeAlert={showAlert} />}
       </div>
     <div id="signup">
-      
       <div id="signupLeftImage">
         <img id="design" src={signUpLogo} alt="signupImage" />
       </div>
