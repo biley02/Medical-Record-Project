@@ -442,7 +442,8 @@ module.exports.profile_get = async (req, res) => {
   // const token=req.cookies.jwt
   // console.log('token backend',token)
   // console.log(req.user)
-  res.send("hello");
+  const user = req.user;
+  res.send(user);
 };
 
 module.exports.logout_get = async (req, res) => {

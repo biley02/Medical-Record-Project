@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router";
 
-
 import "../styles/userProfile.css";
 
 import defaultDp from "../img/profile.png";
@@ -20,18 +19,19 @@ import "../styles/modal.css";
 
 import { useGlobalContext } from "../context/Context";
 import axios from "axios";
-axios.defaults.withCredentials=true
+axios.defaults.withCredentials = true;
 
 const baseUrl = "http://localhost:8080/user";
 
 const UserSideComponent = () => {
   const pathname = useLocation().pathname;
   const [path, setPath] = useState("");
+  const [user, setUser] = useState({});
 
-  const {Alert,alert,setAlert,showAlert,userToken}=useGlobalContext()
-  const history=useHistory()
+  const { Alert, alert, setAlert, showAlert, userToken } = useGlobalContext();
+  const history = useHistory();
 
-  const tmp_token=useState(userToken)
+  const tmp_token = useState(userToken);
 
   const [isShowDropDown, setIsShowDropDown] = useState(false);
 
@@ -86,26 +86,27 @@ const UserSideComponent = () => {
     }
   };
 
-  useEffect(()=>{
-    axios.get(`${baseUrl}/login`).then((res)=>{
-      const error=res.data;
-      console.log('error',error)
-      if(error.show===true)
-      {
-        showAlert(true,error.type,error.msg)
-        return history.push('/user/login')
+  useEffect(() => {
+    axios.get(`${baseUrl}/login`).then((res) => {
+      const error = res.data;
+      console.log("error", error);
+      if (error.show === true) {
+        showAlert(true, error.type, error.msg);
+        return history.push("/user/login");
       }
-    })
-  },[])
-
+    });
+  }, []);
 
   //profile details from backend
- 
-  useEffect(()=>{
-    axios.get('http://localhost:8080/user/profile',{withCredentials:true}).then((res)=>{
-      console.log('user details at frontend',res.data)
-    })
-  },[])
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8080/user/profile", { withCredentials: true })
+      .then((res) => {
+        console.log("data from backedn", res.data);
+        setUser(res.data);
+      });
+  }, []);
 
   // console.log(path)
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -294,7 +295,11 @@ const UserSideComponent = () => {
                 </div>
               </div>
             </div>
-            {path === "/user/profile" ? <UserMiddleComponent /> : ""}
+            {path === "/user/profile" ? (
+              <UserMiddleComponent userobj={user} />
+            ) : (
+              ""
+            )}
             {path === "/user/disease" ? <DiseaseContent /> : ""}
             <div
               className="col-lg-2 col-sm-0 col-12 order-2 order-sm-3"
@@ -388,7 +393,11 @@ const UserSideComponent = () => {
                 </div>
               </div>
             </div>
-            {path === "/user/profile" ? <UserMiddleComponent /> : ""}
+            {path === "/user/profile" ? (
+              <UserMiddleComponent userobj={user} />
+            ) : (
+              ""
+            )}
             {path === "/user/disease" ? <DiseaseContent /> : ""}
 
             <div
