@@ -92,8 +92,12 @@ router.post("/signup", authController.signup_post);
 router.get("/login", authController.login_get);
 router.post("/login", authController.login_post);
 router.get("/logout", authController.logout_get);
-router.get("/profile",requireAuth,  authController.profile_get);
-router.post("/profile/editDetails", authController.editDetails_post);
+router.get("/profile", requireAuth, authController.profile_get);
+router.post(
+  "/profile/editDetails",
+  requireAuth,
+  authController.editDetails_post
+);
 
 router.post(
   "/profile/upload",
@@ -116,14 +120,8 @@ router.get("/userHospital", requireAuth, authController.userHospital_get);
 router.get("/disease", requireAuth, authController.disease_get);
 router.get("/hospitalSearch", requireAuth, authController.hospitalSearch_get);
 router.post("/hospitalSearch", requireAuth, authController.hospitalSearch_post);
-router.get(
-  "/forgotPassword",
-  authController.getForgotPasswordForm
-);
-router.post(
-  "/forgotPassword",
-  authController.forgotPassword
-);
+router.get("/forgotPassword", authController.getForgotPasswordForm);
+router.post("/forgotPassword", authController.forgotPassword);
 router.get("/resetPassword/:id/:token", authController.getPasswordResetForm);
 router.post("/resetPassword/:id/:token", authController.resetPassword);
 router.get("/download/:type/pdf", requireAuth, authController.download);

@@ -1,14 +1,43 @@
 .alert-danger {
-    color: #721c24;
+    color: #ff0019;
     background: #f8d7da;
+    font-size: medium;
+    height:fit-content;
+    padding-top:3vh;
   }
   .alert-success {
-    color: #155724;
-    background: #d4edda;
+    color: #1b5528;
+    background: #c9ebd1;
+    height:fit-content;
+    padding-top:3vh;
+    font-size: medium;
   }
 
   .top-alert{
-      margin-top:3%;
       font-size: larger;
-      margin-bottom: 0;
+      margin-bottom: -2vh;
+  }
+
+  @media screen and (max-width: 480px){
+    .alert-danger {
+      color: #ff0019;
+      background: #f8d7da;
+      font-size: medium;
+      height: fit-content;
+      padding-top: 5vh;
+    }
+
+    .alert-success {
+      color: #1b5528;
+      background: #c9ebd1;
+      height: fit-content;
+      padding-top: 5vh;
+      font-size: medium;
+    }
+      .top-alert {
+        font-size: larger;
+        margin-bottom: -5vh;
+      }
+
+    
   }

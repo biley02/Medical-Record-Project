@@ -15,7 +15,7 @@ const AppProvider=({children})=>{
         useEffect(() => {
           const timeout = setTimeout(() => {
             removeAlert();
-          }, 3000);
+          },3000);
           return () => clearTimeout(timeout);
         }, [msg]);
         return <p className={`alert alert-${type}`}>{msg}</p>;
