@@ -51,21 +51,41 @@ module.exports.editDetails_post = async (req, res) => {
       return setError("danger", true, "Unable to save the details");
     }
     console.log("nominee", nominee);
+    let newuser = await User.findByIdAndUpdate(user._id, {
+      name: name,
+      phoneNumber: phone,
+      bloodGroup: bloodGroup,
+      nominee: nominee._id,
+    });
 
-    user.nominee = nominee._id;
-    user.bloodGroup = bloodGroup;
-    user.name = name;
-    user.phoneNumber = phone;
+    console.log("user saved", newuser);
+    setError("success", false, "User details updated");
+    res.send(error_msg);
+    //   .then((result) => {
+    //     // console.log(result);
+    //     console.log("user saved", user);
+    //     setError("success", false, "User details updated");
+    //     res.send(error_msg);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //     setError("danger", true, "error while editing profile details");
+    //     res.send(error_msg);
+    //   });
+    // user.nominee = nominee._id;
+    // user.bloodGroup = bloodGroup;
+    // user.name = name;
+    // user.phoneNumber = phone;
 
-    await user.save();
-    console.log("user saved", user);
+    // await user.save();
+
     // req.flash('success_msg','Details about the user has been saved')
 
-    return setError("success", false, "User details updated");
     // res.redirect('/user/profile')
   } catch (e) {
     // console.log("error",e)
-    return setError("danger", true, "error while editing profile details");
+    setError("danger", true, "error while editing profile details");
+    res.send(error_msg);
   }
 };
 
@@ -257,6 +277,7 @@ module.exports.login_post = async (req, res) => {
     }
 
     const token = user.generateAuthToken(maxAge);
+    console.log(token);
 
     res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
 
