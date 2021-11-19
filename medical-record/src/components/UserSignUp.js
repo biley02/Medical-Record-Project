@@ -90,7 +90,6 @@ const UserSignUp = () => {
       {alert.show && <Alert {...alert} removeAlert={showAlert} />}
       </div>
     <div id="signup">
-      
       <div id="signupLeftImage">
         <img id="design" src={signUpLogo} alt="signupImage" />
       </div>
