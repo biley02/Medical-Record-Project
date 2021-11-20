@@ -46,10 +46,12 @@ mongoose
 
     const indexRoutes = require('./routes/index')
     const userRoutes = require('./routes/user')
+    const hospitalRoutes=require('./routes/hospital')
 
 
     app.use('/',indexRoutes)
     app.use('/user',userRoutes)
+    app.use('/hospital',hospitalRoutes)
 
 
 
