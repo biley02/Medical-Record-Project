@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import coverPhoto from "../img/CoverPhoto.png";
 import ProfilePic from "../img/ProfilePic.png";
@@ -10,15 +10,8 @@ import DpModal from "../components/DpModal";
 import ProfileDetailsModal from "../components/ProfileDetailsModal";
 
 const UserMiddleComponent = ({ userobj }) => {
-  const user = {
-    name: userobj.name,
-    profilePic: "",
-    shortId: "",
-    bloodGroup: "",
-    email: "",
-    phoneNo: "",
-    adress: "",
-  };
+  console.log('hospitalllll',userobj)
+  const user=userobj
 
   return (
     <div className="col-lg-8 col-sm-8 col-12 order-1 order-sm-2" id="pSec2">
@@ -40,9 +33,9 @@ const UserMiddleComponent = ({ userobj }) => {
           <DpModal />
         </div>
         <div className="name-id">
-          <h5 id="name">{user.name ? user.name : "Default Name"}</h5>
+          <h5 id="name">{user.hospitalName ? user.hospitalName : ""}</h5>
           <h4 id="heading1">
-            Patient Id-{user.shortId ? user.shortId : "DEF1234"}
+            License Number-{user.licenseNumber ? user.licenseNumber : "DEF1234"}
             <span id="patientId"></span>
           </h4>
         </div>

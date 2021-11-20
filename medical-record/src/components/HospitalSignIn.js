@@ -11,7 +11,7 @@ import { useGlobalContext } from "../context/Context";
 import { useHistory } from "react-router-dom";
 
 
-const baseUrl='http://localhost:8080/user'
+const baseUrl='http://localhost:8080/hospital'
 
 
 const UserSignIn = () => {
@@ -29,7 +29,7 @@ const UserSignIn = () => {
       if(error.show===false)
       {
         showAlert(true,error.type,error.msg)
-        return history.push('/user/profile')
+        return history.push('/hospital/profile')
       }
      }).catch((e)=>{console.log(e)})
    },[])
@@ -51,7 +51,7 @@ const UserSignIn = () => {
     }
     setloginDetails({ email: "", password: "" });
     showAlert(true,error.type,error.msg)
-    history.push('/user/profile')
+    history.push('/hospital/profile')
   };
   return (
      <>

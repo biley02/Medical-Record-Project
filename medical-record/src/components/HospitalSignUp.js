@@ -12,13 +12,14 @@ import {useHistory} from 'react-router-dom'
 import { useGlobalContext } from "../context/Context";
 
 
-const baseUrl='http://localhost:8080/user'
+const baseUrl='http://localhost:8080/hospital'
 const type = "signup";
 const UserSignUp = () => {
   const [userSignUpDetails, setUserSignUpDetails] = useState({
-    name: "",
+    hospitalName: "",
     email: "",
-    registrationNumber: "",
+    licenseNumber: "",
+    phoneNumber:"",
     password: "",
     confirmPassword: "",
   });
@@ -37,7 +38,7 @@ const UserSignUp = () => {
      if(error.show===false)
      {
        showAlert(true,error.type,error.msg)
-       return history.push('/user/profile')
+       return history.push('/hospital/profile')
      }
     }).catch((e)=>{console.log(e)})
   },[])
@@ -69,14 +70,15 @@ const UserSignUp = () => {
         }
     
         showAlert(true,'success',error.msg)
-        history.push('/user/login') 
+        history.push('/hospital/login') 
 
       }).catch((error)=>{console.log(error)});
     
     setUserSignUpDetails({
-      name: "",
+      hospitalName: "",
       email: "",
-      registrationNumber: "",
+      licenseNumber: "",
+      phoneNumber:"",
       password: "",
       confirmPassword: "",
     });
@@ -98,7 +100,7 @@ const UserSignUp = () => {
         <div id="Form">
           <div id="details">
             <form onSubmit={signupSubmit}>
-              <label className="label1" htmlFor="name">
+              <label className="label1" htmlFor="hospitalName">
                 Hospital Name*
               </label>
               <br />
@@ -107,8 +109,8 @@ const UserSignUp = () => {
                 id="SignUpName"
                 type="text"
                 placeholder="Hospital name "
-                name="name"
-                value={userSignUpDetails.name}
+                name="hospitalName"
+                value={userSignUpDetails.hospitalName}
                 onChange={handleChange}
                 required
               ></input>
@@ -128,7 +130,7 @@ const UserSignUp = () => {
                 required
               ></input>
               <br />
-              <label className="label1" htmlFor="registrationNumber">
+              <label className="label1" htmlFor="licenseNumber">
                 Registration Number*
               </label>
               <br />
@@ -137,8 +139,8 @@ const UserSignUp = () => {
                 id="SignUpPhone"
                 type="tel"
                 placeholder="Registration Number"
-                name="registrationNumber"
-                value={userSignUpDetails.registrationNumber}
+                name="licenseNumber"
+                value={userSignUpDetails.licenseNumber}
                 onChange={handleChange}
                 required
               ></input>

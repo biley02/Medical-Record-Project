@@ -19,7 +19,7 @@ import { useGlobalContext } from "../context/Context";
 import axios from "axios";
 axios.defaults.withCredentials = true;
 
-const baseUrl = "http://localhost:8080/user";
+const baseUrl = "http://localhost:8080/hospital";
 
 const UserSideComponent = () => {
   const pathname = useLocation().pathname;
@@ -84,22 +84,22 @@ const UserSideComponent = () => {
     }
   };
 
-//   useEffect(() => {
-//     axios.get(`${baseUrl}/login`).then((res) => {
-//       const error = res.data;
-//       console.log("error", error);
-//       if (error.show === true) {
-//         showAlert(true, error.type, error.msg);
-//         return history.push("/user/login");
-//       }
-//     });
-//   }, []);
+  useEffect(() => {
+    axios.get(`${baseUrl}/login`).then((res) => {
+      const error = res.data;
+      console.log("error", error);
+      if (error.show === true) {
+        showAlert(true, error.type, error.msg);
+        return history.push("/hospital/login");
+      }
+    });
+  }, []);
 
   //profile details from backend
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/user/profile", { withCredentials: true })
+      .get(`${baseUrl}/profile`, { withCredentials: true })
       .then((res) => {
         console.log("data from backedn", res.data);
         setUser(res.data);
@@ -234,39 +234,6 @@ const UserSideComponent = () => {
                 <div className="lists active-list">
                   <a href="/user/profile">Profile</a>
                   <img src={defaultDp} className="Icons profile-icon" />
-                </div>
-
-                <div className="lists dropdown">
-                  <a
-                    href="#"
-                    role="button"
-                    id="dropdownMenuLink"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                    onClick={() => {
-                      myFunctionMobile();
-                    }}
-                  >
-                    Diseases
-                  </a>
-                  <img src={diseaseImage} className="Icons" />
-                  <div
-                    id="myDropdownMobile"
-                    className={
-                      isShowDropDown ? "dropdown-menu show" : "dropdown-menu"
-                    }
-                    aria-labelledby="dropdownMenuLink"
-                  >
-                    <button className="dropdown-item">
-                      <button
-                        className="dropdown-item"
-                        onClick={() => setModalIsOpen(true)}
-                      >
-                        Add New
-                      </button>
-                    </button>
-                  </div>
                 </div>
 
                 <div className="lists">
