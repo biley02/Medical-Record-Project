@@ -361,7 +361,6 @@ body {
         /* height: 62vh; */
         box-shadow: none;
     }
-
     .row{
         background-color: white;
     }
@@ -378,6 +377,7 @@ body {
     }
     #pSec2 {
         height: 50%;
+        background-color: white;
     }
     #pSec3 {
         display: block;

@@ -41,11 +41,11 @@ const UserMiddleComponent = ({ userobj }) => {
         </div>
         <div id="patientDetails">
           <div className="heading-and-edit-icon">
-            <h3 id="heading2-edit-details">Patient Details</h3>
+            <h3 id="heading2-edit-details">Hospital Details</h3>
             <ProfileDetailsModal />
           </div>
           <label for="bloodGroup" class="detailLevels">
-            Blood Group :{user.bloodGroup ? user.bloodGroup : ""}
+            Hospital Head :{user.bloodGroup ? user.bloodGroup : ""}
           </label>
           <br />
           <label for="Adress" class="detailLevels">

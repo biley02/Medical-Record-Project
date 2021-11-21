@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router";
 
-import "../styles/userProfile.css";
+import "../hospitalStyles/profile.css";
 
 import defaultDp from "../img/profile.png";
 import AppointmentImage from "../img/appointment.png";
@@ -136,10 +136,6 @@ const UserSideComponent = () => {
                   <img src={AppointmentImage} className="Icons" />
                 </div>
                 <div className="lists">
-                  <a href="#">Progress Report</a>
-                  <img src={progressImage} className="Icons" />
-                </div>
-                <div className="lists">
                   <a href="#">Message</a>
                   <img src={messageImage} className="Icons" />
                 </div>
@@ -147,7 +143,7 @@ const UserSideComponent = () => {
                   <div className="Doctor-list">
                     <div id="mySidenavTab" className="sidenav">
                       <div id="Dr">
-                        <p className="sidenavHeader">Hospitals</p>
+                        <p className="sidenavHeader">Paitients</p>
                         <a
                           className="closebtn"
                           onClick={() => {
@@ -180,7 +176,7 @@ const UserSideComponent = () => {
                         }
                         onClick={() => openNavTab()}
                       >
-                        <a>Hospitals</a>
+                        <a>Paitients</a>
                         <img src={doctorIcon} className="Icons Icons-invert" />
                       </button>
                     </div>
@@ -203,7 +199,7 @@ const UserSideComponent = () => {
               id="pSec3"
             >
               <div id="Dr">
-                <a>Doctors </a>
+                <a>Paitients </a>
                 <img src={doctorIcon} className="Icons doctor-icon" />
               </div>
               <form
@@ -242,11 +238,6 @@ const UserSideComponent = () => {
                 </div>
 
                 <div className="lists">
-                  <a href="#">Progress Report</a>
-                  <img src={progressImage} className="Icons" />
-                </div>
-
-                <div className="lists">
                   <a href="#">Message</a>
                   <img src={messageImage} className="Icons" />
                 </div>
@@ -270,7 +261,7 @@ const UserSideComponent = () => {
             >
               <div id="mySidenav" className="sidenav">
                 <div id="Dr">
-                  <p className="sidenavHeader">Hospitals</p>
+                  <p className="sidenavHeader">Paitients</p>
                   <a
                     className="closebtn"
                     onClick={() => {
@@ -291,7 +282,7 @@ const UserSideComponent = () => {
                     openSideNav();
                   }}
                 >
-                  <a>Hospitals</a>
+                  <a>Paitients</a>
                   <img src={doctorIcon} className="Icons doctor-icon" />
                 </button>
               </div>
