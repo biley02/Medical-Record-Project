@@ -196,6 +196,10 @@ const UserSignUp = () => {
               >
                 Register
               </button>
+              <div class="loginlink-section">
+                <p id="login">Already have an account?</p>
+    	          <a href="/user/login" className="toggle" id="loginLink" style={{textDecoration:'none !important'}}>Login</a>
+              </div>
             </form>
           </div>
         </div>

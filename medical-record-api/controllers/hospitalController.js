@@ -13,6 +13,17 @@ const { handleErrors } = require('../utilities/Utilities');
 require('dotenv').config()
 
 const maxAge = 30 * 24 * 60 * 60
+
+
+
+const error_msg = { type: "", show: false, msg: "" };
+
+const setError = (type = "", show = false, msg = "") => {
+  error_msg.type = type;
+  error_msg.show = show;
+  error_msg.msg = msg;
+};
+
 module.exports.document_get=async(req,res)=>{
     try{
     const diseaseId=req.query
@@ -33,7 +44,7 @@ module.exports.document_get=async(req,res)=>{
     }
     //const diseases=await Disease.populate().execPopulate()
     // console.log('dieases',disease)
-    res.render({
+    res.render("./hospitalViews/profile",{
         path:'/hospital/document',
         disease,
         user,
@@ -41,7 +52,6 @@ module.exports.document_get=async(req,res)=>{
         custom_flash:null, 
         
     })
-    // res.status(200).send("Hello")
    }
 
     
@@ -91,7 +101,7 @@ module.exports.patientDiseases_get=async(req,res)=>{
     }
     const diseases=await user.populate('disease','name').execPopulate()
     //console.log('dieases',diseases)
-    res.render({
+    res.render("./hospitalViews/profile",{
         path:'/hospital/diseases',
         user:user,
         diseases,
@@ -99,7 +109,6 @@ module.exports.patientDiseases_get=async(req,res)=>{
         custom_flash:null, 
         
     })
-    // res.status(200).send("Hello")
    }
 
     
@@ -128,37 +137,37 @@ module.exports.patient_get= async (req,res)=>{
         res.redirect('/hospital/profile')
     }
     const diseases=await user.populate('disease','name').execPopulate()
-    res.render({
+    res.render("./hospitalViews/profile",{
         path:'/hospital/patient',
         user:user,
         patients, foundUser:null,access:null, 
         custom_flash:null, 
         diseases       
     })
-    // res.status(200).send("Hello")
 }
 
 
 module.exports.signup_get = (req, res) => {
-    res.render( { type:"signup" }); 
-    // res.status(200).send("Hello")
+    // res.render("./hospitalViews/signup", { type:"signup" }); 
+    res.send('hello')
 
 }
 
 module.exports.profile_get = async (req, res) => {
-    res.locals.hospital = req.hospital
-     //console.log("hospital", req.hospital)
-    const patients = await Relations.find({'isPermitted': true, 'hospitalId': req.hospital._id},"userId").populate('userId','name'); 
+    // res.locals.hospital = req.hospital
+    //  //console.log("hospital", req.hospital)
+    // const patients = await Relations.find({'isPermitted': true, 'hospitalId': req.hospital._id},"userId").populate('userId','name'); 
     
-    // console.log("patientssssss",patients)
-    res.render(
-    {path:'/hospital/profile',
-    patients:patients, 
-    foundUser:null,
-    access:null, 
-    custom_flash:null, 
-      })
-    // res.status(200).send("Hello")
+    // // console.log("patientssssss",patients)
+    // res.render("./hospitalViews/profile",
+    // {path:'/hospital/profile',
+    // patients:patients, 
+    // foundUser:null,
+    // access:null, 
+    // custom_flash:null, 
+    //   })
+    const hospital=req.hospital
+    res.send(hospital)
 }
 
 
@@ -208,12 +217,11 @@ module.exports.emailVerify_get = async (req, res) => {
 }
 
 module.exports.signup_post = async (req, res) => {
-    const { licenseNumber,  hospitalName, email, phoneNumber,password, confirmPwd  } = req.body
-    //console.log("in sign up route",req.body);
-    if (!(!password || !confirmPwd) && (password != confirmPwd)) {
-        req.flash('error_msg', 'Passwords do not match. Try again')
-        res.status(400).redirect('/hospital/login')
-        return;
+    const { licenseNumber,  hospitalName, email, phoneNumber,password, confirmPassword  } = req.body
+    console.log("in sign up route",req.body);
+    if (!(!password || !confirmPassword) && (password != confirmPassword)) {
+        setError("danger", true, "Password do not match");
+        return res.send(error_msg);
     }
 
     try {
@@ -227,39 +235,35 @@ module.exports.signup_post = async (req, res) => {
       return res.redirect("/signup")
     }*/
         if (hospitalExists) {
-            req.flash(
-                'success_msg',
-                'This email is already registered. Try logging in'
-            )
-            return res.redirect('/hospital/login')
+            setError("success", false, "user already exists try login in");
+            return res.send(error_msg);
         }
 
         const hospital = new Hospital({ licenseNumber,  hospitalName, email, phoneNumber,password  })
         let saveUser = await hospital.save()
-        //console.log(saveUser);
-        req.flash(
-            'success_msg',
-            'Registration successful. Check your inbox to verify your email'
-        )
+        console.log(saveUser);
+        setError("success", false, "user registered mail has been sent");
         hospitalSignupMail(saveUser, req.hostname, req.protocol)
         //res.send(saveUser)
-        res.redirect('/hospital/login')
+        res.send(error_msg);
     } catch (err) {
         const errors = handleErrors(err)
-        // console.log(errors)
+        console.log(errors)
 
         var message = 'Could not signup. '.concat((errors['email'] || ""), (errors['password'] || ""), (errors['phoneNumber'] || ""), (errors["licenseNumber"] || ""),  (errors["hospitalName"] || ""),)
         //res.json(errors);
-        req.flash(
-            'error_msg',
-            message
-        )
-        res.status(400).redirect('/hospital/signup')
+        setError('danger',true,message)
+        res.status(400).send(error_msg)
     }
 }
 module.exports.login_get = (req, res) => {
-    res.render( { type:"login" }); 
-    // res.status(200).send("Hello")
+  const token = req.cookies.hospital;
+  if (token) {
+    setError("success", false, "User already Loged in");
+    return res.send(error_msg);
+  }
+  setError("danger", true, "User not loged in");
+  return res.send(error_msg);
 }
 
 module.exports.login_post = async (req, res) => {
@@ -280,21 +284,19 @@ module.exports.login_post = async (req, res) => {
             if(timeDiff<=10800000)
             {
                 // console.log("Email already sent check it")
-                req.flash(
-                    'error_msg',
-                    `${userExists.hospitalName}, we have already sent you a verify link please check your email`)
-                res.redirect('/hospital/login')
-                return
+                setError("danger", true, "email has been sent please verify");
+
+                return res.send(error_msg);
             }
-            req.flash(
-                'success_msg',
-                `${userExists.hospitalName}, your verify link has expired we have sent you another email please check you mailbox`
-            )
+            setError(
+                "danger",
+                true,
+                `${userExists.name}, your verify link has expired we have sent you another email please check you mailbox`
+              );
             hospitalSignupMail(userExists, req.hostname, req.protocol)
             await Hospital.findByIdAndUpdate(userExists._id, { updatedAt: new Date() });
             //console.log('userExists',userExists)
-            res.redirect('/hospital/login')
-            return
+            return res.send(error_msg);
         }
        
         const token = hospital.generateAuthToken(maxAge)
@@ -302,21 +304,23 @@ module.exports.login_post = async (req, res) => {
         res.cookie('hospital', token, { httpOnly: true, maxAge: maxAge * 1000 })
         //console.log(user);
         //signupMail(saveUser)
-        req.flash('success_msg', 'Successfully logged in')
-        res.status(200).redirect('/hospital/profile')
+        setError("success", false, "successfully logged in");
+        res.send(error_msg);
     } catch (err) {
-        req.flash('error_msg', 'Invalid Credentials')
-        //console.log(err)
-        res.redirect('/hospital/login')
+        setError("danger", true, "invalid credentials");
+        // console.log(err)
+        res.send(error_msg);
     }
 }
 
 
 module.exports.logout_get = async (req, res) => {
     
-    res.clearCookie('hospital')
-    req.flash('success_msg', 'Successfully logged out')
-    res.redirect('/hospital/login')
+  console.log("hospital logged out");
+  res.clearCookie("hospital");
+
+  setError("success", true, "Successfully logged out");
+  res.send(error_msg);
 }
 
 module.exports.relation_post=async (req,res)=>{
@@ -418,8 +422,7 @@ module.exports.patient_search = async (req, res) =>
         //    console.log('searched patient',access);
         //    console.log("Found patient that I am passing into the ejs file", result);
            const custom_flash = "User found"; 
-            res.render( {path:'/hospital/search', patients:patients,access:access, foundUser:result, custom_flash:custom_flash });
-            // res.status(200).send("Hello")
+            res.render("./hospitalViews/profile", {path:'/hospital/search', patients:patients,access:access, foundUser:result, custom_flash:custom_flash });
             return 
 
         }

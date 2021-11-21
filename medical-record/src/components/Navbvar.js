@@ -83,7 +83,7 @@ const Navbar=()=>{
                     </div>
                   </li>
                 {/* <li class="nav-item"><a class="nav-link" href="/user/logout">LOGOUT</a></li> */}
-                <li className="nav-item" onClick={logout}><p className="nav-link" onClick={logout}>LOGOUT</p></li>
+                <li className="nav-item" onClick={logout}><p className="nav-link" onClick={logout} >LOGOUT</p></li>
             </ul>
         </div>
     </nav>

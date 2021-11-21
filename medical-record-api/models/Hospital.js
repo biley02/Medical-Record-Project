@@ -44,8 +44,8 @@ const hospitalSchema = mongoose.Schema(
         phoneNumber: {
             type: String,
             trim: true,
-            required:[true, 'Phone number field cannot be empty'], 
-            validate: [utilities.phoneValidator, 'Phone Number is invalid']
+            required:[false, 'Phone number field cannot be empty'], 
+            // validate: [utilities.phoneValidator, 'Phone Number is invalid']
         },
         profilePic: {
             type: String,
