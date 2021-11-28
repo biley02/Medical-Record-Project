@@ -25,8 +25,16 @@ const baseUrl = "http://localhost:8080/user";
 
 const UserSideComponent = () => {
   const pathname = useLocation().pathname;
+  const [medicineFile,setMedicineFile]=useState()
+  const [documentFile,setDocumentFile]=useState()
+  const [medicineName,setMedicineName]=useState('No File Chosen')
+  const [documentName,setDocumentName]=useState('No File Chosen')
+  const [diseaseName,setDiseaseName]=useState('')
   const [path, setPath] = useState("");
   const [user, setUser] = useState({});
+  // const [medicine,setMedicine]=useState('')
+  // const [document,setDocument]=useState('')
+  
 
   const { Alert, alert, setAlert, showAlert, userToken } = useGlobalContext();
   const history = useHistory();
@@ -111,6 +119,29 @@ const UserSideComponent = () => {
   // console.log(path)
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
+  const sendFile=()=>{
+    setModalIsOpen(false)
+    console.log("document",documentFile)
+    console.log('medicine',medicineFile)
+    console.log('diseaseName',diseaseName)
+
+    const data=new FormData()
+    data.append("name",diseaseName)
+    data.append("medicine",medicineFile)
+    data.append("document",documentFile)
+
+    axios.post(`${baseUrl}/profile/upload`,data).then(res=>{
+      console.log(res.data)
+    }).catch(e=>console.log(e))
+
+    setDiseaseName('')
+    setMedicineFile()
+    setDocumentFile()
+    setDocumentName('No File Chosen')
+    setMedicineName('No File Chosen')
+    
+  }
+
   return (
     <>
       <div
@@ -122,7 +153,8 @@ const UserSideComponent = () => {
           <form
             className="form-group"
             // id="open-modal"
-            enctype="multipart/form-data"
+            // enctype="multipart/form-data"
+            
           >
             <div className="mod">
               <button
@@ -144,7 +176,12 @@ const UserSideComponent = () => {
                   className="form__input"
                   id="name"
                   placeholder="Disease Name"
-                  required=""
+                  required="true"
+                  onChange={(e)=>{
+                    const {value}=e.target
+                    setDiseaseName(value)
+                  }
+                  }
                 />
                 <br />
                 <br />
@@ -152,20 +189,32 @@ const UserSideComponent = () => {
               <div>
                 <br />
 
-                <input type="file" id="actual-btn" hidden />
-                <label htmlFor="actual-btn" className="lb1">
+                <input type="file" id="medicine" hidden onChange={e=>{
+                  const file=e.target.files[0]
+                  // console.log(file)
+                  setMedicineFile(file)
+                  const value=file.name
+                  setMedicineName(value)
+                }}/>
+                <label htmlFor="medicine" className="lb1" >
                   Add medicine
                 </label>
-                <span id="file-chosen">No file chosen</span>
+                <span id="file-chosen">{medicineName}</span>
               </div>
               <div>
                 <br />
 
-                <input type="file" id="actual-btn" hidden />
-                <label htmlFor="actual-btn" className="lb2">
+                <input type="file" id="document" hidden onChange={e=>{
+                  const file=e.target.files[0]
+                  // console.log(file)
+                  setDocumentFile(file)
+                  const value=file.name
+                  setDocumentName(value)
+                }} />
+                <label htmlFor="document" className="lb2">
                   Add presciptions
                 </label>
-                <span id="file-chosen">No file chosen</span>
+                <span id="file-chosen">{documentName}</span>
                 {/* <span>
                   <span class="form__med">
                     Add Medicine... <input type="file" id="profilePic" />
@@ -174,7 +223,7 @@ const UserSideComponent = () => {
                   </span>
                 </span> */}
               </div>
-              <button className="accept" type="save">
+              <button className="accept" type="submit" onClick={diseaseName?sendFile:e=>{console.log('enter disease name')}} >
                 Save &rarr;<i className="uil uil-expand-arrows"></i>
               </button>
             </div>

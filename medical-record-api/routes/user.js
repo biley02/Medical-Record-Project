@@ -11,6 +11,7 @@ const multer = require("multer");
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     // console.log("in multer",file)
+    // console.log("multer",req.body)
     if (file.fieldname !== "profilePic") {
       const { name } = req.body;
       // console.log('disease name',name)

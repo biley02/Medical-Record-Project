@@ -21,7 +21,7 @@ require('dotenv').config()
 const port=process.env.PORT || 8080
 
 mongoose
-    .connect(process.env.MONGODB_URL, {
+    .connect('mongodb+srv://Rishiraj:abcABC%40123@cluster0.nm4oa.mongodb.net/Cluster0', {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         

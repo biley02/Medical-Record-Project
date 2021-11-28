@@ -152,7 +152,8 @@ module.exports.signup_post = async (req, res) => {
 
   try {
     const userExists = await User.findOne({ email });
-    // console.log('userexists', userExists)
+    console.log('userexists', userExists)
+    console.log(User)
     /*if(userExists && userExists.active== false)
     {
       req.flash("success_msg",`${userExists.name}, we have sent you a link to verify your account kindly check your mail`)
@@ -175,9 +176,9 @@ module.exports.signup_post = async (req, res) => {
       nominee,
     });
     let saveUser = await user.save();
-    // console.log(saveUser);
+    console.log(saveUser);
     setError("success", false, "user registered mail has been sent");
-    signupMail(saveUser, req.hostname, req.protocol);
+    // signupMail(saveUser, req.hostname, req.protocol);
     //res.send(saveUser)
     res.send(error_msg);
   } catch (err) {
@@ -291,111 +292,113 @@ module.exports.login_post = async (req, res) => {
 };
 
 module.exports.upload_post = async (req, res) => {
-  // console.log("in uploads",req.body)
+  console.log("in uploads",req.body)
 
   try {
     let { name } = req.body;
-
+    console.log("filessss",req.files)
     const files = req.files;
     dname = name.toLowerCase();
-    const obj = JSON.parse(JSON.stringify(files));
+    
+    const medicine=files.medicine
+    const document=files.document
+
+    
+    const user=req.user;
+    user.populate("disease").then(data=>{console.log(data)})
+
+    console.log("medicine",medicine)
+    console.log("document",document)
     // console.log("files",obj)
     // console.log(obj.document[0].filename)
-    if (Object.keys(obj).length === 0) {
-      req.flash(
-        "error_msg",
-        "You may have not submitted any file or the file type may not be supported. Please try jpg,jpeg,pdf files"
-      );
-      return res.redirect("/user/profile");
-    }
-    if (name === "") {
-      req.flash("error_msg", "Disease name cant be empty");
-      return res.redirect("/user/profile");
-    }
-    const userDisease = await req.user
-      .populate("disease", "name")
-      .execPopulate();
-    // console.log('disease',userDisease)
+    
+    const userDisease = await user
+      .populate("disease")
+    console.log('diseassssssssssse',userDisease)
     const existName = userDisease.disease.find((data) => data.name === dname);
     // console.log('disease',existName)
 
-    const document = {
-      originalName: "",
-      filename: "",
-    };
-    const medicine = {
-      originalName: "",
-      filename: "",
-    };
+    let documentObj={
+      _id:'',
+      originalName:'',
+      filename:''
+    }
+
+    let medicineObj={
+      _id:'',
+      originalName:'',
+      filename:''
+    }
 
     if (existName) {
       const existDisease = await Disease.findById({ _id: existName._id });
       // console.log('exist disease',existDisease)
 
-      if (obj.medicine) {
-        //medicine[0]._id= mongoose.Types.ObjectId()
-        medicine.originalName = obj.medicine[0].originalname;
-        medicine.filename = `/uploads/${req.user.email}/${dname}/${obj.medicine[0].filename}`;
-        existDisease.medicine.push(medicine);
+      if (medicine) {
+        medicineObj._id= mongoose.Types.ObjectId()
+        medicineObj.originalName = medicine[0].originalname;
+        medicineObj.filename = `/uploads/${req.user.email}/${dname}/${medicine[0].filename}`;
+        existDisease.medicine.push(medicineObj);
       }
-      if (obj.document) {
-        //document[0]._id=mongoose.Types.ObjectId()
-        document.originalName = obj.document[0].originalname;
-        document.filename = `/uploads/${req.user.email}/${dname}/${obj.document[0].filename}`;
-        existDisease.document.push(document);
+      if (document) {
+        documentObj._id=mongoose.Types.ObjectId()
+        documentObj.originalName = document[0].originalname;
+        documentObj.filename = `/uploads/${req.user.email}/${dname}/${document[0].filename}`;
+        existDisease.document.push(documentObj);
       }
       await existDisease.save();
-      req.flash(
-        "success_msg",
-        "Disease name already exists, file succesfully uploaded"
-      );
-      return res.redirect("/user/profile");
     }
 
     /*let images = files.map((file) => {
             return `/uploads/${req.user.email}/${file.filename}`
         })*/
 
-    let newDisease = await new Disease({
+    const newDisease = await new Disease({
       name,
+      document,
+      medicine
     }).save();
-    if (obj.medicine) {
-      medicine.originalName = obj.medicine[0].originalname;
-      medicine.filename = `/uploads/${req.user.email}/${dname}/${obj.medicine[0].filename}`;
-      newDisease.medicine.push(medicine);
 
-      // medicine.push(`/uploads/${req.user.email}/${dname}/${obj.medicine[0].filename}`)
-    }
-    if (obj.document) {
-      document.originalName = obj.document[0].originalname;
-      document.filename = `/uploads/${req.user.email}/${dname}/${obj.document[0].filename}`;
-      newDisease.document.push(document);
-      //await newDisease.save()
-      //document.push( `/uploads/${req.user.email}/${dname}/${obj.document[0].filename}`)
-    }
-    await newDisease.save();
+    console.log('disesssssss',newDisease)
+    // if (medicine) {
+    //   // medicineObj.originalName = medicine[0].originalname;
+    //   // medicineObj.filename = `/uploads/${req.user.email}/${dname}/${medicine[0].filename}`;
+    //   newDisease.medicine.push(medicine);
 
-    // console.log('documents',document)
-    // console.log('medicine',medicine)
+    //   // medicine.push(`/uploads/${req.user.email}/${dname}/${obj.medicine[0].filename}`)
+    // }
+    // if (document) {
+    //   // documentObj.originalName =document[0].originalname;
+    //   // documentObj.filename = `/uploads/${req.user.email}/${dname}/${document[0].filename}`;
+    //   newDisease.document.push(document);
+    //   //await newDisease.save()
+    //   //document.push( `/uploads/${req.user.email}/${dname}/${obj.document[0].filename}`)
+    // }
+    // await newDisease.save();
 
-    if (!newDisease) {
-      req.flash(
-        "error_msg",
-        "Unable to save the disease details, Please check the file format. Supported file formats are:jpeg,jpg,png,gif,pdf"
-      );
-      return res.redirect("/user/profile");
-    }
-    req.user.disease.push(newDisease);
+    // // console.log('documents',document)
+    // // console.log('medicine',medicine)
+
+    // if (!newDisease) {
+    //   // req.flash(
+    //   //   "error_msg",
+    //   //   "Unable to save the disease details, Please check the file format. Supported file formats are:jpeg,jpg,png,gif,pdf"
+    //   // );
+    //   // return res.redirect("/user/profile");
+    // }
+    req.user.disease.push(newDisease._id);
     await req.user.save();
 
-    // console.log(newDisease)
-    req.flash("success_msg", "Sucessfully uploaded disease details.");
-    return res.redirect("/user/profile");
+    console.log('new user',user)
+    // req.flash("success_msg", "Sucessfully uploaded disease details.");
+    // return res.redirect("/user/profile");
   } catch (err) {
     // console.log("error")
-    // console.error(err)
-    req.flash("error_msg", "Something went wrong");
-    return res.redirect("/user/profile");
+    console.error(err)
+    // req.flash("error_msg", "Something went wrong");
+    // return res.redirect("/user/profile");
+    setError("danger",true,"error")
+    res.send(error_msg)
   }
 };
 
@@ -443,6 +446,8 @@ module.exports.profile_get = async (req, res) => {
   // console.log('token backend',token)
   // console.log(req.user)
   const user = req.user;
+  const disease=await user.populate("disease","name")
+  console.log("disease",disease)
   res.send(user);
 };
 
