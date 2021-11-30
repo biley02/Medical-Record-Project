@@ -3,6 +3,7 @@ import { useHistory, useLocation } from "react-router";
 
 import pdfImage from '../img/pdf-image.png'
 import axios from "axios";
+import Loader from "../LoaderComponents/Loader";
 
 const baseUrl = "http://localhost:8080/user";
 
@@ -13,11 +14,17 @@ const DiseaseContent = () => {
     document: [],
     medicine: [],
   });
+
+  const [isLoading,setIsLoading]=useState(false)
   useEffect(()=>{
+    setIsLoading(true)
     const id=localStorage.getItem('diseaseId')
     console.log('content',id)
     if(!id)
-    return
+    {
+      setIsLoading(false)
+      return
+    }
     axios.post(`${baseUrl}/disease`,{
       diseaseId:id
     }).then(res=>{
@@ -26,9 +33,15 @@ const DiseaseContent = () => {
       console.log('diseasData',details)
       setDisease(details)
       console.log('disease state',disease)
+      setIsLoading(false)
+      return
     })
     
   },[])
+  if(isLoading)
+  {
+    return <Loader/>
+  }
   return (
       <div className="col-lg-8 col-sm-8 col-12 order-1 order-sm-2" id="pSec9">
         <div className="disease-back-link">

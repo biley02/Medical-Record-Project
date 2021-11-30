@@ -12,6 +12,7 @@ import settingsImage from "../img/Settings.png";
 import diseaseImage from "../img/disease.png";
 import UserMiddleComponent from "./UserMiddleComponent";
 import DiseaseContent from "./DiseaseContent";
+import Loader from "../LoaderComponents/Loader";
 
 import { FaTimes } from "react-icons/fa";
 
@@ -33,6 +34,7 @@ const UserSideComponent = () => {
   const [path, setPath] = useState("");
   const [user, setUser] = useState({});
   const [disease,setDisease]=useState([])
+  const [isLoading,setIsLoading]=useState(false)
   // const [diseaseDetails,setDisaseDetails]=useState({})
   const [diseaseData,setDiseaseData]=useState({
     name: "Default",
@@ -102,6 +104,7 @@ const UserSideComponent = () => {
   };
 
   useEffect(() => {
+    setIsLoading(true)
     axios
       .get("http://localhost:8080/user/profile", { withCredentials: true })
       .then((res) => {
@@ -111,6 +114,7 @@ const UserSideComponent = () => {
         // console.log('diseaseData',diseaseData)
         setUser(userData);
         setDisease(diseaseData)
+        setIsLoading(false)
       });
       console.log('disease detailsssssss',diseaseData)
   }, []);
@@ -271,6 +275,7 @@ const UserSideComponent = () => {
       <div className="desktop-view">
         <div className="container-fluid profile-body">
           <div className="row">
+          {isLoading?<Loader/>:''}
             <div
               className="col-lg-2 col-sm-4 col-12 order-3 order-sm-1"
               id="pSec1"
@@ -424,6 +429,7 @@ const UserSideComponent = () => {
       <div className="mobile-view">
         <div className="container-fluid profile-body">
           <div className="row">
+          {isLoading?<Loader/>:''}
             <div
               className="col-lg-2 col-sm-4 col-12 order-3 order-sm-1"
               id="pSec1"

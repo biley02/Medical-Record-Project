@@ -11,9 +11,12 @@ import doctorIcon from "../img/doctor-icon.png";
 import settingsImage from "../img/Settings.png";
 import diseaseImage from "../img/disease.png";
 import UserMiddleComponent from "./profileMiddle";
+import SideLoader from '../LoaderComponents/SideLoader'
+import Loader from "../LoaderComponents/Loader"
 import { FaTimes } from "react-icons/fa";
 
 import "../styles/modal.css";
+import "../styles/loader.css"
 
 import { useGlobalContext } from "../context/Context";
 import axios from "axios";
@@ -25,6 +28,8 @@ const UserSideComponent = () => {
   const pathname = useLocation().pathname;
   const [path, setPath] = useState("");
   const [user, setUser] = useState({});
+  const [isLoading,setIsLoading]=useState(true)
+  const [sideLoader,setSideLoader]=useState(false)
 
   const { Alert, alert, setAlert, showAlert, userToken } = useGlobalContext();
   const history = useHistory();
@@ -33,11 +38,14 @@ const UserSideComponent = () => {
 
   const [isShowDropDown, setIsShowDropDown] = useState(false);
 
+
+
   useEffect(() => {
     setPath(pathname);
   }, [pathname]);
 
   useEffect(() => {
+    if(!document.getElementById("mySidenavTab"))return
     document.getElementById("mySidenavTab").style.width =
       sessionStorage.sideNavBar;
     document.getElementById("mySidenav").style.width =
@@ -98,25 +106,44 @@ const UserSideComponent = () => {
   //profile details from backend
 
   useEffect(() => {
+    setIsLoading(true)
     axios
       .get(`${baseUrl}/profile`, { withCredentials: true })
       .then((res) => {
         console.log("data from backedn", res.data);
         setUser(res.data);
+        setIsLoading(false)
       });
   }, []);
 
   // console.log(path)
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
+  if(isLoading)
+  {
+    // return(
+    //   <div className="container">
+    //   <div className="mdidle">
+    //     <Loader/>
+    //   </div>
+    // </div>
+    // )
+    
+  }
+
   return (
     <>
+    
       <div className={alert.show ? "top-alert" : ""}>
         {alert.show && <Alert {...alert} removeAlert={showAlert} />}
       </div>
-      <div className="desktop-view">
+      
+      <div className='desktop-view'>
+      
         <div className="container-fluid profile-body">
+        
           <div className="row">
+          {isLoading?<Loader/>:''}  
             <div
               className="col-lg-2 col-sm-4 col-12 order-3 order-sm-1"
               id="pSec1"
@@ -166,6 +193,8 @@ const UserSideComponent = () => {
                         />
                         <button id="id_search_button">click</button>
                       </form>
+                      <SideLoader/>
+                      
                     </div>
                     <div id="Drs">
                       <button
@@ -213,8 +242,9 @@ const UserSideComponent = () => {
                   className="mobile-preview shadow floating-animate"
                   id="id_search1"
                 />
-                <button id="id_search_button1">click</button>
+                {/* <button id="id_search_button1">click</button> */}
               </form>
+              <SideLoader/>
             </div>
           </div>
         </div>
@@ -222,6 +252,7 @@ const UserSideComponent = () => {
       <div className="mobile-view">
         <div className="container-fluid profile-body">
           <div className="row">
+          {isLoading?<Loader/>:''} 
             <div
               className="col-lg-2 col-sm-4 col-12 order-3 order-sm-1"
               id="pSec1"
@@ -274,6 +305,17 @@ const UserSideComponent = () => {
                     ></i>
                   </a>
                 </div>
+                <form id="hospital-search" className="sidenav-form">
+                    <input
+                      type="text"
+                      placeholder="Search..."
+                      className="mobile-preview shadow floating-animate"
+                      name="hnam"
+                      id="id_search"
+                      />
+                      <button id="id_search_button">click</button>
+                </form>
+                <SideLoader/>
               </div>
               <div id="Dr-sec3">
                 <button
