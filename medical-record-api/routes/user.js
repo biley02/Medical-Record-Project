@@ -118,7 +118,7 @@ router.post(
 
 router.get("/userHospital", requireAuth, authController.userHospital_get);
 
-router.get("/disease", requireAuth, authController.disease_get);
+router.post("/disease", requireAuth, authController.disease_post);
 router.get("/hospitalSearch", requireAuth, authController.hospitalSearch_get);
 router.post("/hospitalSearch", requireAuth, authController.hospitalSearch_post);
 router.get("/forgotPassword", authController.getForgotPasswordForm);

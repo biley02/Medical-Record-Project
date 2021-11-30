@@ -296,7 +296,7 @@ module.exports.upload_post = async (req, res) => {
 
   try {
     let { name } = req.body;
-    console.log("filessss",req.files)
+    // console.log("filessss",req.files)
     const files = req.files;
     dname = name.toLowerCase();
     
@@ -307,14 +307,14 @@ module.exports.upload_post = async (req, res) => {
     const user=req.user;
     user.populate("disease").then(data=>{console.log(data)})
 
-    console.log("medicine",medicine)
-    console.log("document",document)
+    // console.log("medicine",medicine)
+    // console.log("document",document)
     // console.log("files",obj)
     // console.log(obj.document[0].filename)
     
     const userDisease = await user
       .populate("disease")
-    console.log('diseassssssssssse',userDisease)
+    // console.log('diseassssssssssse',userDisease)
     const existName = userDisease.disease.find((data) => data.name === dname);
     // console.log('disease',existName)
 
@@ -353,13 +353,22 @@ module.exports.upload_post = async (req, res) => {
             return `/uploads/${req.user.email}/${file.filename}`
         })*/
 
+    medicineObj.originalName = medicine[0].originalname;
+    medicineObj.filename = `/uploads/${req.user.email}/${dname}/${medicine[0].filename}`;
+
+    documentObj.originalName = document[0].originalname;
+    documentObj.filename = `/uploads/${req.user.email}/${dname}/${document[0].filename}`;
+
     const newDisease = await new Disease({
       name,
-      document,
-      medicine
+      medicine,
+      document
     }).save();
 
-    console.log('disesssssss',newDisease)
+    // console.log('disesssssss',newDisease)
+    // newDisease.medicine.originalName=medicineObj.originalName
+    // newDisease.document.originalName=documentObj.originalName
+
     // if (medicine) {
     //   // medicineObj.originalName = medicine[0].originalname;
     //   // medicineObj.filename = `/uploads/${req.user.email}/${dname}/${medicine[0].filename}`;
@@ -389,7 +398,7 @@ module.exports.upload_post = async (req, res) => {
     req.user.disease.push(newDisease._id);
     await req.user.save();
 
-    console.log('new user',user)
+    // console.log('new user',user)
     // req.flash("success_msg", "Sucessfully uploaded disease details.");
     // return res.redirect("/user/profile");
   } catch (err) {
@@ -402,24 +411,26 @@ module.exports.upload_post = async (req, res) => {
   }
 };
 
-module.exports.disease_get = async (req, res) => {
-  const userId = req.query;
-  const params = new URLSearchParams(userId);
-  const id = params.get("id");
-  const disease = await Disease.findOne({ _id: id });
+module.exports.disease_post = async (req, res) => {
+  // const userId = req.body;
+  // const params = new URLSearchParams(userId);
+  // const id = params.get("id");
+
+  // const disease = await Disease.findOne({ _id: id });
   // console.log("disease",disease)
-  const hospitals = await Relations.find({
-    userId: req.user._id,
-    isPermitted: true,
-  }).populate("hospitalId", "hospitalName");
+  // const hospitals = await Relations.find({
+  //   userId: req.user._id,
+  //   isPermitted: true,
+  // }).populate("hospitalId", "hospitalName");
   // console.log('user',req.user)
-  res.locals.user = await req.user.populate("disease").execPopulate();
+  // res.locals.user = await req.user.populate("disease").execPopulate();
   // console.log('diseases',Userdiseases)
-  res.render("./userViews/profile", {
-    path: "/user/disease",
-    hospitals,
-    disease,
-  });
+  console.log('disease id',req.body)
+  const {diseaseId}=req.body
+  const disease = await Disease.findOne({ _id: diseaseId });
+  console.log(disease)
+  res.send(disease)
+  // console.log(diseaseId)
   //   console.log("in disease page")
 };
 
@@ -447,8 +458,9 @@ module.exports.profile_get = async (req, res) => {
   // console.log(req.user)
   const user = req.user;
   const disease=await user.populate("disease","name")
-  console.log("disease",disease)
-  res.send(user);
+  // console.log("disease",disease)
+  // console.log(user,disease)
+  res.send({user,disease});
 };
 
 module.exports.logout_get = async (req, res) => {
