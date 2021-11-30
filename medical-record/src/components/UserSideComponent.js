@@ -32,6 +32,13 @@ const UserSideComponent = () => {
   const [diseaseName,setDiseaseName]=useState('')
   const [path, setPath] = useState("");
   const [user, setUser] = useState({});
+  const [disease,setDisease]=useState([])
+  // const [diseaseDetails,setDisaseDetails]=useState({})
+  const [diseaseData,setDiseaseData]=useState({
+    name: "Default",
+    document: [],
+    medicine: [],
+  })
   // const [medicine,setMedicine]=useState('')
   // const [document,setDocument]=useState('')
   
@@ -95,9 +102,24 @@ const UserSideComponent = () => {
   };
 
   useEffect(() => {
+    axios
+      .get("http://localhost:8080/user/profile", { withCredentials: true })
+      .then((res) => {
+        console.log("data from backedn", res.data);
+        const userData=res.data.user
+        const diseaseData=res.data.disease.disease
+        // console.log('diseaseData',diseaseData)
+        setUser(userData);
+        setDisease(diseaseData)
+      });
+      console.log('disease detailsssssss',diseaseData)
+  }, []);
+
+
+  useEffect(() => {
     axios.get(`${baseUrl}/login`).then((res) => {
       const error = res.data;
-      console.log("error", error);
+      // console.log("error", error);
       if (error.show === true) {
         showAlert(true, error.type, error.msg);
         return history.push("/user/login");
@@ -105,16 +127,29 @@ const UserSideComponent = () => {
     });
   }, []);
 
+
+
+
+  const handleDisease=( diseaseId)=>{
+    console.log('disease id',diseaseId)
+
+    // axios.post(`${baseUrl}/disease`,{
+    //   diseaseId
+    // }).then(res=>{
+    //   // console.log('disease id sent',res.data)
+    //   const details =res.data
+    //   console.log('diseasData',details)
+    //   setDiseaseData(details)
+    //   console.log('disease state',diseaseData)
+    //   return history.push('/user/disease')
+    // })
+
+    localStorage.setItem('diseaseId',diseaseId)
+    history.push('/user/disease')
+  }
+
   //profile details from backend
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:8080/user/profile", { withCredentials: true })
-      .then((res) => {
-        console.log("data from backedn", res.data);
-        setUser(res.data);
-      });
-  }, []);
 
   // console.log(path)
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -278,8 +313,19 @@ const UserSideComponent = () => {
                         onClick={() => setModalIsOpen(true)}
                       >
                         Add New
+                        
                       </button>
                     </a>
+                       {
+                          disease.map(data=>{
+                            return(
+                              <a className="dropdown-item"  onClick={()=>{handleDisease(data._id)}}><span
+													className="dropAnchor">
+                            {data.name}
+												    </span></a>
+                          )
+                          })
+                        }
                   </div>
                 </div>
 
@@ -410,14 +456,24 @@ const UserSideComponent = () => {
                     }
                     aria-labelledby="dropdownMenuLink"
                   >
-                    <button className="dropdown-item">
+                   
                       <button
                         className="dropdown-item"
                         onClick={() => setModalIsOpen(true)}
                       >
                         Add New
+                        
                       </button>
-                    </button>
+                      {
+                          disease.map(data=>{
+                            return(
+                              <a className="dropdown-item" onClick={()=>{handleDisease(data._id)}}><span
+													className="dropAnchor">
+                            {data.name}
+												    </span></a>
+                          )
+                          })
+                      }
                   </div>
                 </div>
 

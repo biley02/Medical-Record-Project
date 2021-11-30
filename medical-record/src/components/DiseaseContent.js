@@ -1,16 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useHistory, useLocation } from "react-router";
 
 import pdfImage from '../img/pdf-image.png'
+import axios from "axios";
 
-const DiseaseContent = ({ id }) => {
+const baseUrl = "http://localhost:8080/user";
+
+const DiseaseContent = () => {
+
   const [disease, setDisease] = useState({
-    name: "Disease",
-    document: [
-      { originalName: "Doc1", filename: "india" },
-      { originalName: "Doc1", filename: "india" },
-    ],
-    medicine: [{ originalName: "Doc1", filename: "india" }],
+    name: "Default Disease",
+    document: [],
+    medicine: [],
   });
+  useEffect(()=>{
+    const id=localStorage.getItem('diseaseId')
+    console.log('content',id)
+    if(!id)
+    return
+    axios.post(`${baseUrl}/disease`,{
+      diseaseId:id
+    }).then(res=>{
+      // console.log('disease id sent',res.data)
+      const details =res.data
+      console.log('diseasData',details)
+      setDisease(details)
+      console.log('disease state',disease)
+    })
+    
+  },[])
   return (
       <div className="col-lg-8 col-sm-8 col-12 order-1 order-sm-2" id="pSec9">
         <div className="disease-back-link">
@@ -47,7 +65,7 @@ const DiseaseContent = ({ id }) => {
                     style={{ display: "inline-block" }}
                     className="media-heading align-self-center"
                   >
-                    {doc.originalName}
+                    {doc.filename}
                   </div>
                   <div className="media-body">
                     <p>
@@ -83,7 +101,7 @@ const DiseaseContent = ({ id }) => {
                   className="media-heading align-self-center"
                   id="mobTitle"
                 >
-                  {med.originalName}
+                  {med.filename}
                 </div>
                 <div className="media-body">
                   <p>
