@@ -8,6 +8,7 @@ import AppointmentImage from "../img/appointment.png";
 import progressImage from "../img/progress.png";
 import messageImage from "../img/message.png";
 import doctorIcon from "../img/doctor-icon.png";
+import ProfilePic from "../img/ProfilePic.png";
 import settingsImage from "../img/Settings.png";
 import diseaseImage from "../img/disease.png";
 import UserMiddleComponent from "./profileMiddle";
@@ -30,13 +31,17 @@ const UserSideComponent = () => {
   const [user, setUser] = useState({});
   const [isLoading,setIsLoading]=useState(true)
   const [sideLoader,setSideLoader]=useState(false)
+  const [isShowDropDown, setIsShowDropDown] = useState(false);
+  const [patient,setPatient]=useState('')
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [foundUser,setFoundUser]=useState({})
+  const [access,setAccess]=useState([])
 
   const { Alert, alert, setAlert, showAlert, userToken } = useGlobalContext();
   const history = useHistory();
 
-  const tmp_token = useState(userToken);
 
-  const [isShowDropDown, setIsShowDropDown] = useState(false);
+  
 
 
 
@@ -107,6 +112,7 @@ const UserSideComponent = () => {
 
   useEffect(() => {
     setIsLoading(true)
+    console.log('found user',foundUser)
     axios
       .get(`${baseUrl}/profile`, { withCredentials: true })
       .then((res) => {
@@ -117,18 +123,30 @@ const UserSideComponent = () => {
   }, []);
 
   // console.log(path)
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  
 
-  if(isLoading)
-  {
-    // return(
-    //   <div className="container">
-    //   <div className="mdidle">
-    //     <Loader/>
-    //   </div>
-    // </div>
-    // )
+  const searchPatient=(e)=>{
+    e.preventDefault()
+    setSideLoader(true)
+    setPatient('')
+    // console.log("short id patient",patient)
+    axios.post(`${baseUrl}/search`,{short_id:patient}).then(res=>{
+      console.log('data from backend',res.data)
+      const user=res.data.result
+      
+      const access=res.data.access
+      const msg=res.data.error_msg
+      showAlert(true,msg.type,msg.msg)
+      setFoundUser(user)
+      if(access)
+      setAccess(access)
+      setSideLoader(false)
+      
+    })
+
     
+
+
   }
 
   return (
@@ -189,11 +207,39 @@ const UserSideComponent = () => {
                           placeholder="Search..."
                           className="mobile-preview shadow floating-animate"
                           name="hnam"
+                          value={patient}
                           id="id_search"
+                          onChange={(e)=>{
+                            setPatient(e.target.value)
+                          }}
                         />
-                        <button id="id_search_button">click</button>
+                        <button id="id_search_button" onClick={searchPatient}>click</button>
                       </form>
-                      <SideLoader/>
+                      {sideLoader?<SideLoader/>:
+                      <div>
+                      {foundUser&&foundUser.name?
+                      <div>
+                      <div id="patientId2">
+                      <div id="patientImage2">
+                        <img src={ProfilePic}/>
+                      </div>
+                      <div id="patientName2">
+                      <p>{foundUser.name}</p>
+                      </div>
+                      </div>
+                      {(access.length===0)?
+                        <div>
+                          <a className="btn btn-danger" role="button" id="search_button2">Request Patient</a>
+                          <br/><br/>
+                          {foundUser.nominee?<a class="btn btn-warning" role="button" id="search_button2">Request Nominee</a>:''}    
+                        </div>
+                         :<a class="btn btn-primary" role="button" id="search_button2">View Details</a>
+                        }
+                      </div>
+                      :''}
+                      <hr></hr>
+                      
+                    </div>}
                       
                     </div>
                     <div id="Drs">
@@ -232,19 +278,48 @@ const UserSideComponent = () => {
                 <img src={doctorIcon} className="Icons doctor-icon" />
               </div>
               <form
-                method="POST"
-                action="/user/hospitalSearch"
                 id="search-form"
               >
                 <input
                   type="text"
                   placeholder="Search..."
+                  value={patient}
                   className="mobile-preview shadow floating-animate"
                   id="id_search1"
+                  onChange={(e)=>{
+                    setPatient(e.target.value)
+                  }}
                 />
                 {/* <button id="id_search_button1">click</button> */}
+                <button id="id_search_button1" onClick={searchPatient}>click</button>
               </form>
-              <SideLoader/>
+              {sideLoader?<SideLoader/>:
+              <div>
+              {foundUser&&foundUser.name?
+              <div>
+              <div id="patientId2">
+              <div id="patientImage2">
+                <img src={ProfilePic}/>
+              </div>
+              <div id="patientName2">
+              <p>{foundUser.name}</p>
+              </div>
+              </div>
+              {(access.length===0)?
+                <div>
+                  <a className="btn btn-danger" role="button" id="search_button2">Request Patient</a>
+                  <br/><br/>
+                  {foundUser.nominee?<a class="btn btn-warning" role="button" id="search_button2">Request Nominee</a>:''}    
+                </div>
+                 :<a class="btn btn-primary" role="button" id="search_button2">View Details</a>
+                }
+                <hr></hr>
+              </div>
+              :''}
+             
+              
+            </div>}
+              
             </div>
           </div>
         </div>
@@ -312,10 +387,38 @@ const UserSideComponent = () => {
                       className="mobile-preview shadow floating-animate"
                       name="hnam"
                       id="id_search"
+                      value={patient}
+                      onChange={(e)=>{
+                        setPatient(e.target.value)
+                      }}
                       />
-                      <button id="id_search_button">click</button>
+                      <button id="id_search_button" onClick={searchPatient}>click</button>
                 </form>
-                <SideLoader/>
+                {sideLoader?<SideLoader/>:
+                <div>
+                {foundUser&&foundUser.name?
+                <div>
+                <div id="patientId2">
+                <div id="patientImage2">
+                  <img src={ProfilePic}/>
+                </div>
+                <div id="patientName2">
+                <p>{foundUser.name}</p>
+                </div>
+                </div>
+                {(access.length===0)?
+                  <div>
+                    <a className="btn btn-danger" role="button" id="search_button2">Request Patient</a>
+                    <br/>
+                    {foundUser.nominee?<a class="btn btn-warning" role="button" id="search_button2">Request Nominee</a>:''}    
+                  </div>
+                   :<a class="btn btn-primary" role="button" id="search_button2">View Details</a>
+                  }
+                </div>
+                :''}
+                <hr></hr>
+                
+              </div>}
               </div>
               <div id="Dr-sec3">
                 <button

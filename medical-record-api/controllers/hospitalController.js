@@ -397,9 +397,10 @@ module.exports.patient_search = async (req, res) =>
     // console.log("Searched patient", req.body);
     if (!short_id || short_id.length < 8)
     {
-        req.flash("error_msg", "Unique ID of user cannot be less than 8 characters")
-        res.redirect("/hospital/profile")
-        return 
+        // req.flash("error_msg", "Unique ID of user cannot be less than 8 characters")
+        // res.redirect("/hospital/profile")
+        setError('danger',true,'Unique ID of user cannot be less than 8 characters')
+        return res.send({error_msg})
     }
     try
     {
@@ -407,32 +408,36 @@ module.exports.patient_search = async (req, res) =>
         //console.log('resukts',result)
         if (result === null)
         {
-            req.flash('error_msg', 'No such user exists'); 
-            res.redirect("/hospital/profile")
-            return 
+            // 
+            setError('danger',true,'User with given id not found')
+            return res.send({error_msg})
 
         }  
         else
         {
             
-            res.locals.hospital = req.hospital;
+            // res.locals.hospital = req.hospital;
            
-            const patients = await Relations.find({'isPermitted': true, 'hospitalId': req.hospital._id}, "userId").populate('userId', 'name'); 
+            // const patients = await Relations.find({'isPermitted': true, 'hospitalId': req.hospital._id}, "userId").populate('userId', 'name'); 
             const access= await Relations.find({'userId':result._id, 'hospitalId':req.hospital._id, 'isPermitted':true }).populate('userId','isPermitted'); 
         //    console.log('searched patient',access);
         //    console.log("Found patient that I am passing into the ejs file", result);
-           const custom_flash = "User found"; 
-            res.render("./hospitalViews/profile", {path:'/hospital/search', patients:patients,access:access, foundUser:result, custom_flash:custom_flash });
-            return 
+        //    const custom_flash = "User found"; 
+        //     res.render("./hospitalViews/profile", {path:'/hospital/search', patients:patients,access:access, foundUser:result, custom_flash:custom_flash });
+            setError('success',false,'User Found')
+            return res.send({error_msg,access,result})
 
         }
 
     }
-    catch
+    catch(error)
     {
     //  console.log("Internal error while searching for patient"); 
-     req.flash('error_msg', 'Could not execute search operation')
-     res.redirect("/hospital/profile"); 
+    //  req.flash('error_msg', 'Could not execute search operation')
+    //  res.redirect("/hospital/profile"); 
+    console.log(error)
+    setError('danger',true,'user search failed')
+    res.send(error_msg)
     }
 }
 
