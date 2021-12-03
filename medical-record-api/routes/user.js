@@ -11,6 +11,7 @@ const multer = require("multer");
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     // console.log("in multer",file)
+    // console.log("multer",req.body)
     if (file.fieldname !== "profilePic") {
       const { name } = req.body;
       // console.log('disease name',name)
@@ -117,7 +118,7 @@ router.post(
 
 router.get("/userHospital", requireAuth, authController.userHospital_get);
 
-router.get("/disease", requireAuth, authController.disease_get);
+router.post("/disease", requireAuth, authController.disease_post);
 router.get("/hospitalSearch", requireAuth, authController.hospitalSearch_get);
 router.post("/hospitalSearch", requireAuth, authController.hospitalSearch_post);
 router.get("/forgotPassword", authController.getForgotPasswordForm);

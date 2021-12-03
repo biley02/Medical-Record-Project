@@ -8,15 +8,21 @@ import AppointmentImage from "../img/appointment.png";
 import progressImage from "../img/progress.png";
 import messageImage from "../img/message.png";
 import doctorIcon from "../img/doctor-icon.png";
+import ProfilePic from "../img/ProfilePic.png";
 import settingsImage from "../img/Settings.png";
 import diseaseImage from "../img/disease.png";
 import UserMiddleComponent from "./profileMiddle";
+import SideLoader from "../LoaderComponents/SideLoader";
+import Loader from "../LoaderComponents/Loader";
 import { FaTimes } from "react-icons/fa";
 
 import "../styles/modal.css";
+import "../styles/loader.css";
 
 import { useGlobalContext } from "../context/Context";
 import axios from "axios";
+import HospitalPatient from "./HospitalPatient";
+import HospitalDiseaseContent from "./HospitalDisease";
 axios.defaults.withCredentials = true;
 
 const baseUrl = "http://localhost:8080/hospital";
@@ -25,19 +31,23 @@ const UserSideComponent = () => {
   const pathname = useLocation().pathname;
   const [path, setPath] = useState("");
   const [user, setUser] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [sideLoader, setSideLoader] = useState(false);
+  const [isShowDropDown, setIsShowDropDown] = useState(false);
+  const [patient, setPatient] = useState("");
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [foundUser, setFoundUser] = useState({});
+  const [access, setAccess] = useState([]);
 
   const { Alert, alert, setAlert, showAlert, userToken } = useGlobalContext();
   const history = useHistory();
-
-  const tmp_token = useState(userToken);
-
-  const [isShowDropDown, setIsShowDropDown] = useState(false);
 
   useEffect(() => {
     setPath(pathname);
   }, [pathname]);
 
   useEffect(() => {
+    if (!document.getElementById("mySidenavTab")) return;
     document.getElementById("mySidenavTab").style.width =
       sessionStorage.sideNavBar;
     document.getElementById("mySidenav").style.width =
@@ -98,25 +108,67 @@ const UserSideComponent = () => {
   //profile details from backend
 
   useEffect(() => {
-    axios
-      .get(`${baseUrl}/profile`, { withCredentials: true })
-      .then((res) => {
-        console.log("data from backedn", res.data);
-        setUser(res.data);
-      });
+    setIsLoading(true);
+    console.log("found user", foundUser);
+    axios.get(`${baseUrl}/profile`, { withCredentials: true }).then((res) => {
+      console.log("data from backedn", res.data);
+      setUser(res.data);
+      setIsLoading(false);
+    });
   }, []);
 
   // console.log(path)
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const requestPatient = (short_id) => {
+    console.log("id", short_id);
+    axios
+      .post(`${baseUrl}/relation`, {
+        shortId: short_id,
+      })
+      .then((res) => {
+        console.log("details from backend", res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const searchPatient = (e) => {
+    e.preventDefault();
+    setSideLoader(true);
+    setPatient("");
+    // console.log("short id patient",patient)
+    axios.post(`${baseUrl}/search`, { short_id: patient }).then((res) => {
+      console.log("data from backend", res.data);
+      const user = res.data.result;
+
+      const access = res.data.access;
+      const msg = res.data.error_msg;
+      showAlert(true, msg.type, msg.msg);
+      setFoundUser(user);
+      if (access) setAccess(access);
+      setSideLoader(false);
+    });
+  };
+
+  const getPatient = (shortId) => {
+    console.log("get patient", shortId);
+    axios.post(`${baseUrl}/patient`, { shortId: shortId }).then((res) => {
+      console.log("patient details from backend", res.data);
+      history.push("/hospital/patient");
+    });
+  };
 
   return (
     <>
       <div className={alert.show ? "top-alert" : ""}>
         {alert.show && <Alert {...alert} removeAlert={showAlert} />}
       </div>
+
       <div className="desktop-view">
         <div className="container-fluid profile-body">
           <div className="row">
+            {isLoading ? <Loader /> : ""}
             <div
               className="col-lg-2 col-sm-4 col-12 order-3 order-sm-1"
               id="pSec1"
@@ -124,10 +176,10 @@ const UserSideComponent = () => {
               <div id="leftPanel">
                 <div
                   className={
-                    path === "/user/profile" ? "lists active-list" : "lists"
+                    path === "/hospital/profile" ? "lists active-list" : "lists"
                   }
                 >
-                  <a href="/user/profile">Profile</a>
+                  <a href="/hospital/profile">Profile</a>
                   <img src={defaultDp} className="Icons Icons-invert" />
                 </div>
 
@@ -162,10 +214,75 @@ const UserSideComponent = () => {
                           placeholder="Search..."
                           className="mobile-preview shadow floating-animate"
                           name="hnam"
+                          value={patient}
                           id="id_search"
+                          onChange={(e) => {
+                            setPatient(e.target.value);
+                          }}
                         />
-                        <button id="id_search_button">click</button>
+                        <button id="id_search_button" onClick={searchPatient}>
+                          click
+                        </button>
                       </form>
+                      {sideLoader ? (
+                        <SideLoader />
+                      ) : (
+                        <div>
+                          {foundUser && foundUser.name ? (
+                            <div>
+                              <div id="patientId2">
+                                <div id="patientImage2">
+                                  <img src={ProfilePic} />
+                                </div>
+                                <div id="patientName2">
+                                  <p>{foundUser.name}</p>
+                                </div>
+                              </div>
+                              {access.length === 0 ? (
+                                <div>
+                                  <a
+                                    className="btn btn-danger"
+                                    role="button"
+                                    id="search_button2"
+                                    onClick={() => {
+                                      requestPatient(foundUser.short_id);
+                                    }}
+                                  >
+                                    Request Patient
+                                  </a>
+                                  <br />
+                                  <br />
+                                  {foundUser.nominee ? (
+                                    <a
+                                      class="btn btn-warning"
+                                      role="button"
+                                      id="search_button2"
+                                    >
+                                      Request Nominee
+                                    </a>
+                                  ) : (
+                                    ""
+                                  )}
+                                </div>
+                              ) : (
+                                <a
+                                  class="btn btn-primary"
+                                  role="button"
+                                  id="search_button2"
+                                  onClick={() => {
+                                    getPatient(foundUser.short_id);
+                                  }}
+                                >
+                                  View Details
+                                </a>
+                              )}
+                            </div>
+                          ) : (
+                            ""
+                          )}
+                          <hr></hr>
+                        </div>
+                      )}
                     </div>
                     <div id="Drs">
                       <button
@@ -193,7 +310,9 @@ const UserSideComponent = () => {
             ) : (
               ""
             )}
+            {path === "/hospital/diseases" ? <HospitalDiseaseContent /> : ""}
             {/* {path === "/user/disease" ? <DiseaseContent /> : ""} */}
+            {path === "/hospital/patient" ? <HospitalPatient /> : ""}
             <div
               className="col-lg-2 col-sm-0 col-12 order-2 order-sm-3"
               id="pSec3"
@@ -202,19 +321,81 @@ const UserSideComponent = () => {
                 <a>Paitients </a>
                 <img src={doctorIcon} className="Icons doctor-icon" />
               </div>
-              <form
-                method="POST"
-                action="/user/hospitalSearch"
-                id="search-form"
-              >
+              <form id="search-form">
                 <input
                   type="text"
                   placeholder="Search..."
+                  value={patient}
                   className="mobile-preview shadow floating-animate"
                   id="id_search1"
+                  onChange={(e) => {
+                    setPatient(e.target.value);
+                  }}
                 />
-                <button id="id_search_button1">click</button>
+                {/* <button id="id_search_button1">click</button> */}
+                <button id="id_search_button1" onClick={searchPatient}>
+                  click
+                </button>
               </form>
+              {sideLoader ? (
+                <SideLoader />
+              ) : (
+                <div>
+                  {foundUser && foundUser.name ? (
+                    <div>
+                      <div id="patientId2">
+                        <div id="patientImage2">
+                          <img src={ProfilePic} />
+                        </div>
+                        <div id="patientName2">
+                          <p>{foundUser.name}</p>
+                        </div>
+                      </div>
+                      {access.length === 0 ? (
+                        <div>
+                          <a
+                            className="btn btn-danger"
+                            role="button"
+                            id="search_button2"
+                            onClick={() => {
+                              requestPatient(foundUser.short_id);
+                            }}
+                          >
+                            Request Patient
+                          </a>
+                          <br />
+                          <br />
+                          {foundUser.nominee ? (
+                            <a
+                              class="btn btn-warning"
+                              role="button"
+                              id="search_button2"
+                            >
+                              Request Nominee
+                            </a>
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                      ) : (
+                        <a
+                          class="btn btn-primary"
+                          role="button"
+                          id="search_button2"
+                          onClick={() => {
+                            getPatient(foundUser.short_id);
+                          }}
+                        >
+                          View Details
+                        </a>
+                      )}
+                      <hr></hr>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -222,13 +403,14 @@ const UserSideComponent = () => {
       <div className="mobile-view">
         <div className="container-fluid profile-body">
           <div className="row">
+            {isLoading ? <Loader /> : ""}
             <div
               className="col-lg-2 col-sm-4 col-12 order-3 order-sm-1"
               id="pSec1"
             >
               <div id="leftPanel">
                 <div className="lists active-list">
-                  <a href="/user/profile">Profile</a>
+                  <a href="/hospital/profile">Profile</a>
                   <img src={defaultDp} className="Icons profile-icon" />
                 </div>
 
@@ -253,6 +435,8 @@ const UserSideComponent = () => {
             ) : (
               ""
             )}
+            {path === "/hospital/diseases" ? <HospitalDiseaseContent /> : ""}
+            {path === "/hospital/patient" ? <HospitalPatient /> : ""}
             {/* {path === "/user/disease" ? <DiseaseContent /> : ""} */}
 
             <div
@@ -274,6 +458,80 @@ const UserSideComponent = () => {
                     ></i>
                   </a>
                 </div>
+                <form id="hospital-search" className="sidenav-form">
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    className="mobile-preview shadow floating-animate"
+                    name="hnam"
+                    id="id_search"
+                    value={patient}
+                    onChange={(e) => {
+                      setPatient(e.target.value);
+                    }}
+                  />
+                  <button id="id_search_button" onClick={searchPatient}>
+                    click
+                  </button>
+                </form>
+                {sideLoader ? (
+                  <SideLoader />
+                ) : (
+                  <div>
+                    {foundUser && foundUser.name ? (
+                      <div>
+                        <div id="patientId2">
+                          <div id="patientImage2">
+                            <img src={ProfilePic} />
+                          </div>
+                          <div id="patientName2">
+                            <p>{foundUser.name}</p>
+                          </div>
+                        </div>
+                        {access.length === 0 ? (
+                          <div>
+                            <a
+                              className="btn btn-danger"
+                              role="button"
+                              id="search_button2"
+                              onClick={() => {
+                                requestPatient(foundUser.short_id);
+                              }}
+                            >
+                              Request Patient
+                            </a>
+                            <br />
+                            {foundUser.nominee ? (
+                              <a
+                                class="btn btn-warning"
+                                role="button"
+                                id="search_button2"
+                              >
+                                Request Nominee
+                              </a>
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                        ) : (
+                          <a
+                            class="btn btn-primary"
+                            role="button"
+                            id="search_button2"
+                            onClick={() => {
+                              getPatient(foundUser.short_id);
+                            }}
+                          >
+                            View Details
+                          </a>
+                        )}
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                    <hr></hr>
+                  </div>
+                )}
               </div>
               <div id="Dr-sec3">
                 <button

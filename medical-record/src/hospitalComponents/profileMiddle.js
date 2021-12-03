@@ -10,7 +10,7 @@ import DpModal from "../components/DpModal";
 import ProfileDetailsModal from "../components/ProfileDetailsModal";
 
 const UserMiddleComponent = ({ userobj }) => {
-  console.log('hospitalllll',userobj)
+  // console.log('hospitalllll',userobj)
   const user=userobj
 
   return (

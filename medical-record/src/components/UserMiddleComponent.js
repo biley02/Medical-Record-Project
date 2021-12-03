@@ -10,10 +10,11 @@ import DpModal from "./DpModal";
 import ProfileDetailsModal from "./ProfileDetailsModal";
 
 const UserMiddleComponent = ({ userobj }) => {
+  console.log('userssssss',userobj)
   const user = {
     name: userobj.name,
     profilePic: "",
-    shortId: "",
+    shortId: userobj.short_id,
     bloodGroup: "",
     email: "",
     phoneNo: "",

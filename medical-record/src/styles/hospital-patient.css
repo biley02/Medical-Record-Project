@@ -1,0 +1,119 @@
+#View {
+  margin-left: auto;
+  margin-right: 2%;
+  height: auto;
+  width: auto;
+  background-color: #019dfa;
+  border: none;
+  border-radius: 4px;
+  padding: 3px 8px;
+  color: white;
+}
+
+.container {
+  height: fit-content;
+}
+
+.media {
+  margin-bottom: 20px !important;
+  display: flex;
+  align-items: flex-end !important;
+  justify-content: space-between !important;
+  padding-bottom: 20px;
+}
+
+#patientDetailsh {
+  margin-bottom: 4%;
+  padding: 1% 2% 3% 4%;
+  height: auto;
+
+  width: 90%;
+  align-self: center;
+  background-color: #f3f3f3;
+  border-radius: 15px;
+}
+
+.diseases {
+  display: inline-block;
+}
+
+.pSec2h {
+  height: 89vh;
+  overflow-y: scroll;
+  padding-right: 0;
+}
+
+.sub1h {
+  height: 80vh !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #ffffff;
+  box-shadow: 3px 3px 15px rgb(0 0 0 / 25%);
+  border-radius: 10px 10px 10px 10px;
+}
+
+.sub4h {
+  margin-top: 4vh;
+  height: unset !important;
+}
+
+#pSec2::-webkit-scrollbar {
+  width: 5.5px;
+}
+
+#pSec2::-webkit-scrollbar-track {
+  background-color: rgb(209, 202, 202);
+}
+
+#pSec2::-webkit-scrollbar-thumb {
+  background-color: #9593a0;
+}
+
+@media (max-width: 1092px) {
+  .sub1h {
+    height: 60vh !important;
+  }
+}
+
+@media (max-width: 860px) {
+  #heading2 {
+    position: relative;
+    top: 10px;
+  }
+
+  .sub1h {
+    height: 55vh !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .pSec2h {
+    height: unset;
+    overflow-y: hidden;
+  }
+
+  .sub4h {
+    margin-top: 0;
+    margin-bottom: 20px;
+    box-shadow: none !important;
+  }
+
+  #patientDetailsh {
+    padding: 4%;
+    height: auto;
+    /* margin-bottom: 60px; */
+  }
+}
+
+@media (max-width: 420px) {
+  .sub4h {
+    position: relative;
+    bottom: 5vh !important;
+    margin-top: 20%;
+  }
+
+  .sub1h {
+    height: 60vh !important;
+  }
+}

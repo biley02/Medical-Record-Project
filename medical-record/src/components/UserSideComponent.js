@@ -12,6 +12,7 @@ import settingsImage from "../img/Settings.png";
 import diseaseImage from "../img/disease.png";
 import UserMiddleComponent from "./UserMiddleComponent";
 import DiseaseContent from "./DiseaseContent";
+import Loader from "../LoaderComponents/Loader";
 
 import { FaTimes } from "react-icons/fa";
 
@@ -25,8 +26,24 @@ const baseUrl = "http://localhost:8080/user";
 
 const UserSideComponent = () => {
   const pathname = useLocation().pathname;
+  const [medicineFile,setMedicineFile]=useState()
+  const [documentFile,setDocumentFile]=useState()
+  const [medicineName,setMedicineName]=useState('No File Chosen')
+  const [documentName,setDocumentName]=useState('No File Chosen')
+  const [diseaseName,setDiseaseName]=useState('')
   const [path, setPath] = useState("");
   const [user, setUser] = useState({});
+  const [disease,setDisease]=useState([])
+  const [isLoading,setIsLoading]=useState(false)
+  // const [diseaseDetails,setDisaseDetails]=useState({})
+  const [diseaseData,setDiseaseData]=useState({
+    name: "Default",
+    document: [],
+    medicine: [],
+  })
+  // const [medicine,setMedicine]=useState('')
+  // const [document,setDocument]=useState('')
+  
 
   const { Alert, alert, setAlert, showAlert, userToken } = useGlobalContext();
   const history = useHistory();
@@ -87,9 +104,26 @@ const UserSideComponent = () => {
   };
 
   useEffect(() => {
+    setIsLoading(true)
+    axios
+      .get("http://localhost:8080/user/profile", { withCredentials: true })
+      .then((res) => {
+        console.log("data from backedn", res.data);
+        const userData=res.data.user
+        const diseaseData=res.data.disease.disease
+        // console.log('diseaseData',diseaseData)
+        setUser(userData);
+        setDisease(diseaseData)
+        setIsLoading(false)
+      });
+      console.log('disease detailsssssss',diseaseData)
+  }, []);
+
+
+  useEffect(() => {
     axios.get(`${baseUrl}/login`).then((res) => {
       const error = res.data;
-      console.log("error", error);
+      // console.log("error", error);
       if (error.show === true) {
         showAlert(true, error.type, error.msg);
         return history.push("/user/login");
@@ -97,19 +131,55 @@ const UserSideComponent = () => {
     });
   }, []);
 
+
+
+
+  const handleDisease=( diseaseId)=>{
+    console.log('disease id',diseaseId)
+
+    // axios.post(`${baseUrl}/disease`,{
+    //   diseaseId
+    // }).then(res=>{
+    //   // console.log('disease id sent',res.data)
+    //   const details =res.data
+    //   console.log('diseasData',details)
+    //   setDiseaseData(details)
+    //   console.log('disease state',diseaseData)
+    //   return history.push('/user/disease')
+    // })
+
+    localStorage.setItem('diseaseId',diseaseId)
+    history.push('/user/disease')
+  }
+
   //profile details from backend
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:8080/user/profile", { withCredentials: true })
-      .then((res) => {
-        console.log("data from backedn", res.data);
-        setUser(res.data);
-      });
-  }, []);
 
   // console.log(path)
   const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const sendFile=()=>{
+    setModalIsOpen(false)
+    console.log("document",documentFile)
+    console.log('medicine',medicineFile)
+    console.log('diseaseName',diseaseName)
+
+    const data=new FormData()
+    data.append("name",diseaseName)
+    data.append("medicine",medicineFile)
+    data.append("document",documentFile)
+
+    axios.post(`${baseUrl}/profile/upload`,data).then(res=>{
+      console.log(res.data)
+    }).catch(e=>console.log(e))
+
+    setDiseaseName('')
+    setMedicineFile()
+    setDocumentFile()
+    setDocumentName('No File Chosen')
+    setMedicineName('No File Chosen')
+    
+  }
 
   return (
     <>
@@ -122,7 +192,8 @@ const UserSideComponent = () => {
           <form
             className="form-group"
             // id="open-modal"
-            enctype="multipart/form-data"
+            // enctype="multipart/form-data"
+            
           >
             <div className="mod">
               <button
@@ -144,7 +215,12 @@ const UserSideComponent = () => {
                   className="form__input"
                   id="name"
                   placeholder="Disease Name"
-                  required=""
+                  required="true"
+                  onChange={(e)=>{
+                    const {value}=e.target
+                    setDiseaseName(value)
+                  }
+                  }
                 />
                 <br />
                 <br />
@@ -152,20 +228,32 @@ const UserSideComponent = () => {
               <div>
                 <br />
 
-                <input type="file" id="actual-btn" hidden />
-                <label htmlFor="actual-btn" className="lb1">
+                <input type="file" id="medicine" hidden onChange={e=>{
+                  const file=e.target.files[0]
+                  // console.log(file)
+                  setMedicineFile(file)
+                  const value=file.name
+                  setMedicineName(value)
+                }}/>
+                <label htmlFor="medicine" className="lb1" >
                   Add medicine
                 </label>
-                <span id="file-chosen">No file chosen</span>
+                <span id="file-chosen">{medicineName}</span>
               </div>
               <div>
                 <br />
 
-                <input type="file" id="actual-btn" hidden />
-                <label htmlFor="actual-btn" className="lb2">
+                <input type="file" id="document" hidden onChange={e=>{
+                  const file=e.target.files[0]
+                  // console.log(file)
+                  setDocumentFile(file)
+                  const value=file.name
+                  setDocumentName(value)
+                }} />
+                <label htmlFor="document" className="lb2">
                   Add presciptions
                 </label>
-                <span id="file-chosen">No file chosen</span>
+                <span id="file-chosen">{documentName}</span>
                 {/* <span>
                   <span class="form__med">
                     Add Medicine... <input type="file" id="profilePic" />
@@ -174,7 +262,7 @@ const UserSideComponent = () => {
                   </span>
                 </span> */}
               </div>
-              <button className="accept" type="save">
+              <button className="accept" type="submit" onClick={diseaseName?sendFile:e=>{console.log('enter disease name')}} >
                 Save &rarr;<i className="uil uil-expand-arrows"></i>
               </button>
             </div>
@@ -187,6 +275,7 @@ const UserSideComponent = () => {
       <div className="desktop-view">
         <div className="container-fluid profile-body">
           <div className="row">
+          {isLoading?<Loader/>:''}
             <div
               className="col-lg-2 col-sm-4 col-12 order-3 order-sm-1"
               id="pSec1"
@@ -229,8 +318,19 @@ const UserSideComponent = () => {
                         onClick={() => setModalIsOpen(true)}
                       >
                         Add New
+                        
                       </button>
                     </a>
+                       {
+                          disease.map(data=>{
+                            return(
+                              <a className="dropdown-item"  onClick={()=>{handleDisease(data._id)}}><span
+													className="dropAnchor">
+                            {data.name}
+												    </span></a>
+                          )
+                          })
+                        }
                   </div>
                 </div>
 
@@ -329,6 +429,7 @@ const UserSideComponent = () => {
       <div className="mobile-view">
         <div className="container-fluid profile-body">
           <div className="row">
+          {isLoading?<Loader/>:''}
             <div
               className="col-lg-2 col-sm-4 col-12 order-3 order-sm-1"
               id="pSec1"
@@ -361,14 +462,24 @@ const UserSideComponent = () => {
                     }
                     aria-labelledby="dropdownMenuLink"
                   >
-                    <button className="dropdown-item">
+                   
                       <button
                         className="dropdown-item"
                         onClick={() => setModalIsOpen(true)}
                       >
                         Add New
+                        
                       </button>
-                    </button>
+                      {
+                          disease.map(data=>{
+                            return(
+                              <a className="dropdown-item" onClick={()=>{handleDisease(data._id)}}><span
+													className="dropAnchor">
+                            {data.name}
+												    </span></a>
+                          )
+                          })
+                      }
                   </div>
                 </div>
 
