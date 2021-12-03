@@ -10,8 +10,9 @@ import UserSideComponent from "./components/UserSideComponent";
 import UserDiseaseComponent from "./components/UserDiseaseComponent";
 import DiseaseContent from "./components/DiseaseContent";
 import HospitalSignIn from "./components/HospitalSignIn";
-import HospitalSignUp from "./components/HospitalSignUp"
-import HospitalProfile from './hospitalComponents/profile'
+import HospitalSignUp from "./components/HospitalSignUp";
+import HospitalProfile from "./hospitalComponents/profile";
+import HospitalPatient from "./hospitalComponents/HospitalPatient";
 
 function App() {
   return (
@@ -42,6 +43,12 @@ function App() {
           <HospitalSignUp />
         </Route>
         <Route path="/hospital/profile">
+          <HospitalProfile />
+        </Route>
+        <Route path="/hospital/patient">
+          <HospitalProfile />
+        </Route>
+        <Route path="/hospital/diseases">
           <HospitalProfile />
         </Route>
       </Switch>
