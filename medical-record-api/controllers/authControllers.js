@@ -152,8 +152,8 @@ module.exports.signup_post = async (req, res) => {
 
   try {
     const userExists = await User.findOne({ email });
-    console.log('userexists', userExists)
-    console.log(User)
+    console.log("userexists", userExists);
+    console.log(User);
     /*if(userExists && userExists.active== false)
     {
       req.flash("success_msg",`${userExists.name}, we have sent you a link to verify your account kindly check your mail`)
@@ -292,56 +292,56 @@ module.exports.login_post = async (req, res) => {
 };
 
 module.exports.upload_post = async (req, res) => {
-  console.log("in uploads",req.body)
+  console.log("in uploads", req.body);
 
   try {
     let { name } = req.body;
     // console.log("filessss",req.files)
     const files = req.files;
     dname = name.toLowerCase();
-    
-    const medicine=files.medicine
-    const document=files.document
 
-    
-    const user=req.user;
-    user.populate("disease").then(data=>{console.log(data)})
+    const medicine = files.medicine;
+    const document = files.document;
+
+    const user = req.user;
+    user.populate("disease").then((data) => {
+      console.log(data);
+    });
 
     // console.log("medicine",medicine)
     // console.log("document",document)
     // console.log("files",obj)
     // console.log(obj.document[0].filename)
-    
-    const userDisease = await user
-      .populate("disease")
+
+    const userDisease = await user.populate("disease");
     // console.log('diseassssssssssse',userDisease)
     const existName = userDisease.disease.find((data) => data.name === dname);
     // console.log('disease',existName)
 
-    let documentObj={
-      _id:'',
-      originalName:'',
-      filename:''
-    }
+    let documentObj = {
+      _id: "",
+      originalName: "",
+      filename: "",
+    };
 
-    let medicineObj={
-      _id:'',
-      originalName:'',
-      filename:''
-    }
+    let medicineObj = {
+      _id: "",
+      originalName: "",
+      filename: "",
+    };
 
     if (existName) {
       const existDisease = await Disease.findById({ _id: existName._id });
       // console.log('exist disease',existDisease)
 
       if (medicine) {
-        medicineObj._id= mongoose.Types.ObjectId()
+        medicineObj._id = mongoose.Types.ObjectId();
         medicineObj.originalName = medicine[0].originalname;
         medicineObj.filename = `/uploads/${req.user.email}/${dname}/${medicine[0].filename}`;
         existDisease.medicine.push(medicineObj);
       }
       if (document) {
-        documentObj._id=mongoose.Types.ObjectId()
+        documentObj._id = mongoose.Types.ObjectId();
         documentObj.originalName = document[0].originalname;
         documentObj.filename = `/uploads/${req.user.email}/${dname}/${document[0].filename}`;
         existDisease.document.push(documentObj);
@@ -362,7 +362,7 @@ module.exports.upload_post = async (req, res) => {
     const newDisease = await new Disease({
       name,
       medicine,
-      document
+      document,
     }).save();
 
     // console.log('disesssssss',newDisease)
@@ -403,11 +403,11 @@ module.exports.upload_post = async (req, res) => {
     // return res.redirect("/user/profile");
   } catch (err) {
     // console.log("error")
-    console.error(err)
+    console.error(err);
     // req.flash("error_msg", "Something went wrong");
     // return res.redirect("/user/profile");
-    setError("danger",true,"error")
-    res.send(error_msg)
+    setError("danger", true, "error");
+    res.send(error_msg);
   }
 };
 
@@ -425,11 +425,11 @@ module.exports.disease_post = async (req, res) => {
   // console.log('user',req.user)
   // res.locals.user = await req.user.populate("disease").execPopulate();
   // console.log('diseases',Userdiseases)
-  console.log('disease id',req.body)
-  const {diseaseId}=req.body
+  console.log("disease id", req.body);
+  const { diseaseId } = req.body;
   const disease = await Disease.findOne({ _id: diseaseId });
-  console.log(disease)
-  res.send(disease)
+  console.log(disease);
+  res.send(disease);
   // console.log(diseaseId)
   //   console.log("in disease page")
 };
@@ -457,10 +457,14 @@ module.exports.profile_get = async (req, res) => {
   // console.log('token backend',token)
   // console.log(req.user)
   const user = req.user;
-  const disease=await user.populate("disease","name")
+  const disease = await user.populate("disease", "name");
+  const hospitals = await Relations.find({
+    userId: req.user._id,
+    isPermitted: true,
+  }).populate("hospitalId", "hospitalName");
   // console.log("disease",disease)
   // console.log(user,disease)
-  res.send({user,disease});
+  res.send({ user, disease, hospitals });
 };
 
 module.exports.logout_get = async (req, res) => {
@@ -587,42 +591,31 @@ module.exports.hospitalSearch_get = async (req, res) => {
 };
 module.exports.hospitalSearch_post = async (req, res) => {
   const hospitalName = req.body.hname;
-  // console.log(hospitalName)
 
   if (!hospitalName) {
-    req.flash("error_msg", "Enter a value");
-    res.redirect("/user/profile");
-    return;
+    setError("danger", true, "Enter a Hospital Name");
+    res.send({ error_msg });
   }
   try {
     const hospital = await Hospital.find({ hospitalName: hospitalName });
     //    console.log('resukts',hospital)
     if (hospital.length === 0) {
-      req.flash("error_msg", "No such hospital exists");
-      res.redirect("/user/profile");
-      return;
+      setError("success", true, "No such Hospital Exists");
+      res.send({ error_msg });
     } else {
-      req.flash("success_msg", "Hospital found");
-      res.locals.user = await req.user.populate("disease").execPopulate();
-      const hospitals = await Relations.find({
-        userId: req.user._id,
-        isPermitted: true,
-      }).populate("hospitalId", "hospitalName");
-      const nominee = await req.user.populate("nominee").execPopulate();
+      setError("success", true, "Hospital Found");
+      // res.locals.user = await req.user.populate("disease").execPopulate();
+      // console.log("hospital search", hospital);
+
       // console.log(hospitals)
       // console.log(hospitals)
-      res.render("./userViews/profile", {
-        path: "/user/hospitalSearch",
-        hospitals,
-        nominee,
-        hospital,
-      });
-      return;
+      res.send({ error_msg, hospital });
     }
-  } catch {
+  } catch (e) {
     //  console.log("Internal error while searching for hospital");
-    req.flash("error_msg", "error while searching for hospital");
-    res.redirect("/user/profile");
+    console.log(e);
+    setError("danger", false, "Error Occured while Searching");
+    res.send({ error_msg });
   }
 };
 module.exports.download = async (req, res) => {
