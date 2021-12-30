@@ -89,31 +89,58 @@ module.exports.editDetails_post = async (req, res) => {
   }
 };
 
-module.exports.userHospital_get = async (req, res) => {
-  const hsopitalId = req.query;
-  const params = new URLSearchParams(hsopitalId);
-  const newId = params.get("id");
-  // console.log(newId);
-  res.locals.user = await req.user.populate("disease").execPopulate();
-  //const newId=JSON.parse(userId,true)
-  const hospital = await Hospital.findOne({ _id: newId });
-  //    console.log('user details',userHospital)
-
-  //  console.log("hospital", user)
-  const hospitals = await Relations.find(
-    { userId: req.user._id, isPermitted: true },
-    "hospitalId"
-  ).populate("hospitalId", "hospitalName");
-  // console.log('relation',hospitals)
-  if (!hospital) {
-    req.flash("error_msg", "user not found");
-    res.redirect("/user/profile");
+module.exports.userHospitalId_post = async (req, res) => {
+  try {
+    const id = req.body.userHospitalId;
+    const token = jwt.sign({ id }, process.env.JWT_SECRET, {
+      expiresIn: maxAge,
+    });
+    // res.cookie("userHospitalId", token, {
+    //   httpOnly: true,
+    //   maxAge: maxAge * 1000,
+    // });
+    setError("success", true, "token set");
+    res.send({ error_msg, token });
+  } catch (e) {
+    console.log(e);
   }
-  res.render("./userViews/profile", {
-    path: "/user/userHospital",
-    hospitals,
-    hospital,
-  });
+};
+
+module.exports.userHospital_post = async (req, res) => {
+  try {
+    const token = req.body.userHospitalId;
+    // console.log(req.body);
+    if (!token) {
+      setError("danger", true, "id not found");
+      res.send({ error_msg });
+    }
+    if (token) {
+      jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
+        if (err) {
+          console.log("err", err.message);
+
+          // res.redirect('/user/login')
+        } else {
+          const hospital = await Hospital.findById(decodedToken.id);
+
+          // if null then redirect to signup
+          if (hospital == null) {
+            // req.flash("error_msg", "You do not have an account yet, kindly sign up for one");
+            // res.clearCookie('jwt')
+            // res.redirect("/hospita/signup");
+            setError("danger", true, "Hospital not found");
+            return res.send({ error_msg });
+          }
+          //   console.log(disease);
+
+          setError("success", false, "View Details");
+          res.send({ error_msg, hospital });
+        }
+      });
+    }
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 // controller actions

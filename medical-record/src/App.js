@@ -13,6 +13,7 @@ import HospitalSignIn from "./components/HospitalSignIn";
 import HospitalSignUp from "./components/HospitalSignUp";
 import HospitalProfile from "./hospitalComponents/profile";
 import HospitalPatient from "./hospitalComponents/HospitalPatient";
+import UserHospital from "./components/UserHospital";
 
 function App() {
   return (
@@ -33,6 +34,9 @@ function App() {
           <UserSideComponent />
         </Route>
         <Route path="/user/disease">
+          <UserSideComponent />
+        </Route>
+        <Route path="/user/hospital">
           <UserSideComponent />
         </Route>
         {/* hospital routes */}

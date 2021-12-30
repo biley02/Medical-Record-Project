@@ -116,8 +116,8 @@ router.post(
   authController.upload_post
 );
 
-router.get("/userHospital", requireAuth, authController.userHospital_get);
-
+router.post("/userHospital", requireAuth, authController.userHospital_post);
+router.post("/userHospitalId", requireAuth, authController.userHospitalId_post);
 router.post("/disease", requireAuth, authController.disease_post);
 router.get("/hospitalSearch", requireAuth, authController.hospitalSearch_get);
 router.post("/hospitalSearch", requireAuth, authController.hospitalSearch_post);

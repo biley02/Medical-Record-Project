@@ -22,6 +22,7 @@ import "../styles/modal.css";
 
 import { useGlobalContext } from "../context/Context";
 import axios from "axios";
+import UserHospital from "./UserHospital";
 axios.defaults.withCredentials = true;
 
 const baseUrl = "http://localhost:8080/user";
@@ -206,6 +207,18 @@ const UserSideComponent = () => {
       })
       .catch((e) => {
         console.log(e);
+      });
+  };
+
+  const getHospital = (id) => {
+    // console.log("get hospital", id);
+    axios
+      .post(`${baseUrl}/userHospitalId`, { userHospitalId: id })
+      .then((res) => {
+        console.log("tokennnn", res.data);
+        localStorage.setItem("userHospitalId", res.data.token);
+        history.push("/user/hospital");
+        window.location.reload(true);
       });
   };
 
@@ -433,7 +446,12 @@ const UserSideComponent = () => {
                           {foundHospitals.length > 0
                             ? foundHospitals.map((hdata) => {
                                 return (
-                                  <ul id="patientList">
+                                  <ul
+                                    id="patientList"
+                                    onClick={() => {
+                                      getHospital();
+                                    }}
+                                  >
                                     <div id="patientId2">
                                       <div id="patientImage2">
                                         <img src={ProfilePic} />
@@ -452,7 +470,12 @@ const UserSideComponent = () => {
                       {userHospital && userHospital.length > 0
                         ? userHospital.map((hdata) => {
                             return (
-                              <ul id="patientList">
+                              <ul
+                                id="patientList"
+                                onClick={() => {
+                                  getHospital(hdata.hospitalId._id);
+                                }}
+                              >
                                 <div id="patientId2">
                                   <div id="patientImage2">
                                     <img src={ProfilePic} />
@@ -492,6 +515,7 @@ const UserSideComponent = () => {
             ) : (
               ""
             )}
+            {path === "/user/hospital" ? <UserHospital /> : ""}
             {path === "/user/disease" ? <DiseaseContent /> : ""}
             <div
               className="col-lg-2 col-sm-0 col-12 order-2 order-sm-3"
@@ -523,7 +547,12 @@ const UserSideComponent = () => {
                   {foundHospitals.length > 0
                     ? foundHospitals.map((hdata) => {
                         return (
-                          <ul id="patientList">
+                          <ul
+                            id="patientList"
+                            onClick={() => {
+                              getHospital(hdata._id);
+                            }}
+                          >
                             <div id="patientId2">
                               <div id="patientImage2">
                                 <img src={ProfilePic} />
@@ -542,7 +571,12 @@ const UserSideComponent = () => {
               {userHospital && userHospital.length > 0
                 ? userHospital.map((hdata) => {
                     return (
-                      <ul id="patientList">
+                      <ul
+                        id="patientList"
+                        onClick={() => {
+                          getHospital(hdata.hospitalId._id);
+                        }}
+                      >
                         <div id="patientId2">
                           <div id="patientImage2">
                             <img src={ProfilePic} />
@@ -642,6 +676,7 @@ const UserSideComponent = () => {
             ) : (
               ""
             )}
+            {path === "/user/hospital" ? <UserHospital /> : ""}
             {path === "/user/disease" ? <DiseaseContent /> : ""}
 
             <div
@@ -686,7 +721,12 @@ const UserSideComponent = () => {
                     {foundHospitals.length > 0
                       ? foundHospitals.map((hdata) => {
                           return (
-                            <ul id="patientList">
+                            <ul
+                              id="patientList"
+                              onClick={() => {
+                                getHospital(hdata._id);
+                              }}
+                            >
                               <div id="patientId2">
                                 <div id="patientImage2">
                                   <img src={ProfilePic} />
@@ -705,7 +745,12 @@ const UserSideComponent = () => {
                 {userHospital && userHospital.length > 0
                   ? userHospital.map((hdata) => {
                       return (
-                        <ul id="patientList">
+                        <ul
+                          id="patientList"
+                          onClick={() => {
+                            getHospital(hdata.hospitalId._id);
+                          }}
+                        >
                           <div id="patientId2">
                             <div id="patientImage2">
                               <img src={ProfilePic} />
