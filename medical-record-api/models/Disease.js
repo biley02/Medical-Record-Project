@@ -1,33 +1,36 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 // const User = require('../models/User')
 
-
 const diseaseSchema = mongoose.Schema({
-    name: {
+  name: {
+    type: String,
+    trim: true,
+  },
+  medicine: [
+    {
+      originalName: {
         type: String,
-        trim: true,
+      },
+      filename: {
+        type: String,
+      },
     },
-    medicine:[{
-        originalName:{
-            type:String
-        },
-        filename:{
-            type:String
-        }
-    }],
-    document:[{
-        originalName:{
-            type:String
-        },
-        filename:{
-            type:String
-        }
-    }],
-    owner:{
-        type: mongoose.Schema.Types.ObjectId ,
-        ref:'User'
-    }
-})
+  ],
+  document: [
+    {
+      originalName: {
+        type: String,
+      },
+      filename: {
+        type: String,
+      },
+    },
+  ],
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
+});
 
 /*diseaseSchema.virtual('owner',{
     ref:'User',
@@ -35,6 +38,6 @@ const diseaseSchema = mongoose.Schema({
     foreignField:'disease'
 })*/
 
-const Disease = mongoose.model('Disease', diseaseSchema)
+const Disease = mongoose.model("Disease", diseaseSchema);
 
-module.exports = Disease
+module.exports = Disease;

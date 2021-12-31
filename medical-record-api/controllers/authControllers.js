@@ -317,126 +317,215 @@ module.exports.login_post = async (req, res) => {
     res.send(error_msg);
   }
 };
-
 module.exports.upload_post = async (req, res) => {
-  console.log("in uploads", req.body);
-
   try {
     let { name } = req.body;
-    // console.log("filessss",req.files)
     const files = req.files;
     dname = name.toLowerCase();
-
     const medicine = files.medicine;
+    console.log("Medicine", medicine);
     const document = files.document;
-
     const user = req.user;
-    user.populate("disease").then((data) => {
-      console.log(data);
-    });
-
-    // console.log("medicine",medicine)
-    // console.log("document",document)
-    // console.log("files",obj)
-    // console.log(obj.document[0].filename)
-
     const userDisease = await user.populate("disease");
-    // console.log('diseassssssssssse',userDisease)
     const existName = userDisease.disease.find((data) => data.name === dname);
-    // console.log('disease',existName)
-
-    let documentObj = {
-      _id: "",
-      originalName: "",
-      filename: "",
-    };
-
-    let medicineObj = {
-      _id: "",
-      originalName: "",
-      filename: "",
-    };
 
     if (existName) {
       const existDisease = await Disease.findById({ _id: existName._id });
-      // console.log('exist disease',existDisease)
+      var medicinedoc = medicine
+        ? {
+            originalName: medicine[0].originalname,
+            filename: `/uploads/${req.user.email}/${dname}/${medicine[0].filename}`,
+          }
+        : null;
 
-      if (medicine) {
-        medicineObj._id = mongoose.Types.ObjectId();
-        medicineObj.originalName = medicine[0].originalname;
-        medicineObj.filename = `/uploads/${req.user.email}/${dname}/${medicine[0].filename}`;
-        existDisease.medicine.push(medicineObj);
-      }
-      if (document) {
-        documentObj._id = mongoose.Types.ObjectId();
-        documentObj.originalName = document[0].originalname;
-        documentObj.filename = `/uploads/${req.user.email}/${dname}/${document[0].filename}`;
-        existDisease.document.push(documentObj);
-      }
+      var documentdoc = document
+        ? {
+            originalName: document[0].originalname,
+            filename: `/uploads/${req.user.email}/${dname}/${document[0].filename}`,
+          }
+        : null;
+
+      if (medicinedoc) await existDisease.medicine.push(medicinedoc);
+      if (documentdoc) await existDisease.document.push(documentdoc);
       await existDisease.save();
+
+      await Disease.findByIdAndUpdate(
+        { _id: existDisease._id },
+        {
+          medicine: existDisease.medicine,
+          document: existDisease.document,
+        }
+      );
+      console.log("This is updated new disease", existDisease);
+      console.log(user);
+    } else {
+      var medicinedoc = medicine
+        ? {
+            originalName: medicine[0].originalname,
+            filename: `/uploads/${req.user.email}/${dname}/${medicine[0].filename}`,
+          }
+        : null;
+      var documentdoc = document
+        ? {
+            originalName: document[0].originalname,
+            filename: `/uploads/${req.user.email}/${dname}/${document[0].filename}`,
+          }
+        : null;
+      const newDisease = await new Disease({
+        name,
+      });
+      console.log("Medicine doc ", medicinedoc);
+      // console.log("This is new disease", newDisease);
+      if (medicinedoc) await newDisease.medicine.push(medicinedoc);
+      if (documentdoc) await newDisease.document.push(documentdoc);
+      await newDisease.save();
+      // console.log("This is updated new disease ", newDisease);
+
+      await Disease.findByIdAndUpdate(
+        { _id: newDisease._id },
+        {
+          medicine: newDisease.medicine,
+          document: newDisease.document,
+        }
+      );
+
+      let diseaseArr = user.disease;
+      diseaseArr.push(newDisease._id);
+
+      await User.findByIdAndUpdate(
+        { _id: user._id },
+        {
+          disease: diseaseArr,
+        }
+      );
+      // console.log(user);
     }
-
-    /*let images = files.map((file) => {
-            return `/uploads/${req.user.email}/${file.filename}`
-        })*/
-
-    medicineObj.originalName = medicine[0].originalname;
-    medicineObj.filename = `/uploads/${req.user.email}/${dname}/${medicine[0].filename}`;
-
-    documentObj.originalName = document[0].originalname;
-    documentObj.filename = `/uploads/${req.user.email}/${dname}/${document[0].filename}`;
-
-    const newDisease = await new Disease({
-      name,
-      medicine,
-      document,
-    }).save();
-
-    // console.log('disesssssss',newDisease)
-    // newDisease.medicine.originalName=medicineObj.originalName
-    // newDisease.document.originalName=documentObj.originalName
-
-    // if (medicine) {
-    //   // medicineObj.originalName = medicine[0].originalname;
-    //   // medicineObj.filename = `/uploads/${req.user.email}/${dname}/${medicine[0].filename}`;
-    //   newDisease.medicine.push(medicine);
-
-    //   // medicine.push(`/uploads/${req.user.email}/${dname}/${obj.medicine[0].filename}`)
-    // }
-    // if (document) {
-    //   // documentObj.originalName =document[0].originalname;
-    //   // documentObj.filename = `/uploads/${req.user.email}/${dname}/${document[0].filename}`;
-    //   newDisease.document.push(document);
-    //   //await newDisease.save()
-    //   //document.push( `/uploads/${req.user.email}/${dname}/${obj.document[0].filename}`)
-    // }
-    // await newDisease.save();
-
-    // // console.log('documents',document)
-    // // console.log('medicine',medicine)
-
-    // if (!newDisease) {
-    //   // req.flash(
-    //   //   "error_msg",
-    //   //   "Unable to save the disease details, Please check the file format. Supported file formats are:jpeg,jpg,png,gif,pdf"
-    //   // );
-    //   // return res.redirect("/user/profile");
-    // }
-    req.user.disease.push(newDisease._id);
-    await req.user.save();
-
-    // console.log('new user',user)
-    // req.flash("success_msg", "Sucessfully uploaded disease details.");
-    // return res.redirect("/user/profile");
-  } catch (err) {
-    // console.log("error")
-    console.error(err);
-    // req.flash("error_msg", "Something went wrong");
-    // return res.redirect("/user/profile");
-    setError("danger", true, "error");
-    res.send(error_msg);
+  } catch (error) {
+    console.log(error);
   }
 };
+
+//not sure code
+// module.exports.upload_post = async (req, res) => {
+//   console.log("in uploads", req.body);
+
+//   try {
+//     let { name } = req.body;
+//     // console.log("filessss",req.files)
+//     const files = req.files;
+//     dname = name.toLowerCase();
+
+//     const medicine = files.medicine;
+//     const document = files.document;
+
+//     const user = req.user;
+//     user.populate("disease").then((data) => {
+//       console.log(data);
+//     });
+
+//     // console.log("medicine",medicine)
+//     // console.log("document",document)
+//     // console.log("files",obj)
+//     // console.log(obj.document[0].filename)
+
+//     const userDisease = await user.populate("disease");
+//     // console.log('diseassssssssssse',userDisease)
+//     const existName = userDisease.disease.find((data) => data.name === dname);
+//     // console.log('disease',existName)
+
+//     let documentObj = {
+//       _id: "",
+//       originalName: "",
+//       filename: "",
+//     };
+
+//     let medicineObj = {
+//       _id: "",
+//       originalName: "",
+//       filename: "",
+//     };
+
+//     if (existName) {
+//       const existDisease = await Disease.findById({ _id: existName._id });
+//       // console.log('exist disease',existDisease)
+
+//       if (medicine) {
+//         medicineObj._id = mongoose.Types.ObjectId();
+//         medicineObj.originalName = medicine[0].originalname;
+//         medicineObj.filename = `/uploads/${req.user.email}/${dname}/${medicine[0].filename}`;
+//         existDisease.medicine.push(medicineObj);
+//       }
+//       if (document) {
+//         documentObj._id = mongoose.Types.ObjectId();
+//         documentObj.originalName = document[0].originalname;
+//         documentObj.filename = `/uploads/${req.user.email}/${dname}/${document[0].filename}`;
+//         existDisease.document.push(documentObj);
+//       }
+//       await existDisease.save();
+
+//     }
+
+//     /*let images = files.map((file) => {
+//             return `/uploads/${req.user.email}/${file.filename}`
+//         })*/
+
+//     medicineObj.originalName = medicine[0].originalname;
+//     medicineObj.filename = `/uploads/${req.user.email}/${dname}/${medicine[0].filename}`;
+
+//     documentObj.originalName = document[0].originalname;
+//     documentObj.filename = `/uploads/${req.user.email}/${dname}/${document[0].filename}`;
+
+//     const newDisease = await new Disease({
+//       name,
+//       medicine,
+//       document,
+//     }).save();
+
+//     // console.log('disesssssss',newDisease)
+//     // newDisease.medicine.originalName=medicineObj.originalName
+//     // newDisease.document.originalName=documentObj.originalName
+
+//     // if (medicine) {
+//     //   // medicineObj.originalName = medicine[0].originalname;
+//     //   // medicineObj.filename = `/uploads/${req.user.email}/${dname}/${medicine[0].filename}`;
+//     //   newDisease.medicine.push(medicine);
+
+//     //   // medicine.push(`/uploads/${req.user.email}/${dname}/${obj.medicine[0].filename}`)
+//     // }
+//     // if (document) {
+//     //   // documentObj.originalName =document[0].originalname;
+//     //   // documentObj.filename = `/uploads/${req.user.email}/${dname}/${document[0].filename}`;
+//     //   newDisease.document.push(document);
+//     //   //await newDisease.save()
+//     //   //document.push( `/uploads/${req.user.email}/${dname}/${obj.document[0].filename}`)
+//     // }
+//     // await newDisease.save();
+
+//     // // console.log('documents',document)
+//     // // console.log('medicine',medicine)
+
+//     // if (!newDisease) {
+//     //   // req.flash(
+//     //   //   "error_msg",
+//     //   //   "Unable to save the disease details, Please check the file format. Supported file formats are:jpeg,jpg,png,gif,pdf"
+//     //   // );
+//     //   // return res.redirect("/user/profile");
+//     // }
+//     req.user.disease.push(newDisease._id);
+//     await req.user.save();
+
+//     // console.log('new user',user)
+//     // req.flash("success_msg", "Sucessfully uploaded disease details.");
+//     // return res.redirect("/user/profile");
+//   } catch (err) {
+//     // console.log("error")
+//     console.error(err);
+//     // req.flash("error_msg", "Something went wrong");
+//     // return res.redirect("/user/profile");
+//     setError("danger", true, "error");
+//     res.send(error_msg);
+//   }
+// };
 
 module.exports.disease_post = async (req, res) => {
   // const userId = req.body;
