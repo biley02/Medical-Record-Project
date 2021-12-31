@@ -321,13 +321,17 @@ module.exports.upload_post = async (req, res) => {
   try {
     let { name } = req.body;
     const files = req.files;
+    // console.log(files);
     dname = name.toLowerCase();
     const medicine = files.medicine;
-    console.log("Medicine", medicine);
+    // console.log("Medicineeeeeee", medicine);
     const document = files.document;
     const user = req.user;
     const userDisease = await user.populate("disease");
-    const existName = userDisease.disease.find((data) => data.name === dname);
+    // console.log("diseasesssssssss", userDisease);
+    const existName = userDisease.disease.find(
+      (data) => data.name.toLowerCase() === dname
+    );
 
     if (existName) {
       const existDisease = await Disease.findById({ _id: existName._id });
@@ -356,8 +360,8 @@ module.exports.upload_post = async (req, res) => {
           document: existDisease.document,
         }
       );
-      console.log("This is updated new disease", existDisease);
-      console.log(user);
+      // console.log("This is updated new disease", existDisease);
+      // console.log(user);
     } else {
       var medicinedoc = medicine
         ? {
@@ -374,7 +378,7 @@ module.exports.upload_post = async (req, res) => {
       const newDisease = await new Disease({
         name,
       });
-      console.log("Medicine doc ", medicinedoc);
+      // console.log("Medicine doc ", medicinedoc);
       // console.log("This is new disease", newDisease);
       if (medicinedoc) await newDisease.medicine.push(medicinedoc);
       if (documentdoc) await newDisease.document.push(documentdoc);

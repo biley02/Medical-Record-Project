@@ -79,7 +79,7 @@ const HospitalDiseaseContent = () => {
                     style={{ display: "inline-block" }}
                     className="media-heading align-self-center"
                   >
-                    {doc.filename}
+                    {doc.originalName}
                   </div>
                   <div className="media-body">
                     <p>
@@ -115,7 +115,7 @@ const HospitalDiseaseContent = () => {
                   className="media-heading align-self-center"
                   id="mobTitle"
                 >
-                  {med.filename}
+                  {med.originalName}
                 </div>
                 <div className="media-body">
                   <p>
