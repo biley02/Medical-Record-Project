@@ -157,6 +157,7 @@ const UserSideComponent = () => {
 
     localStorage.setItem("diseaseId", diseaseId);
     history.push("/user/disease");
+    window.location.reload(true);
   };
 
   //profile details from backend
