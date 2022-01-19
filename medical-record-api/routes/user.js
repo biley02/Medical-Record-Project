@@ -11,6 +11,7 @@ const multer = require("multer");
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     // console.log("in multer",file)
+    // console.log("multer",req.body)
     if (file.fieldname !== "profilePic") {
       const { name } = req.body;
       // console.log('disease name',name)
@@ -87,13 +88,17 @@ function checkFileType1(file, cb) {
 const authController = require("../controllers/authControllers");
 const { requireAuth, redirectIfLoggedIn } = require("../middleware/userAuth");
 router.get("/verify/:id", authController.emailVerify_get);
-router.get("/signup", redirectIfLoggedIn, authController.signup_get);
+router.get("/signup", authController.signup_get);
 router.post("/signup", authController.signup_post);
-router.get("/login", redirectIfLoggedIn, authController.login_get);
+router.get("/login", authController.login_get);
 router.post("/login", authController.login_post);
-router.get("/logout", requireAuth, authController.logout_get);
+router.get("/logout", authController.logout_get);
 router.get("/profile", requireAuth, authController.profile_get);
-router.post("/profile/editDetails", authController.editDetails_post);
+router.post(
+  "/profile/editDetails",
+  requireAuth,
+  authController.editDetails_post
+);
 
 router.post(
   "/profile/upload",
@@ -111,21 +116,13 @@ router.post(
   authController.upload_post
 );
 
-router.get("/userHospital", requireAuth, authController.userHospital_get);
-
-router.get("/disease", requireAuth, authController.disease_get);
+router.post("/userHospital", requireAuth, authController.userHospital_post);
+router.post("/userHospitalId", requireAuth, authController.userHospitalId_post);
+router.post("/disease", requireAuth, authController.disease_post);
 router.get("/hospitalSearch", requireAuth, authController.hospitalSearch_get);
 router.post("/hospitalSearch", requireAuth, authController.hospitalSearch_post);
-router.get(
-  "/forgotPassword",
-  redirectIfLoggedIn,
-  authController.getForgotPasswordForm
-);
-router.post(
-  "/forgotPassword",
-  redirectIfLoggedIn,
-  authController.forgotPassword
-);
+router.get("/forgotPassword", authController.getForgotPasswordForm);
+router.post("/forgotPassword", authController.forgotPassword);
 router.get("/resetPassword/:id/:token", authController.getPasswordResetForm);
 router.post("/resetPassword/:id/:token", authController.resetPassword);
 router.get("/download/:type/pdf", requireAuth, authController.download);

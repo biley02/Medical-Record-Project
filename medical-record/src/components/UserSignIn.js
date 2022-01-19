@@ -18,9 +18,21 @@ const UserSignIn = () => {
   const type = "login";
 
   const [loginDetails, setloginDetails] = useState({ email: "", password: "" });
-  const {alert,Alert,showAlert,setAlert}= useGlobalContext()
+  const {alert,Alert,showAlert,setAlert,userToken,setUserToken}= useGlobalContext()
 
    const history=useHistory()
+
+   useEffect(()=>{
+     axios.get(`${baseUrl}/login`).then((res)=>{
+      //  console.log(res.data)
+      const error=res.data
+      if(error.show===false)
+      {
+        showAlert(true,error.type,error.msg)
+        return history.push('/user/profile')
+      }
+     }).catch((e)=>{console.log(e)})
+   },[])
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -31,8 +43,8 @@ const UserSignIn = () => {
     e.preventDefault();
     console.log("form submitted", loginDetails);
     const response=await axios.post(`${baseUrl}/login`,loginDetails)
-    // console.log(response)
-    const error=response.data;
+    console.log(response.data)
+    const error=response.data
     if(error.show===true)
     {
       return showAlert(error.show,error.type,error.msg)
@@ -84,6 +96,10 @@ const UserSignIn = () => {
             </button>
           </form>
         </div>
+        <div class="signuplink-section">
+          <p id="signUpopt">Don't have an account?</p>
+        <a href="/user/signup" className="toggle" id="signUpLink" style={{textDecoration:'none !important'}}>Create account</a>
+        </div> 
 
         </div>
       </div>

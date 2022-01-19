@@ -11,7 +11,7 @@ var app = express();
 app.use(express.json())
 app.use(cookieParser())
 
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 
 // app.use(express.static('public'))
 
@@ -46,10 +46,12 @@ mongoose
 
     const indexRoutes = require('./routes/index')
     const userRoutes = require('./routes/user')
+    const hospitalRoutes=require('./routes/hospital')
 
 
     app.use('/',indexRoutes)
     app.use('/user',userRoutes)
+    app.use('/hospital',hospitalRoutes)
 
 
 

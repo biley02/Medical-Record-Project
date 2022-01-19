@@ -1,48 +1,49 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router";
+import { useGlobalContext } from "../context/Context";
 
-import pdfImage from '../img/pdf-image.png'
+import pdfImage from "../img/pdf-image.png";
 import axios from "axios";
 import Loader from "../LoaderComponents/Loader";
 
-const baseUrl = "http://localhost:8080/user";
+const baseUrl = "http://localhost:8080/hospital";
 
-const DiseaseContent = () => {
-
+const HospitalDiseaseContent = () => {
+  const { Alert, alert, setAlert, showAlert, userToken } = useGlobalContext();
+  const [isLoading, setIsLoading] = useState(false);
   const [disease, setDisease] = useState({
     name: "Default Disease",
     document: [],
     medicine: [],
   });
 
-  const [isLoading,setIsLoading]=useState(false)
-  useEffect(()=>{
-    setIsLoading(true)
-    const id=localStorage.getItem('diseaseId')
-    console.log('content',id)
-    if(!id)
-    {
-      setIsLoading(false)
-      return
-    }
-    axios.post(`${baseUrl}/disease`,{
-      diseaseId:id
-    }).then(res=>{
-      // console.log('disease id sent',res.data)
-      const details =res.data
-      console.log('diseasData',details)
-      setDisease(details)
-      console.log('disease state',disease)
-      setIsLoading(false)
-      return
-    })
-    
-  },[])
-  if(isLoading)
-  {
-    return <Loader/>
+  useEffect(() => {
+    setIsLoading(true);
+    axios.get(`${baseUrl}/diseases`).then((res) => {
+      console.log("disease", res.data);
+      const diseaseData = res.data.disease;
+      const err = res.data.error_msg;
+      if (err.show) {
+        showAlert(true, err.type, err.msg);
+        return;
+      }
+      setDisease({
+        name: diseaseData.name,
+        document: diseaseData.document,
+        medicine: diseaseData.medicine,
+      });
+      setIsLoading(false);
+    });
+  }, []);
+
+  if (isLoading) {
+    return <Loader />;
   }
   return (
+    <>
+      <div className={alert.show ? "top-alert" : ""}>
+        {alert.show && <Alert {...alert} removeAlert={showAlert} />}
+      </div>
       <div className="col-lg-8 col-sm-8 col-12 order-1 order-sm-2" id="pSec9">
         <div className="disease-back-link">
           <a href="/user/profile">
@@ -131,30 +132,11 @@ const DiseaseContent = () => {
                 </div>
               </div>
             ))}
-            {/* </div> */}
-            {/* <div className="disease-flexbox sub4-2">
-                <h5 id="name1">Medicine</h5>
-                <%for(var i of disease.medicine){%>
-                    <div className="media" style="background: rgb(179, 232, 241)">
-                        <img className="pdf-img align-self-center mr-3" src="../img/pdf-image.png"
-                            alt="Generic placeholder image" style="width: 80px" />
-                        <div style="display: inline-block" className="media-heading align-self-center" id="mobTitle">
-                            <%=i.originalName%>
-                        </div>
-                        <div className="media-body">
-                            <p>
-                                <a href="/user/download/medicine/pdf?pdfdownload=<%=i.filename%>"
-                                    style="color: black"><i className="fa fa-download fa-3x" aria-hidden="true"></i></a>
-                            </p>
-                        </div>
-                    </div>
-                    <%}%>
-            </div> */}
           </div>
         </div>
       </div>
-   
+    </>
   );
 };
 
-export default DiseaseContent;
+export default HospitalDiseaseContent;
