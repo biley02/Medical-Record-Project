@@ -172,6 +172,26 @@ module.exports.patient_get = async (req, res) => {
   }
 };
 
+module.exports.download = async (req, res) => {
+  const downloadpdf = req.query;
+  const params = new URLSearchParams(downloadpdf);
+  const pathp = params.get("pdfdownload");
+  var parts = pathp.split("/");
+  var result = parts[parts.length - 1]; //to get the file name
+  const type = req.params.type; //to get the type wheather 'medical/documnet'
+  let reqPath = path.join(__dirname, `../public/${pathp}/../${type}/${result}`);
+  console.log(reqPath);
+  res.download(reqPath, (error) => {
+    if (error) {
+      // req.flash("error_msg", "error while downloading");
+      console.log(error);
+      return res.send({ error_msg });
+    }
+    console.log("downloaded");
+    res.end();
+  });
+};
+
 module.exports.patient_post = async (req, res) => {
   try {
     const { shortId } = req.body;

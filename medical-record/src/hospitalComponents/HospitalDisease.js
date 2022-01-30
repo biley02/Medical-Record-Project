@@ -5,6 +5,7 @@ import { useGlobalContext } from "../context/Context";
 import pdfImage from "../img/pdf-image.png";
 import axios from "axios";
 import Loader from "../LoaderComponents/Loader";
+import FileDownload from "js-file-download";
 
 const baseUrl = "http://localhost:8080/hospital";
 
@@ -35,6 +36,19 @@ const HospitalDiseaseContent = () => {
       setIsLoading(false);
     });
   }, []);
+
+  const download = (path, type, originalName) => {
+    console.log("...downloading", path, type);
+    //"/user/download/document/pdf?pdfdownload=<%=i.filename%>"
+    //`${baseUrl}/download/${type}/pdf/?pdfdownload=${path}`
+    axios({
+      url: `${baseUrl}/download/${type}/pdf/?pdfdownload=${path}`,
+      method: "GET",
+      responseType: "blob",
+    }).then((res) => {
+      FileDownload(res.data, `${originalName}`);
+    });
+  };
 
   if (isLoading) {
     return <Loader />;
@@ -83,13 +97,13 @@ const HospitalDiseaseContent = () => {
                   </div>
                   <div className="media-body">
                     <p>
-                      <a
-                        href={`/user/download/document/pdf?pdfdownload=${doc.filename}`}
-                        style={{ color: "black" }}
-                      >
+                      <a style={{ color: "black" }}>
                         <i
                           className="fa fa-download fa-3x"
                           aria-hidden="true"
+                          onClick={() =>
+                            download(doc.filename, "document", doc.originalName)
+                          }
                         ></i>
                       </a>
                     </p>
@@ -119,13 +133,13 @@ const HospitalDiseaseContent = () => {
                 </div>
                 <div className="media-body">
                   <p>
-                    <a
-                      href={`/user/download/medicine/pdf?pdfdownload=${med.filename}`}
-                      style={{ color: "black" }}
-                    >
+                    <a style={{ color: "black" }}>
                       <i
                         className="fa fa-download fa-3x"
                         aria-hidden="true"
+                        onClick={() =>
+                          download(med.filename, "medicine", med.originalName)
+                        }
                       ></i>
                     </a>
                   </p>
