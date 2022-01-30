@@ -63,27 +63,6 @@ module.exports.editDetails_post = async (req, res) => {
     console.log("user saved", newuser);
     setError("success", false, "User details updated");
     res.send(error_msg);
-    //   .then((result) => {
-    //     // console.log(result);
-    //     console.log("user saved", user);
-    //     setError("success", false, "User details updated");
-    //     res.send(error_msg);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     setError("danger", true, "error while editing profile details");
-    //     res.send(error_msg);
-    //   });
-    // user.nominee = nominee._id;
-    // user.bloodGroup = bloodGroup;
-    // user.name = name;
-    // user.phoneNumber = phone;
-
-    // await user.save();
-
-    // req.flash('success_msg','Details about the user has been saved')
-
-    // res.redirect('/user/profile')
   } catch (e) {
     // console.log("error",e)
     setError("danger", true, "error while editing profile details");
@@ -183,13 +162,7 @@ module.exports.signup_post = async (req, res) => {
     const userExists = await User.findOne({ email });
     console.log("userexists", userExists);
     console.log(User);
-    /*if(userExists && userExists.active== false)
-    {
-      req.flash("success_msg",`${userExists.name}, we have sent you a link to verify your account kindly check your mail`)
 
-      signupMail(userExists,req.hostname,req.protocol)
-      return res.redirect("/signup")
-    }*/
     if (userExists) {
       setError("success", false, "user already exists try login in");
       return res.send(error_msg);
@@ -410,128 +383,6 @@ module.exports.upload_post = async (req, res) => {
     console.log(error);
   }
 };
-
-//not sure code
-// module.exports.upload_post = async (req, res) => {
-//   console.log("in uploads", req.body);
-
-//   try {
-//     let { name } = req.body;
-//     // console.log("filessss",req.files)
-//     const files = req.files;
-//     dname = name.toLowerCase();
-
-//     const medicine = files.medicine;
-//     const document = files.document;
-
-//     const user = req.user;
-//     user.populate("disease").then((data) => {
-//       console.log(data);
-//     });
-
-//     // console.log("medicine",medicine)
-//     // console.log("document",document)
-//     // console.log("files",obj)
-//     // console.log(obj.document[0].filename)
-
-//     const userDisease = await user.populate("disease");
-//     // console.log('diseassssssssssse',userDisease)
-//     const existName = userDisease.disease.find((data) => data.name === dname);
-//     // console.log('disease',existName)
-
-//     let documentObj = {
-//       _id: "",
-//       originalName: "",
-//       filename: "",
-//     };
-
-//     let medicineObj = {
-//       _id: "",
-//       originalName: "",
-//       filename: "",
-//     };
-
-//     if (existName) {
-//       const existDisease = await Disease.findById({ _id: existName._id });
-//       // console.log('exist disease',existDisease)
-
-//       if (medicine) {
-//         medicineObj._id = mongoose.Types.ObjectId();
-//         medicineObj.originalName = medicine[0].originalname;
-//         medicineObj.filename = `/uploads/${req.user.email}/${dname}/${medicine[0].filename}`;
-//         existDisease.medicine.push(medicineObj);
-//       }
-//       if (document) {
-//         documentObj._id = mongoose.Types.ObjectId();
-//         documentObj.originalName = document[0].originalname;
-//         documentObj.filename = `/uploads/${req.user.email}/${dname}/${document[0].filename}`;
-//         existDisease.document.push(documentObj);
-//       }
-//       await existDisease.save();
-
-//     }
-
-//     /*let images = files.map((file) => {
-//             return `/uploads/${req.user.email}/${file.filename}`
-//         })*/
-
-//     medicineObj.originalName = medicine[0].originalname;
-//     medicineObj.filename = `/uploads/${req.user.email}/${dname}/${medicine[0].filename}`;
-
-//     documentObj.originalName = document[0].originalname;
-//     documentObj.filename = `/uploads/${req.user.email}/${dname}/${document[0].filename}`;
-
-//     const newDisease = await new Disease({
-//       name,
-//       medicine,
-//       document,
-//     }).save();
-
-//     // console.log('disesssssss',newDisease)
-//     // newDisease.medicine.originalName=medicineObj.originalName
-//     // newDisease.document.originalName=documentObj.originalName
-
-//     // if (medicine) {
-//     //   // medicineObj.originalName = medicine[0].originalname;
-//     //   // medicineObj.filename = `/uploads/${req.user.email}/${dname}/${medicine[0].filename}`;
-//     //   newDisease.medicine.push(medicine);
-
-//     //   // medicine.push(`/uploads/${req.user.email}/${dname}/${obj.medicine[0].filename}`)
-//     // }
-//     // if (document) {
-//     //   // documentObj.originalName =document[0].originalname;
-//     //   // documentObj.filename = `/uploads/${req.user.email}/${dname}/${document[0].filename}`;
-//     //   newDisease.document.push(document);
-//     //   //await newDisease.save()
-//     //   //document.push( `/uploads/${req.user.email}/${dname}/${obj.document[0].filename}`)
-//     // }
-//     // await newDisease.save();
-
-//     // // console.log('documents',document)
-//     // // console.log('medicine',medicine)
-
-//     // if (!newDisease) {
-//     //   // req.flash(
-//     //   //   "error_msg",
-//     //   //   "Unable to save the disease details, Please check the file format. Supported file formats are:jpeg,jpg,png,gif,pdf"
-//     //   // );
-//     //   // return res.redirect("/user/profile");
-//     // }
-//     req.user.disease.push(newDisease._id);
-//     await req.user.save();
-
-//     // console.log('new user',user)
-//     // req.flash("success_msg", "Sucessfully uploaded disease details.");
-//     // return res.redirect("/user/profile");
-//   } catch (err) {
-//     // console.log("error")
-//     console.error(err);
-//     // req.flash("error_msg", "Something went wrong");
-//     // return res.redirect("/user/profile");
-//     setError("danger", true, "error");
-//     res.send(error_msg);
-//   }
-// };
 
 module.exports.disease_post = async (req, res) => {
   // const userId = req.body;
