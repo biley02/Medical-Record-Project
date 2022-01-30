@@ -352,7 +352,7 @@ const UserSideComponent = () => {
                         </div>
                       </div>
                       {access.length === 0 ? (
-                        <div>
+                        <div className="request-paitient">
                           <a
                             className="btn btn-danger"
                             role="button"
@@ -378,16 +378,18 @@ const UserSideComponent = () => {
                           )}
                         </div>
                       ) : (
-                        <a
-                          class="btn btn-primary"
-                          role="button"
-                          id="search_button2"
-                          onClick={() => {
-                            getPatient(foundUser.short_id);
-                          }}
-                        >
-                          View Details
-                        </a>
+                        <div className="request-patient">
+                          <a
+                            class="btn btn-primary"
+                            role="button"
+                            id="search_button2"
+                            onClick={() => {
+                              getPatient(foundUser.short_id);
+                            }}
+                          >
+                            View Details
+                          </a>
+                        </div>
                       )}
                       <hr></hr>
                     </div>
@@ -408,27 +410,43 @@ const UserSideComponent = () => {
               className="col-lg-2 col-sm-4 col-12 order-3 order-sm-1"
               id="pSec1"
             >
-              <div id="leftPanel">
-                <div className="lists active-list">
-                  <a href="/hospital/profile">Profile</a>
-                  <img src={defaultDp} className="Icons profile-icon" />
-                </div>
+              {path !== "/hospital/diseases" ? (
+                <div id="leftPanel">
+                  <div className="lists active-list">
+                    <a href="/hospital/profile">Profile</a>
+                    <img src={defaultDp} className="Icons profile-icon" />
+                  </div>
 
-                <div className="lists">
-                  <a href="#">Appointments</a>
-                  <img src={AppointmentImage} className="Icons" />
-                </div>
+                  <div id="Dr-sec3">
+                    <button
+                      className="sideNavButton"
+                      onClick={() => {
+                        openSideNav();
+                      }}
+                    >
+                      <a>Paitients</a>
+                      <img src={doctorIcon} className="Icons doctor-icon" />
+                    </button>
+                  </div>
 
-                <div className="lists">
-                  <a href="#">Message</a>
-                  <img src={messageImage} className="Icons" />
-                </div>
+                  <div className="lists">
+                    <a href="#">Appointments</a>
+                    <img src={AppointmentImage} className="Icons" />
+                  </div>
 
-                <div className="lists">
-                  <a href="#">Settings</a>
-                  <img src={settingsImage} className="Icons" />
+                  <div className="lists">
+                    <a href="#">Message</a>
+                    <img src={messageImage} className="Icons" />
+                  </div>
+
+                  <div className="lists">
+                    <a href="#">Settings</a>
+                    <img src={settingsImage} className="Icons" />
+                  </div>
                 </div>
-              </div>
+              ) : (
+                ""
+              )}
             </div>
             {path === "/hospital/profile" ? (
               <UserMiddleComponent userobj={user} />
@@ -532,17 +550,6 @@ const UserSideComponent = () => {
                     <hr></hr>
                   </div>
                 )}
-              </div>
-              <div id="Dr-sec3">
-                <button
-                  className="sideNavButton"
-                  onClick={() => {
-                    openSideNav();
-                  }}
-                >
-                  <a>Paitients</a>
-                  <img src={doctorIcon} className="Icons doctor-icon" />
-                </button>
               </div>
             </div>
           </div>

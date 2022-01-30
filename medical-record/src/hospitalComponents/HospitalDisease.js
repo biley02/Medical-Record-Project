@@ -46,7 +46,7 @@ const HospitalDiseaseContent = () => {
       </div>
       <div className="col-lg-8 col-sm-8 col-12 order-1 order-sm-2" id="pSec9">
         <div className="disease-back-link">
-          <a href="/user/profile">
+          <a href="/hospital/profile">
             <i className="fa fa-arrow-left" aria-hidden="true"></i>Disease
           </a>
         </div>

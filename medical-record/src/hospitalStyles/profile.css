@@ -14,6 +14,11 @@ body {
   flex-direction: column;
 }
 
+.request-patient {
+  display: flex;
+  justify-content: center;
+}
+
 .lists {
   margin-bottom: 10%;
   padding: 0 7%;
