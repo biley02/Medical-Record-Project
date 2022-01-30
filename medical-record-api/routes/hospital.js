@@ -85,4 +85,6 @@ router.post(
   upload.single("profilePic"),
   hospitalController.picupload_post
 );
+
+router.get("/download/:type/pdf", requireAuth, hospitalController.download);
 module.exports = router;

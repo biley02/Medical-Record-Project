@@ -1,7 +1,7 @@
 /* =============== 
 Modal
 ===============
-*/ 
+*/
 /* #open-modal{
   position: fixed;
   background-color: rgba(255, 255, 255, 0.25);
@@ -63,7 +63,7 @@ Modal
   font-size: 18px;
   line-height: 1.4;
 } */
-@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900');
+@import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900");
 
 *,
 *::before,
@@ -92,11 +92,9 @@ Modal
   color: rgb(32, 32, 32);
 } */
 
-
 small {
   color: lightgray;
 }
-
 
 .modal-overlay {
   position: fixed;
@@ -124,13 +122,11 @@ small {
   overflow-x: hidden; */
   background-color: rgba(19, 19, 22, 0.75);
   transition: opacity 250ms 700ms ease;
-
 }
 /* OPEN/CLOSE MODAL */
 .show-modal {
   visibility: visible;
-  z-index: 10; 
-  
+  z-index: 10;
 }
 .dp-modal-container {
   background: white;
@@ -159,20 +155,19 @@ a:focus {
   outline: none;
 }
 
-
-.mod{
-    width: 60vw;
-    padding: 4rem 2rem;
-    border-radius: .8rem;
-    color: hsl(223, 20%, 93%);
-    background: linear-gradient(to right, hsl(210, 30%, 20%), hsl(255, 30%, 25%));
-    box-shadow: var(--m-shadow, .4rem .4rem 10.2rem .2rem) hsla(236, 50%, 50%, .3);
-    position: relative;
-    overflow: hidden;
-    text-align: center;
-    
+.mod {
+  width: 60vw;
+  padding: 4rem 2rem;
+  border-radius: 0.8rem;
+  color: hsl(223, 20%, 93%);
+  background: linear-gradient(to right, hsl(210, 30%, 20%), hsl(255, 30%, 25%));
+  box-shadow: var(--m-shadow, 0.4rem 0.4rem 10.2rem 0.2rem)
+    hsla(236, 50%, 50%, 0.3);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
 }
-.add-disease-modal-container{
+.add-disease-modal-container {
   /* position: fixed;
   top: 0;
   left: 0;
@@ -221,7 +216,7 @@ input:focus::-webkit-input-placeholder {
   color: rgb(0, 0, 0);
   font-size: 2.2rem;
   position: absolute;
-  top: 2rem;
+  top: 4.2rem;
   right: 2rem;
   display: flex;
   justify-content: center;
@@ -229,41 +224,41 @@ input:focus::-webkit-input-placeholder {
 }
 
 .link-2::before {
-  content: '×';
-  transform: translateY(-.1rem);
+  content: "×";
+  transform: translateY(-0.1rem);
 }
 
 .link-2:hover,
 .link-2:focus {
   background: hsl(199, 90%, 50%);
   border-color: hsl(187, 90%, 50%);
-  transform: translateY(-.2rem);
-  color:#ffeba7
+  transform: translateY(-0.2rem);
+  color: #ffeba7;
 }
-.accept{
+.accept {
   font-size: 1.8rem;
   font-family: Poppins;
   color: hsl(220, 50%, 90%);
   background: linear-gradient(to right, hsl(210, 30%, 20%), hsl(255, 30%, 25%));
-  box-shadow: .4rem .4rem 2.4rem .2rem hsla(236, 50%, 50%, .3);
+  box-shadow: 0.4rem 0.4rem 2.4rem 0.2rem hsla(236, 50%, 50%, 0.3);
   border-radius: 100rem;
   padding: 1.4rem 3.2rem;
-  transition: .2s;
+  transition: 0.2s;
 }
 .accept:hover,
 .accept:focus {
-  transform: translateY(-.2rem);
-  box-shadow: 0 0 4.4rem .2rem hsla(236, 50%, 50%, .4);
+  transform: translateY(-0.2rem);
+  box-shadow: 0 0 4.4rem 0.2rem hsla(236, 50%, 50%, 0.4);
 }
 
 .accept:focus {
-  box-shadow:
-    0 0 4.4rem .2rem hsla(236, 50%, 50%, .4),
-    0 0 0 .4rem linear-gradient(to right, hsl(210, 30%, 20%), hsl(255, 30%, 25%)),
-    0 0 0 .5rem hsl(210, 90%, 50%);
+  box-shadow: 0 0 4.4rem 0.2rem hsla(236, 50%, 50%, 0.4),
+    0 0 0 0.4rem
+      linear-gradient(to right, hsl(210, 30%, 20%), hsl(255, 30%, 25%)),
+    0 0 0 0.5rem hsl(210, 90%, 50%);
 }
 
-@media screen and (max-width:1000px) {
+@media screen and (max-width: 1000px) {
   .dp-modal-container {
     width: 70vw;
   }
@@ -278,24 +273,23 @@ input:focus::-webkit-input-placeholder {
     width: 60vw;
   }
 }
-@media screen and (max-width:900px) and (min-width:721px) {
-   .link-2 {
-     width: 3rem !important;
-     height: 3rem !important;
-     border: 1px solid rgba(255, 255, 255, 0.2);
-     border-radius: 100rem;
-     color: rgb(0, 0, 0);
-     font-size: 2.1rem;
-     position: absolute;
-     top: 2rem;
-     right: 2rem;
-     display: flex;
-     justify-content: center;
-     align-items: center;
-   }
-
+@media screen and (max-width: 900px) and (min-width: 721px) {
+  .link-2 {
+    width: 3rem !important;
+    height: 3rem !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 100rem;
+    color: rgb(0, 0, 0);
+    font-size: 2.1rem;
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
-@media screen and (max-width:720px) {
+@media screen and (max-width: 720px) {
   .dp-modal-container {
     width: 100vw;
   }
@@ -341,10 +335,10 @@ input:focus::-webkit-input-placeholder {
   cursor: pointer;
   margin-top: 1rem;
 } */
-#file{
+#file {
   cursor: pointer;
 }
-.lb1{
+.lb1 {
   background-color: rgb(9, 200, 175);
   color: rgb(255, 255, 255);
   padding: 0.5rem;
@@ -365,7 +359,7 @@ input:focus::-webkit-input-placeholder {
   margin-top: 1vh;
   margin-bottom: 1vh;
 }
-.lb2{
+.lb2 {
   background-color: rgb(9, 200, 175);
   color: rgb(255, 255, 255);
   padding: 0.5rem;

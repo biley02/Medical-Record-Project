@@ -14,6 +14,11 @@ body {
   flex-direction: column;
 }
 
+.request-patient {
+  display: flex;
+  justify-content: center;
+}
+
 .lists {
   margin-bottom: 10%;
   padding: 0 7%;
@@ -404,11 +409,12 @@ body {
     /* margin-top: 2%; */
     margin-left: 8vw;
     /* height: 80%; */
-    width: 80%;
+    width: 85%;
     font-size: 180%;
     padding: 3%;
     box-shadow: 0.5rem 0.5rem 1rem rgb(0 0 0 / 15%);
     border-radius: 5px 5px 0 0;
+    margin: 0% 7.5% 7%;
   }
   #Camera {
     position: absolute;

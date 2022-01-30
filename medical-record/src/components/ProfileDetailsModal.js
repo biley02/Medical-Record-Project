@@ -29,6 +29,7 @@ const ProfileDetailsModal = () => {
       )
       .then((response) => {
         console.log("response.data", response);
+        setModalIsOpen(false);
       })
       .catch((error) => {
         console.log(error);
@@ -41,7 +42,6 @@ const ProfileDetailsModal = () => {
       nomineePhnNumber: "",
       userBloodGroup: "",
     });
-    setModalIsOpen(false);
   };
 
   const handleChange = (e) => {
@@ -213,7 +213,7 @@ const ProfileDetailsModal = () => {
                   Disease Name
                 </label> */}
                 <label htmlFor="name" className="lb">
-                   Email
+                  Email
                 </label>
                 <input
                   type="text"
