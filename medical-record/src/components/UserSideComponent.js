@@ -114,19 +114,17 @@ const UserSideComponent = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    axios
-      .get("http://localhost:8080/user/profile", { withCredentials: true })
-      .then((res) => {
-        console.log("data from backedn", res.data);
-        const userData = res.data.user;
-        const diseaseData = res.data.disease.disease;
-        const userH = res.data.hospitals;
-        // console.log('diseaseData',diseaseData)
-        setUser(userData);
-        setDisease(diseaseData);
-        setIsLoading(false);
-        setUserHospital(userH);
-      });
+    axios.get(`${baseUrl}/profile`, { withCredentials: true }).then((res) => {
+      console.log("data from backedn", res.data);
+      const userData = res.data.user;
+      const diseaseData = res.data.disease ? res.data.disease.disease : {};
+      const userH = res.data.hospitals;
+      // console.log('diseaseData',diseaseData)
+      setUser(userData);
+      setDisease(diseaseData);
+      setIsLoading(false);
+      setUserHospital(userH);
+    });
     console.log("disease detailsssssss", diseaseData);
   }, []);
 
@@ -602,75 +600,91 @@ const UserSideComponent = () => {
               className="col-lg-2 col-sm-4 col-12 order-3 order-sm-1"
               id="pSec1"
             >
-              <div id="leftPanel">
-                <div className="lists active-list">
-                  <a href="/user/profile">Profile</a>
-                  <img src={defaultDp} className="Icons profile-icon" />
-                </div>
+              {path !== "/user/disease" ? (
+                <div id="leftPanel">
+                  <div className="lists active-list">
+                    <a href="/user/profile">Profile</a>
+                    <img src={defaultDp} className="Icons profile-icon" />
+                  </div>
 
-                <div className="lists dropdown">
-                  <a
-                    href="#"
-                    role="button"
-                    id="dropdownMenuLink"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                    onClick={() => {
-                      myFunctionMobile();
-                    }}
-                  >
-                    Diseases
-                  </a>
-                  <img src={diseaseImage} className="Icons" />
-                  <div
-                    id="myDropdownMobile"
-                    className={
-                      isShowDropDown ? "dropdown-menu show" : "dropdown-menu"
-                    }
-                    aria-labelledby="dropdownMenuLink"
-                  >
+                  <div id="Dr-sec3">
                     <button
-                      className="dropdown-item"
-                      onClick={() => setModalIsOpen(true)}
+                      className="sideNavButton"
+                      onClick={() => {
+                        openSideNav();
+                      }}
                     >
-                      Add New
+                      <a>Hospitals</a>
+                      <img src={doctorIcon} className="Icons doctor-icon" />
                     </button>
-                    {disease.map((data) => {
-                      return (
-                        <a
-                          className="dropdown-item"
-                          onClick={() => {
-                            handleDisease(data._id);
-                          }}
-                        >
-                          <span className="dropAnchor">{data.name}</span>
-                        </a>
-                      );
-                    })}
+                  </div>
+
+                  <div className="lists dropdown">
+                    <a
+                      href="#"
+                      role="button"
+                      id="dropdownMenuLink"
+                      data-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false"
+                      onClick={() => {
+                        myFunctionMobile();
+                      }}
+                    >
+                      Diseases
+                    </a>
+                    <img src={diseaseImage} className="Icons" />
+                    <div
+                      id="myDropdownMobile"
+                      className={
+                        isShowDropDown ? "dropdown-menu show" : "dropdown-menu"
+                      }
+                      aria-labelledby="dropdownMenuLink"
+                    >
+                      <button
+                        className="dropdown-item"
+                        onClick={() => setModalIsOpen(true)}
+                      >
+                        Add New
+                      </button>
+                      {disease.map((data) => {
+                        return (
+                          <a
+                            className="dropdown-item"
+                            onClick={() => {
+                              handleDisease(data._id);
+                            }}
+                          >
+                            <span className="dropAnchor">{data.name}</span>
+                          </a>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="lists">
+                    <a href="#">Appointments</a>
+                    <img src={AppointmentImage} className="Icons" />
+                  </div>
+
+                  <div className="lists">
+                    <a href="#">Progress Report</a>
+                    <img src={progressImage} className="Icons" />
+                  </div>
+
+                  <div className="lists">
+                    <a href="#">Message</a>
+                    <img src={messageImage} className="Icons" />
+                  </div>
+
+                  <div className="lists">
+                    <a href="#">Settings</a>
+                    <img src={settingsImage} className="Icons" />
                   </div>
                 </div>
-
-                <div className="lists">
-                  <a href="#">Appointments</a>
-                  <img src={AppointmentImage} className="Icons" />
-                </div>
-
-                <div className="lists">
-                  <a href="#">Progress Report</a>
-                  <img src={progressImage} className="Icons" />
-                </div>
-
-                <div className="lists">
-                  <a href="#">Message</a>
-                  <img src={messageImage} className="Icons" />
-                </div>
-
-                <div className="lists">
-                  <a href="#">Settings</a>
-                  <img src={settingsImage} className="Icons" />
-                </div>
-              </div>
+              ) : (
+                ""
+              )}
             </div>
             {path === "/user/profile" ? (
               <UserMiddleComponent userobj={user} />
@@ -764,17 +778,6 @@ const UserSideComponent = () => {
                       );
                     })
                   : ""}
-              </div>
-              <div id="Dr-sec3">
-                <button
-                  className="sideNavButton"
-                  onClick={() => {
-                    openSideNav();
-                  }}
-                >
-                  <a>Hospitals</a>
-                  <img src={doctorIcon} className="Icons doctor-icon" />
-                </button>
               </div>
             </div>
           </div>
