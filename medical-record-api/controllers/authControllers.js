@@ -29,43 +29,51 @@ module.exports.editDetails_post = async (req, res) => {
     console.log("details", req.body);
     const Nname = req.body.nomineeName;
     const Nemail = req.body.nomineeEmail;
-    const NphoneNumber = req.body.nomineePhn;
-    // console.log("name,phn,email",name,email,phoneNumber)
-    // console.log("name,phn,email",name,email,phoneNumber)
+    const NphoneNumber = req.body.nomineePhnNumber;
+    let address = req.body.address;
 
-    const bloodGroup = !req.body.bloodGroup
-      ? user.bloodGroup
-      : req.body.bloodGroup;
-    const name = !req.body.name ? user.name : req.body.name;
-    const phone = !req.body.phone ? user.phoneNumber : req.body.phone;
+    console.log(user);
 
-    // await user.save()
-    // console.log(user)
-    let nominee = await new Nominee({
-      Nname,
-      Nemail,
-      NphoneNumber,
+    if ((Nemail || NphoneNumber) && !Nname) {
+      setError("danger", true, "Nominee name can't be empty");
+      return res.send({ error_msg });
+    }
+
+    // Nemail = req.body.nomineeEmail ? req.body.nomineeEmail : "";
+    // NphoneNumber = req.body.nomineePhn ? req.body.nomineePhnNumber : "";
+
+    if (!address && !Nname) {
+      setError("danger", true, "Set field to update details");
+      return res.send({ error_msg });
+    }
+    address = req.body.address ? req.body.address : user.address;
+    const nominee = await new Nominee({
+      name: Nname,
+      email: Nemail,
+      phoneNumber: NphoneNumber,
     }).save();
     if (!nominee) {
-      // req.flash('error_msg', 'Unable to save the details')
-      // return res.redirect('/user/profile')
-      return setError("danger", true, "Unable to save the details");
+      setError("danger", true, "Unable to save the details");
+      return res.send({ error_msg });
     }
-    console.log("nominee", nominee);
+    console.log("nominee saveddddd", nominee);
     let newuser = await User.findByIdAndUpdate(user._id, {
-      name: name,
-      phoneNumber: phone,
-      bloodGroup: bloodGroup,
-      nominee: nominee._id,
+      address: address,
     });
 
-    console.log("user saved", newuser);
+    if (Nname) {
+      const finalUser = await User.findByIdAndUpdate(user._id, {
+        nominee: nominee._id,
+      });
+      console.log("final user", finalUser);
+    }
+
     setError("success", false, "User details updated");
-    res.send(error_msg);
+    return res.send({ error_msg });
   } catch (e) {
     // console.log("error",e)
     setError("danger", true, "error while editing profile details");
-    res.send(error_msg);
+    res.send({ error_msg });
   }
 };
 
@@ -429,14 +437,17 @@ module.exports.profile_get = async (req, res) => {
   // console.log('token backend',token)
   // console.log(req.user)
   const user = req.user;
+  const nominee = await user.populate("nominee");
+  console.log("nominee", nominee);
   const disease = await user.populate("disease", "name");
+  // console.log("diseasessssss", disease);
   const hospitals = await Relations.find({
     userId: req.user._id,
     isPermitted: true,
   }).populate("hospitalId", "hospitalName");
   // console.log("disease",disease)
   // console.log(user,disease)
-  res.send({ user, disease, hospitals });
+  res.send({ user, disease, hospitals, nominee });
 };
 
 module.exports.logout_get = async (req, res) => {

@@ -36,6 +36,7 @@ const UserSideComponent = () => {
   const [diseaseName, setDiseaseName] = useState("");
   const [path, setPath] = useState("");
   const [user, setUser] = useState({});
+
   const [disease, setDisease] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -120,6 +121,8 @@ const UserSideComponent = () => {
       const diseaseData = res.data.disease ? res.data.disease.disease : {};
       const userH = res.data.hospitals;
       // console.log('diseaseData',diseaseData)
+
+      // console.log("nomineeUserrrrrrrrrrrrrrrrrrrrr", nomineeU);
       setUser(userData);
       setDisease(diseaseData);
       setIsLoading(false);
@@ -235,12 +238,11 @@ const UserSideComponent = () => {
             // enctype="multipart/form-data"
           >
             <div className="mod">
-              <button
-                href="#"
+              <a
                 title="Close"
                 className="link-2"
                 onClick={() => setModalIsOpen(false)}
-              ></button>
+              ></a>
               <h1 className="modal__title">Add Diseases</h1>
               <div>
                 {/* <label className="form__name" htmlFor="userName">

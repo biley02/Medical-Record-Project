@@ -10,15 +10,16 @@ import DpModal from "./DpModal";
 import ProfileDetailsModal from "./ProfileDetailsModal";
 
 const UserMiddleComponent = ({ userobj }) => {
-  console.log('userssssss',userobj)
+  console.log("nomineeeeeeeeee", userobj);
   const user = {
     name: userobj.name,
     profilePic: "",
     shortId: userobj.short_id,
-    bloodGroup: "",
-    email: "",
-    phoneNo: "",
-    adress: "",
+    email: userobj.email,
+    address: userobj.address,
+    phoneNo: userobj.phoneNumber,
+    NomineeName: userobj.nominee ? userobj.nominee.name : "",
+    NomineeEmail: userobj.nominee ? userobj.nominee.email : "",
   };
 
   return (
@@ -52,20 +53,22 @@ const UserMiddleComponent = ({ userobj }) => {
             <h3 id="heading2-edit-details">Patient Details</h3>
             <ProfileDetailsModal />
           </div>
-          <label for="bloodGroup" class="detailLevels">
-            Blood Group :{user.bloodGroup ? user.bloodGroup : ""}
+          <label for="Email " class="detailLevels">
+            Email : {user.email ? user.email : ""}
           </label>
           <br />
-          <label for="Adress" class="detailLevels">
-            Address :{user.adress ? user.adress : ""}
+
+          <label for="Adress " class="detailLevels">
+            Address : {user.address ? user.address : " "}
           </label>
           <br />
-          <label for="PhoneNo" class="detailLevels">
-            Phone Number :{user.phoneNo ? user.phoneNo : ""}
+          <label for="PhoneNo " class="detailLevels">
+            Phone Number : {user.phoneNo ? user.phoneNo : " "}
           </label>
           <br />
-          <label for="Email" class="detailLevels">
-            Email :{user.email ? user.email : ""}
+          <label for="NomineeName " class="detailLevels">
+            Nominee Name : {user.NomineeName ? user.NomineeName : " "}
+            {user.NomineeEmail ? ` (${user.NomineeEmail})` : ""}
           </label>
           <br />
         </div>
