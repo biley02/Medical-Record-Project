@@ -12,7 +12,6 @@ require("dotenv").config();
 const { nanoId } = require("nanoid");
 const mongoose = require("mongoose");
 const { setegid } = require("process");
-const Download = require("download");
 
 const maxAge = 30 * 24 * 60 * 60;
 
