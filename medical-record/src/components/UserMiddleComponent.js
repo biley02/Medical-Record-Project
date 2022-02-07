@@ -13,7 +13,6 @@ const UserMiddleComponent = ({ userobj }) => {
   console.log("nomineeeeeeeeee", userobj);
   const user = {
     name: userobj.name,
-    profilePic: "",
     shortId: userobj.short_id,
     email: userobj.email,
     address: userobj.address,
