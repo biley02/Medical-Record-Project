@@ -1,0 +1,376 @@
+/* =============== 
+Modal
+===============
+*/
+/* #open-modal{
+  position: fixed;
+  background-color: rgba(255, 255, 255, 0.25);
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s;
+}
+*/
+/* #open-modal:target {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 250ms 700ms ease;
+}
+
+
+#open-modal{
+  width: 400px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 2em;
+  background: white;
+}
+ */
+
+/* .modal-close {
+    width: 4rem;
+    height: 4rem;
+    border: 1px solid hsla(0, 0%, 100%, .4);
+    border-radius: 100rem;
+
+    color: inherit;
+    font-size: 2.2rem;
+
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-close:hover {
+    transform: translateY(-.2rem);
+    box-shadow: 0 0 4.4rem .2rem hsla(177, 84%, 50%, 0.4);
+    cursor: pointer;
+} */
+
+/* Demo Styles */
+/* html {
+  font-size: 18px;
+  line-height: 1.4;
+} */
+@import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900");
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+/* #open-modal{
+  font-family: 'Poppins',
+  Roboto,
+  Oxygen-Sans,
+  Ubuntu,
+  Cantarell,
+  "Helvetica Neue",
+  sans-serif;
+  font-weight:4rem;
+  font-family: 'Poppins',
+  sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.7;
+  background-color: #fff;
+  background-image: url('https://assets.codepen.io/1462889/back-page.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 101%;
+  color: rgb(32, 32, 32);
+} */
+
+small {
+  color: lightgray;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: grid;
+  place-items: center;
+  transition: var(--transition);
+  visibility: hidden;
+  z-index: -1;
+  /* display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -ms-flex-pack: center;
+  justify-content: center;
+  margin: 0 auto;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden; */
+  background-color: rgba(19, 19, 22, 0.75);
+  transition: opacity 250ms 700ms ease;
+}
+/* OPEN/CLOSE MODAL */
+.show-modal {
+  visibility: visible;
+  z-index: 10;
+}
+.dp-modal-container {
+  background: white;
+  border-radius: var(--radius);
+  width: 50vw;
+  height: 30vh;
+  max-width: var(--fixed-width);
+  text-align: center;
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+
+.add-details-modal-container {
+  background: white;
+  border-radius: var(--radius);
+  width: 30vw;
+  height: 70vh;
+  max-width: var(--fixed-width);
+  text-align: center;
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+a:focus {
+  outline: none;
+}
+
+.mod {
+  width: 60vw;
+  padding: 4rem 2rem;
+  border-radius: 0.8rem;
+  color: hsl(223, 20%, 93%);
+  background: linear-gradient(to right, hsl(210, 30%, 20%), hsl(255, 30%, 25%));
+  box-shadow: var(--m-shadow, 0.4rem 0.4rem 10.2rem 0.2rem)
+    hsla(236, 50%, 50%, 0.3);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+.add-disease-modal-container {
+  /* position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;*/
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 100vh;
+  padding: 0 4rem 2rem;
+  background: linear-gradient(to right, hsl(210, 30%, 20%), hsl(255, 30%, 25%));
+}
+.add-disease-modal-container:target {
+  display: flex;
+}
+
+.form__input {
+  font-family: Poppins;
+  color: rgb(0, 0, 0);
+  height: 1.2vh !important;
+  margin-left: 1vw;
+  font-size: 1rem !important;
+  padding: 1.3rem 1.3rem;
+  border-radius: 0.3rem;
+  background-color: rgb(255, 255, 255);
+  border: none;
+  border-bottom: 0.3rem solid transparent;
+  transition: all 0.3s;
+  font-weight: Bold !important;
+}
+input:focus::-webkit-input-placeholder {
+  color: transparent;
+}
+
+.link-2 {
+  width: 4rem;
+  height: 4rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 100rem;
+  color: rgb(0, 0, 0);
+  font-size: 2.2rem;
+  position: absolute;
+  top: 4.2rem;
+  right: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.link-2::before {
+  content: "×";
+  transform: translateY(-0.1rem);
+}
+
+.link-2:hover,
+.link-2:focus {
+  background: hsl(199, 90%, 50%);
+  border-color: hsl(187, 90%, 50%);
+  transform: translateY(-0.2rem);
+  color: #ffeba7;
+}
+.accept {
+  font-size: 1.8rem;
+  font-family: Poppins;
+  color: hsl(220, 50%, 90%);
+  background: linear-gradient(to right, hsl(210, 30%, 20%), hsl(255, 30%, 25%));
+  box-shadow: 0.4rem 0.4rem 2.4rem 0.2rem hsla(236, 50%, 50%, 0.3);
+  border-radius: 100rem;
+  padding: 1.4rem 3.2rem;
+  transition: 0.2s;
+}
+.accept:hover,
+.accept:focus {
+  transform: translateY(-0.2rem);
+  box-shadow: 0 0 4.4rem 0.2rem hsla(236, 50%, 50%, 0.4);
+}
+
+.accept:focus {
+  box-shadow: 0 0 4.4rem 0.2rem hsla(236, 50%, 50%, 0.4),
+    0 0 0 0.4rem
+      linear-gradient(to right, hsl(210, 30%, 20%), hsl(255, 30%, 25%)),
+    0 0 0 0.5rem hsl(210, 90%, 50%);
+}
+
+@media screen and (max-width: 1000px) {
+  .dp-modal-container {
+    width: 70vw;
+  }
+
+  .add-details-modal-container {
+    height: 70vh;
+    width: 60vw;
+  }
+
+  .add-diseases-modal-container {
+    height: 55vh;
+    width: 60vw;
+  }
+}
+@media screen and (max-width: 900px) and (min-width: 721px) {
+  .link-2 {
+    width: 3rem !important;
+    height: 3rem !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 100rem;
+    color: rgb(0, 0, 0);
+    font-size: 2.1rem;
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+@media screen and (max-width: 720px) {
+  .dp-modal-container {
+    width: 100vw;
+  }
+  .link-2 {
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 100rem;
+    color: rgb(0, 0, 0);
+    font-size: 2.1rem;
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .mod {
+    width: 95vw !important;
+    margin-left: 1vw !important;
+    margin-top: 2vh !important;
+  }
+
+  .add-details-modal-container {
+    height: 75vh;
+    width: 100vw;
+  }
+
+  .add-diseases-modal-container {
+    height: 80vh;
+    width: 95vw;
+  }
+}
+
+/* #documents{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  color: white;
+  font-family: sans-serif;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  margin-top: 1rem;
+} */
+#file {
+  cursor: pointer;
+}
+.lb1 {
+  background-color: rgb(9, 200, 175);
+  color: rgb(255, 255, 255);
+  padding: 0.5rem;
+  font-family: Poppins;
+  border-radius: 0.3rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+}
+.lb {
+  background-color: rgb(9, 200, 175);
+  color: rgb(255, 255, 255);
+  padding: 0.5rem;
+  font-family: Poppins;
+  border-radius: 0.3rem;
+  font-size: 0.9rem;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+}
+.lb2 {
+  background-color: rgb(9, 200, 175);
+  color: rgb(255, 255, 255);
+  padding: 0.5rem;
+  font-family: Poppins;
+  font-size: 0.9rem;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  margin-top: 1vh;
+  margin-bottom: 3vh;
+}
+#file-chosen {
+  margin-left: 0.6rem;
+  font-family: Poppins;
+}

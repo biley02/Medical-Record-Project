@@ -1,0 +1,210 @@
+body {
+    margin: 0;
+    padding: 0;
+    /*box-sizing:border-box;*/
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+#ini{
+	display: flex;
+	flex-direction: row;
+	background-color: #ffffff;
+}
+#loginForm{
+	display: flex;
+	flex-direction:column;
+	justify-content:center;
+	align-items:center;
+	/* position:relative; */
+	width:50vw;
+	height:100vh;
+	background-image: url('../img/signup-dots.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+	background-color: #ffffff;
+	background-size: 98vw 92vh;
+	/* margin-left: 50vw; */
+}
+
+#details1{
+	display: flex;
+	flex-direction: column;
+	
+    /* align-items: center; */
+}
+#heading2{
+	font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	font-weight: bold;
+	font-size:3.5vw !important; 
+	line-height:50.95px;
+	letter-spacing: 0.03em;
+	margin-bottom: 4.5vh;
+	/* margin-left: 16vw; */
+}
+#logInText{
+	text-align:center;
+	color: #7D7987;
+	font-size:1.1em;
+	font-family:Product Sans;
+}
+ .label2{
+ 	display:flex;
+ 	font-size:1.2rem;
+	 
+ }
+ #submitbtn1{
+ 	display:block;
+ 	margin-top:3px;
+ 	height:6vh;
+	width:95%;
+ 	background: #3a80f0;
+    border-radius: 6px;
+    outline:none;
+    border:none;
+    color:#FFFFFF;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    align-items:center;
+	justify-content:center;
+	font-size:1.3vw;
+	cursor: pointer;
+	 box-shadow: 
+         0 3px 10px rgb(0 0 0 / 0.2);
+  }
+  .signuplink-section{
+    margin: 0 20% 0 15%;
+    text-align: center;
+}
+    #signUpopt{
+ 	margin-top:5vh;
+ 	color: #696F79;
+ 	font-family:Inter;
+ 	font-size:1.2em;
+	display:inline-block;
+	
+ }
+ #signUpLink{
+ 	text-decoration: none !important;
+ 	font-family:Inter;
+ 	font-size:1.2em;
+ }
+ /* @media screen and (max-width: 1367px){
+	 #heading1{
+		 text-align: center;
+	 }
+	 
+ } */
+ @media screen and (max-width: 1250px){
+	 #heading2{
+		margin-left: 15w;
+	 }
+	 
+ }
+ @media screen and (max-width: 1050px){
+	.signuplink-section{
+		margin: 0;
+	}
+
+	/* #submitbtn1{
+		width: 95%;
+	}
+	#heading2{
+		left: unset;
+		text-align: center;
+		margin-left: 0;
+	}
+ */
+	#loginForm{
+		margin-left:0vw;
+	}
+}
+@media screen and (max-width: 750px){
+	#heading2 {
+		font-size: 200%;
+	
+	}
+	#loginForm{
+		margin-left:0vw;
+	}
+	
+}
+@media screen and (max-width: 710px){
+	#signUpopt {
+		font-size: 1rem;
+	}
+	#signUpLink{
+		font-size: 1rem;
+	}
+	#submitbtn1{
+		width: 98%;
+		margin-top: 2vh;
+		font-size: 2vw !important;
+	}
+	.LoginEmail {
+		font-size: 3.5vw !important;
+	}
+
+ }
+ @media screen and (max-width: 575px) {
+	 #signUpopt {
+		font-size: 1.2rem;
+		margin-bottom: 1vh;
+	}
+	#signUpLink{
+		font-size: 1.2rem;
+	} 
+	.signuplink-section{
+		display: grid;
+	}
+	
+
+}
+@media screen and (max-width: 500px) {
+	#signupLeftImage{
+        display: none;
+    }
+	#loginForm{
+		width: 100vw;
+		top: 12vh;
+        align-items: center;
+        text-align: left;
+        margin: 7vh auto;
+    }
+	#details1{
+        margin: 0 11vw 1.5vh;
+		font-size:5vw !important
+	}
+	#submitbtn1{
+		width: 100%;
+		margin-top: 2vh;
+		font-size: 4vw !important;
+	}
+	.signuplink-section{
+		display: block;
+        align-items: center;
+        text-align: center;   
+	 }
+	 #signUpopt{
+		 margin-top: 5vh;
+	 }
+	#heading2{
+        font-size: 8vw !important;
+    }
+   
+} 
+@media screen and (max-width: 340px) {
+    .label2{
+        font-size: 87%;
+    }
+	.signuplink-section{
+		display: grid;
+	}
+	#signUpopt{
+		margin-top: 1vh;
+	}
+	#submitbtn1{
+		width: 100%;
+	}
+	#heading2{
+        font-size: 8vw !important;
+    }
+}
