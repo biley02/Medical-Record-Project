@@ -50,10 +50,12 @@ app.use(
 const indexRoutes = require("./routes/index");
 const userRoutes = require("./routes/user");
 const hospitalRoutes = require("./routes/hospital");
+const doctorRoutes = require("./routes/doctor");
 
 app.use("/", indexRoutes);
 app.use("/user", userRoutes);
 app.use("/hospital", hospitalRoutes);
+app.use("/doctor", doctorRoutes);
 
 // start the server in the port 3000 !
 app.listen(port, function () {
