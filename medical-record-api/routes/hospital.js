@@ -68,6 +68,7 @@ router.post("/search", requireAuth, hospitalController.patient_search);
 router.post("/login", hospitalController.login_post);
 router.get("/verifyRelation/:id", hospitalController.relationVerify_get);
 router.get("/verifyNominee/:id", hospitalController.nomineeVerify_get);
+router.post("/addDoctor", requireAuth, hospitalController.add_doctor);
 
 router.post(
   "/profile/editDetails",

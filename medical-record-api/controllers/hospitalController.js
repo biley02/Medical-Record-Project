@@ -1,6 +1,7 @@
 const Hospital = require("../models/Hospital");
 const User = require("../models/User");
 const Disease = require("../models/Disease");
+const Doctor = require("../models/Doctor");
 
 const Relations = require("../models/Relations");
 
@@ -9,6 +10,7 @@ const {
   hospitalSignupMail,
   relationMail,
   nomineeMail,
+  doctorRegistrationMail,
 } = require("../config/nodemailer");
 const path = require("path");
 
@@ -249,7 +251,9 @@ module.exports.profile_get = async (req, res) => {
   // access:null,
   // custom_flash:null,
   //   })
-  const hospital = req.hospital;
+  const hospital = await Hospital.findById(req.hospital._id).populate(
+    "doctors"
+  );
   res.send(hospital);
 };
 
@@ -726,4 +730,40 @@ module.exports.picupload_post = async (req, res) => {
     }
   );
   res.redirect("/hospital/profile");
+};
+
+module.exports.add_doctor = async (req, res) => {
+  try {
+    const hospital = req.hospital;
+    const doctorExists = await Doctor.findOne({ email: req.body.email });
+    if (doctorExists) {
+      console.log("doctor exits");
+      res.redirect("/hospital/profile");
+      return;
+    }
+    const doctor = new Doctor({
+      email: req.body.email,
+      name: req.body.name,
+      password: req.body.password,
+      hospital: hospital._id,
+      reg_no: req.body.reg_no,
+    });
+    const savedDoctor = await doctor.save();
+    if (!savedDoctor) {
+      console.log("doctor not saved");
+      res.redirect("/hospital/profile");
+      return;
+    }
+
+    // doctorRegistrationMail(savedDoctor);
+
+    hospital.doctors.push(savedDoctor._id);
+    await hospital.save();
+
+    setError("success", true, "Doctor has been added.");
+    res.send({ error_msg });
+  } catch (err) {
+    console.log(err, "Error while adding a new doctor. Please try again");
+    res.redirect("/hospital/profile");
+  }
 };
