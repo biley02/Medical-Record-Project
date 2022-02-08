@@ -14,6 +14,10 @@ import HospitalSignUp from "./components/HospitalSignUp";
 import HospitalProfile from "./hospitalComponents/profile";
 import HospitalPatient from "./hospitalComponents/HospitalPatient";
 import UserHospital from "./components/UserHospital";
+import UserAppointment from "./components/UserAppointment";
+import CovidChecker from "./components/CovidChecker";
+import Chat from "./chat/Messenger";
+import HospitalChat from "./HospitalChat/HospitalMessenger";
 
 function App() {
   return (
@@ -39,9 +43,22 @@ function App() {
         <Route path="/user/hospital">
           <UserSideComponent />
         </Route>
+        <Route path="/user/appointment">
+          <UserSideComponent/>
+        </Route>
+        <Route path="/user/covid-checker">
+          <UserSideComponent />
+        </Route>
+        <Route path="/user/chats">
+          <Chat />
+        </Route>
         {/* hospital routes */}
+        
         <Route path="/hospital/login">
           <HospitalSignIn />
+        </Route>
+        <Route path="/hospital/chats">
+          <HospitalChat />
         </Route>
         <Route path="/hospital/signup">
           <HospitalSignUp />

@@ -55,6 +55,7 @@ function checkFileType(file, cb) {
 }
 
 router.get("/document", requireAuth, hospitalController.document_get);
+router.post("/getFriends/:id", requireAuth, hospitalController.getFriends);
 router.post("/diseases", requireAuth, hospitalController.patientDiseases_post);
 router.get("/diseases", requireAuth, hospitalController.patientDiseases_get);
 router.get("/signup", hospitalController.signup_get);
@@ -68,6 +69,7 @@ router.post("/search", requireAuth, hospitalController.patient_search);
 router.post("/login", hospitalController.login_post);
 router.get("/verifyRelation/:id", hospitalController.relationVerify_get);
 router.get("/verifyNominee/:id", hospitalController.nomineeVerify_get);
+router.post("/addDoctor", requireAuth, hospitalController.add_doctor);
 
 router.post(
   "/profile/editDetails",

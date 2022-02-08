@@ -45,7 +45,6 @@ const UserHospital = () => {
       <div className="col-lg-8 col-sm-8 col-12 order-1 order-sm-2" id="pSec2">
         <div id="sub2">
           <h2>Hospital Detail</h2>
-          {/* <hr style={{margin: 'none',border: 'none', borderTop: '10px solid red', width: '5%'}}/> */}
           <hr/>
           <div className="hospDetails">
             <img src={coverPhoto}/>

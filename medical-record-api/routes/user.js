@@ -88,6 +88,7 @@ function checkFileType1(file, cb) {
 const authController = require("../controllers/authControllers");
 const { requireAuth, redirectIfLoggedIn } = require("../middleware/userAuth");
 router.get("/verify/:id", authController.emailVerify_get);
+router.post("/getFriends/:id", authController.getFriends);
 router.get("/signup", authController.signup_get);
 router.post("/signup", authController.signup_post);
 router.get("/login", authController.login_get);
@@ -132,4 +133,7 @@ router.post(
   upload.single("profilePic"),
   authController.picupload_post
 );
+
+//user books a doctor
+router.post("/book/:id", requireAuth, authController.bookappointment);
 module.exports = router;

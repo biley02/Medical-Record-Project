@@ -13,8 +13,10 @@ import settingsImage from "../img/Settings.png";
 import diseaseImage from "../img/disease.png";
 import UserMiddleComponent from "./UserMiddleComponent";
 import DiseaseContent from "./DiseaseContent";
+import UserAppointment from "./UserAppointment";
 import Loader from "../LoaderComponents/Loader";
 import SideLoader from "../LoaderComponents/SideLoader";
+import CovidChecker from "./CovidChecker";
 
 import { FaTimes } from "react-icons/fa";
 
@@ -36,6 +38,7 @@ const UserSideComponent = () => {
   const [diseaseName, setDiseaseName] = useState("");
   const [path, setPath] = useState("");
   const [user, setUser] = useState({});
+
   const [disease, setDisease] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -119,7 +122,6 @@ const UserSideComponent = () => {
       const userData = res.data.user;
       const diseaseData = res.data.disease ? res.data.disease.disease : {};
       const userH = res.data.hospitals;
-      // console.log('diseaseData',diseaseData)
       setUser(userData);
       setDisease(diseaseData);
       setIsLoading(false);
@@ -235,12 +237,11 @@ const UserSideComponent = () => {
             // enctype="multipart/form-data"
           >
             <div className="mod">
-              <button
-                href="#"
+              <a
                 title="Close"
                 className="link-2"
                 onClick={() => setModalIsOpen(false)}
-              ></button>
+              ></a>
               <h1 className="modal__title">Add Diseases</h1>
               <div>
                 {/* <label className="form__name" htmlFor="userName">
@@ -392,9 +393,9 @@ const UserSideComponent = () => {
                     })}
                   </div>
                 </div>
-
+                {/* //here */}
                 <div className="lists">
-                  <a href="#">Appointments</a>
+                  <a href="/user/appointment">Appointments</a>
                   <img src={AppointmentImage} className="Icons" />
                 </div>
                 <div className="lists">
@@ -402,7 +403,7 @@ const UserSideComponent = () => {
                   <img src={progressImage} className="Icons" />
                 </div>
                 <div className="lists">
-                  <a href="#">Message</a>
+                  <a href="/user/chats">Message</a>
                   <img src={messageImage} className="Icons" />
                 </div>
                 <div className="hospital-list">
@@ -503,8 +504,14 @@ const UserSideComponent = () => {
                     </div>
                   </div>
                 </div>
-                <div className="lists">
-                  <a href="#">Settings</a>
+                <div
+                  className={
+                    path === "/user/covid-checker"
+                      ? "lists active-list"
+                      : "lists"
+                  }
+                >
+                  <a href="/user/covid-checker">Corona-Checker</a>
                   <img src={settingsImage} className="Icons" />
                 </div>
               </div>
@@ -516,6 +523,8 @@ const UserSideComponent = () => {
             )}
             {path === "/user/hospital" ? <UserHospital /> : ""}
             {path === "/user/disease" ? <DiseaseContent /> : ""}
+            {path === "/user/appointment" ? <UserAppointment/> : ""}
+            {path === "/user/covid-checker" ? <CovidChecker /> : ""}
             <div
               className="col-lg-2 col-sm-0 col-12 order-2 order-sm-3"
               id="pSec3"
@@ -600,7 +609,7 @@ const UserSideComponent = () => {
               className="col-lg-2 col-sm-4 col-12 order-3 order-sm-1"
               id="pSec1"
             >
-              {path !== "/user/disease" ? (
+              {path !== "/user/disease" && path !== "/user/covid-checker" ? (
                 <div id="leftPanel">
                   <div className="lists active-list">
                     <a href="/user/profile">Profile</a>
@@ -673,12 +682,18 @@ const UserSideComponent = () => {
                   </div>
 
                   <div className="lists">
-                    <a href="#">Message</a>
+                    <a href="/user/chats">Message</a>
                     <img src={messageImage} className="Icons" />
                   </div>
 
-                  <div className="lists">
-                    <a href="#">Settings</a>
+                  <div
+                    className={
+                      path === "/user/covid-checker"
+                        ? "lists active-list"
+                        : "lists"
+                    }
+                  >
+                    <a href="/user/covid-checker">Covid-Checker</a>
                     <img src={settingsImage} className="Icons" />
                   </div>
                 </div>
@@ -693,6 +708,8 @@ const UserSideComponent = () => {
             )}
             {path === "/user/hospital" ? <UserHospital /> : ""}
             {path === "/user/disease" ? <DiseaseContent /> : ""}
+            {path === "/user/appointment" ? <UserAppointment/>:""}
+            {path === "/user/covid-checker" ? <CovidChecker /> : ""}
 
             <div
               className="col-lg-2 col-sm-0 col-12 order-2 order-sm-3"
