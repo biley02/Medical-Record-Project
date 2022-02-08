@@ -23,6 +23,19 @@ const setError = (type = "", show = false, msg = "") => {
   error_msg.msg = msg;
 };
 
+module.exports.getFriends = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    // console.log(id);
+    const friends = await User.findById(id);
+    // console.log(friends);
+    res.status(200).send({ friends });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 module.exports.editDetails_post = async (req, res) => {
   try {
     const user = req.user;
