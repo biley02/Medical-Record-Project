@@ -28,7 +28,7 @@ module.exports.getFriends = async (req, res) => {
 
   try {
     // console.log(id);
-    const friends = await User.findById(id);
+    const friends = await Hospital.findById(id);
     // console.log(friends);
     res.status(200).send({ friends });
   } catch (err) {

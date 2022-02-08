@@ -14,7 +14,7 @@ export default function Conversation({ conversation, currentUser }) {
     const getUser = async () => {
       try {
         const res = await axios.post(
-          `http://localhost:8080/user/getFriends/${friendId}`
+          `http://localhost:8080/hospital/getFriends/${friendId}`
         );
         console.log("friends", res.data.friends);
         setUser(res.data.friends);
@@ -28,7 +28,7 @@ export default function Conversation({ conversation, currentUser }) {
   return (
     <div className="conversation">
       <img className="conversationImg" src={ProfilePic} alt="" />
-      <span className="conversationName">{user?.hospitalName}</span>
+      <span className="conversationName">{user?.name}</span>
     </div>
   );
 }

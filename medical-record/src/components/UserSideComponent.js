@@ -402,7 +402,7 @@ const UserSideComponent = () => {
                   <img src={progressImage} className="Icons" />
                 </div>
                 <div className="lists">
-                  <a href="#">Message</a>
+                  <a href="/user/chats">Message</a>
                   <img src={messageImage} className="Icons" />
                 </div>
                 <div className="hospital-list">
@@ -680,7 +680,7 @@ const UserSideComponent = () => {
                   </div>
 
                   <div className="lists">
-                    <a href="#">Message</a>
+                    <a href="/user/chats">Message</a>
                     <img src={messageImage} className="Icons" />
                   </div>
 

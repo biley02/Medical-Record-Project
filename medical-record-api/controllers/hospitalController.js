@@ -257,6 +257,19 @@ module.exports.profile_get = async (req, res) => {
   res.send(hospital);
 };
 
+module.exports.getFriends = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    // console.log(id);
+    const friends = await User.findById(id);
+    console.log("friends", friends);
+    res.status(200).send({ friends });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 module.exports.emailVerify_get = async (req, res) => {
   try {
     const userID = req.params.id;

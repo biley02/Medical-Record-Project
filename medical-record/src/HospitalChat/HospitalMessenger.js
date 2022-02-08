@@ -1,19 +1,20 @@
 import "./messenger.css";
 
-import Conversation from "../components/conversations/Conversation";
-import Message from "../components/message/Message";
+import Conversation from "../hospitalComponents/conversations/Conversation";
+import Message from "../hospitalComponents/message/Message";
 import Loader from "../LoaderComponents/Loader";
 
 import { useContext, useEffect, useRef, useState } from "react";
 
 import axios from "axios";
+import ReactScrollToBottom from "react-scroll-to-bottom";
 
 import { io } from "socket.io-client";
 import { useGlobalContext } from "../context/Context";
 
 const baseUrl = "http://localhost:8080";
 
-export default function Messenger() {
+export default function HospitalMessenger() {
   const [conversations, setConversations] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -29,10 +30,10 @@ export default function Messenger() {
   useEffect(() => {
     setIsLoading(true);
     axios
-      .get(`${baseUrl}/user/profile`, { withCredentials: true })
+      .get(`${baseUrl}/hospital/profile`, { withCredentials: true })
       .then((res) => {
         console.log("Messenger", res.data);
-        const userData = res.data.user;
+        const userData = res.data;
         setUser(userData);
         setIsLoading(false);
       });
@@ -57,7 +58,11 @@ export default function Messenger() {
 
   useEffect(() => {
     socket.current.emit("addUser", user._id);
-    socket.current.on("getUsers", (users) => {});
+    socket.current.on("getUsers", (users) => {
+      // setOnlineUsers(
+      //   user.followings.filter((f) => users.some((u) => u.userId === f))
+      // );
+    });
   }, [user]);
 
   useEffect(() => {
