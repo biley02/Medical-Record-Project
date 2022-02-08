@@ -50,21 +50,18 @@ app.use(
 const indexRoutes = require("./routes/index");
 const userRoutes = require("./routes/user");
 const hospitalRoutes = require("./routes/hospital");
-<<<<<<< HEAD
-const universityRoutes=require("./routes/university");
+const universityRoutes = require("./routes/university");
+const doctorRoutes = require("./routes/doctor");
 app.use("/", indexRoutes);
 app.use("/user", userRoutes);
 app.use("/hospital", hospitalRoutes);
 app.use("/university", universityRoutes);
-=======
-const doctorRoutes = require("./routes/doctor");
 
-app.use("/", indexRoutes);
-app.use("/user", userRoutes);
-app.use("/hospital", hospitalRoutes);
+// app.use("/", indexRoutes);
+// app.use("/user", userRoutes);
+// app.use("/hospital", hospitalRoutes);
 app.use("/doctor", doctorRoutes);
 
->>>>>>> d0d35730a92f06d6a303aa9c89acb3a42b1a398f
 // start the server in the port 3000 !
 app.listen(port, function () {
   console.log("Example app listening on port :", port);
