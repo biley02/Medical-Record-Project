@@ -13,6 +13,7 @@ import settingsImage from "../img/Settings.png";
 import diseaseImage from "../img/disease.png";
 import UserMiddleComponent from "./UserMiddleComponent";
 import DiseaseContent from "./DiseaseContent";
+import UserAppointment from "./UserAppointment";
 import Loader from "../LoaderComponents/Loader";
 import SideLoader from "../LoaderComponents/SideLoader";
 import CovidChecker from "./CovidChecker";
@@ -392,9 +393,9 @@ const UserSideComponent = () => {
                     })}
                   </div>
                 </div>
-
+                {/* //here */}
                 <div className="lists">
-                  <a href="#">Appointments</a>
+                  <a href="/user/appointment">Appointments</a>
                   <img src={AppointmentImage} className="Icons" />
                 </div>
                 <div className="lists">
@@ -522,6 +523,7 @@ const UserSideComponent = () => {
             )}
             {path === "/user/hospital" ? <UserHospital /> : ""}
             {path === "/user/disease" ? <DiseaseContent /> : ""}
+            {path === "/user/appointment" ? <UserAppointment/> : ""}
             {path === "/user/covid-checker" ? <CovidChecker /> : ""}
             <div
               className="col-lg-2 col-sm-0 col-12 order-2 order-sm-3"
@@ -706,6 +708,7 @@ const UserSideComponent = () => {
             )}
             {path === "/user/hospital" ? <UserHospital /> : ""}
             {path === "/user/disease" ? <DiseaseContent /> : ""}
+            {path === "/user/appointment" ? <UserAppointment/>:""}
             {path === "/user/covid-checker" ? <CovidChecker /> : ""}
 
             <div
