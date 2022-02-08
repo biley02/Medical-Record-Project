@@ -1,32 +1,26 @@
-const mongoose = require('mongoose')
-const utilities = require('../utilities/Utilities')
-require('dotenv').config()
+const mongoose = require("mongoose");
+const utilities = require("../utilities/Utilities");
+require("dotenv").config();
 
 const nomineeSchema = mongoose.Schema(
-    {
-        name:{
-            type:String,
-        },
-        phoneNumber: {
-            type: String,
-            trim: true,
-            
-        },
-        email:{
-            type:String,
-        }
-
+  {
+    name: {
+      type: String,
     },
-    
-    {
-        timestamps: true,
+    phoneNumber: {
+      type: String,
+      trim: true,
     },
+    email: {
+      type: String,
+    },
+  },
 
-)
+  {
+    timestamps: true,
+  }
+);
 
+const Nominee = mongoose.model("Nominee", nomineeSchema);
 
-
-
-const Nominee = mongoose.model('Nominee', nomineeSchema)
-
-module.exports = Nominee
+module.exports = Nominee;

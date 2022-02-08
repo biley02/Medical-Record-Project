@@ -14,7 +14,9 @@ var app = express();
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+const link = "http://localhost:3000";
+
+app.use(cors({ origin: link, credentials: true }));
 
 // app.use(express.static('public'))
 
@@ -48,10 +50,17 @@ app.use(
 const indexRoutes = require("./routes/index");
 const userRoutes = require("./routes/user");
 const hospitalRoutes = require("./routes/hospital");
-
+const universityRoutes = require("./routes/university");
+const doctorRoutes = require("./routes/doctor");
 app.use("/", indexRoutes);
 app.use("/user", userRoutes);
 app.use("/hospital", hospitalRoutes);
+app.use("/university", universityRoutes);
+
+// app.use("/", indexRoutes);
+// app.use("/user", userRoutes);
+// app.use("/hospital", hospitalRoutes);
+app.use("/doctor", doctorRoutes);
 
 // start the server in the port 3000 !
 app.listen(port, function () {
