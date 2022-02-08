@@ -14,7 +14,9 @@ var app = express();
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+const link = "http://localhost:3000";
+
+app.use(cors({ origin: link, credentials: true }));
 
 // app.use(express.static('public'))
 
@@ -48,11 +50,21 @@ app.use(
 const indexRoutes = require("./routes/index");
 const userRoutes = require("./routes/user");
 const hospitalRoutes = require("./routes/hospital");
+<<<<<<< HEAD
 const universityRoutes=require("./routes/university");
 app.use("/", indexRoutes);
 app.use("/user", userRoutes);
 app.use("/hospital", hospitalRoutes);
 app.use("/university", universityRoutes);
+=======
+const doctorRoutes = require("./routes/doctor");
+
+app.use("/", indexRoutes);
+app.use("/user", userRoutes);
+app.use("/hospital", hospitalRoutes);
+app.use("/doctor", doctorRoutes);
+
+>>>>>>> d0d35730a92f06d6a303aa9c89acb3a42b1a398f
 // start the server in the port 3000 !
 app.listen(port, function () {
   console.log("Example app listening on port :", port);

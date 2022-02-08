@@ -5,43 +5,58 @@ import profileEditIcon from "../img/profile-edit-icon.png";
 import axios from "axios";
 import "../styles/modal.css";
 
+import { useGlobalContext } from "../context/Context";
+
 const baseUrl = "http://localhost:8080/user/profile/editDetails";
 const ProfileDetailsModal = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
+  const { Alert, alert, setAlert, showAlert, userToken } = useGlobalContext();
+
   const [updatedUserDetails, setUpdatedUserDetails] = useState({
-    userName: "",
-    userEmail: "",
     nomineeName: "",
-    nomineePhnNumber: "",
-    userBloodGroup: "",
+    nomineePhn: "",
+    nomineeEmail: "",
+    address: "",
   });
 
-  const handleSubmit = async (e) => {
-    console.log("hi");
-    e.preventDefault();
-    console.log(updatedUserDetails);
+  const SendDetails = async () => {
+    console.log("hieeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
 
+    console.log(updatedUserDetails);
     axios
       .post(
         `http://localhost:8080/user/profile/editDetails`,
         updatedUserDetails
       )
       .then((response) => {
-        console.log("response.data", response);
+        console.log("response.dataaaaaaaaaaa", response.data);
+
+        const error = response.data.error_msg;
+
+        if (error.show) {
+          setUpdatedUserDetails({
+            nomineeName: "",
+            nomineePhnNumber: "",
+            nomineeEmail: "",
+            address: "",
+          });
+          setModalIsOpen(false);
+          return showAlert(true, error.type, error.msg);
+        }
+
+        setUpdatedUserDetails({
+          nomineeName: "",
+          nomineePhnNumber: "",
+          nomineeEmail: "",
+          address: "",
+        });
         setModalIsOpen(false);
+        window.location.reload();
       })
       .catch((error) => {
         console.log(error);
       });
-
-    setUpdatedUserDetails({
-      userName: "",
-      userEmail: "",
-      nomineeName: "",
-      nomineePhnNumber: "",
-      userBloodGroup: "",
-    });
   };
 
   const handleChange = (e) => {
@@ -56,209 +71,120 @@ const ProfileDetailsModal = () => {
         id="myBtnEdit"
         onClick={() => {
           setModalIsOpen(true);
+          setUpdatedUserDetails({
+            nomineeName: "",
+            nomineePhnNumber: "",
+            nomineeEmail: "",
+            address: "",
+          });
         }}
       ></img>
-      {/* <div
-        className={`${
-          modalIsOpen ? "modal-overlay show-modal" : "modal-overlay"
-        }`}
-      >
-        <div className="add-details-modal-container">
-          <button
-            className="close-modal-btn"
-            onClick={() => {
-              setModalIsOpen(false);
-            }}
-          >
-            <FaTimes></FaTimes>
-          </button>
-          <form
-            className="form-group"
-            enctype="multipart/form-data"
-            onSubmit={handleSubmit}
-          >
-            <label>Update Details :</label>
-            <div>
-              <label className="label1" htmlFor="userName">
-                User Name :
-              </label>
-              <input
-                type="text"
-                className="inputDetails"
-                name="userName"
-                placeholder="update your name..."
-                value={updatedUserDetails.userName}
-                onChange={handleChange}
-              />
-              <br />
-              <br />
-            </div>
-            <div>
-              <label className="label1" htmlFor="nomineeName">
-                Nominee Name :
-              </label>
-              <input
-                type="text"
-                className="inputDetails"
-                name="nomineeName"
-                placeholder="update your name..."
-                value={updatedUserDetails.nomineeName}
-                onChange={handleChange}
-              />
-              <br />
-              <br />
-            </div>
-            <div>
-              <label className="label1" htmlFor="email">
-                User Email :
-              </label>
-              <input
-                type="text"
-                className="inputDetails"
-                name="userEmail"
-                placeholder="update your email..."
-                value={updatedUserDetails.userEmail}
-                onChange={handleChange}
-              />
-              <br />
-              <br />
-            </div>
-            <div>
-              <label className="label1" htmlFor="userBloodGroup">
-                User Blood-Group :
-              </label>
-              <input
-                type="text"
-                className="inputDetails"
-                name="userBloodGroup"
-                placeholder="update your name..."
-                value={updatedUserDetails.userBloodGroup}
-                onChange={handleChange}
-              />
-              <br />
-              <br />
-            </div>
-            <div>
-              <button
-                type="submit"
-                id="submitbtn"
-                className="register"
-                onSubmit={handleSubmit}
-              >
-                Save
-              </button>
-            </div>
-          </form>
-        </div>
-      </div> */}
       <div
         className={`${
           modalIsOpen ? "modal-overlay show-modal" : "modal-overlay"
         }`}
       >
-        <div className="add-diseases-modal-container">
-          <form
-            className="form-group"
-            // id="open-modal"
-            enctype="multipart/form-data"
-          >
+        <div className="Edit-details-modal">
+          <form className="form-group">
             <div className="mod">
-              <button
-                href="#"
+              <a
                 title="Close"
                 className="link-2"
                 onClick={() => setModalIsOpen(false)}
-              ></button>
+              ></a>
               <h1 className="modal__title">Edit Profile</h1>
               <div>
-                {/* <label className="form__name" htmlFor="userName">
-                  Disease Name
-                </label> */}
                 <label htmlFor="name" className="lb">
-                  Edit User name
+                  Set Nominee Name
                 </label>
                 <input
                   type="text"
                   className="form__input"
-                  id="name"
-                  placeholder="update your name..."
-                  value={updatedUserDetails.userName}
-                  onChange={handleChange}
-                  required=""
+                  id="nomineName"
+                  placeholder="Set Nominee Name ... "
+                  onChange={(e) => {
+                    const { value } = e.target;
+                    setUpdatedUserDetails({
+                      ...updatedUserDetails,
+                      nomineeName: value,
+                    });
+                  }}
                 />
                 <br />
                 <br />
               </div>
               <div>
-                {/* <label className="form__name" htmlFor="userName">
-                  Disease Name
-                </label> */}
-                <label htmlFor="name" className="lb">
-                  Nominee name
+                <label htmlFor="nomineeEmail" className="lb">
+                  Nominee Email
                 </label>
                 <input
                   type="text"
                   className="form__input"
+                  name="nomineeEmail"
                   id="name"
-                  placeholder="update your name..."
-                  value={updatedUserDetails.nomineeName}
-                  onChange={handleChange}
-                  required=""
+                  placeholder="Set nominee email..."
+                  onChange={(e) => {
+                    const { value } = e.target;
+                    setUpdatedUserDetails({
+                      ...updatedUserDetails,
+                      nomineeEmail: value,
+                    });
+                  }}
                 />
                 <br />
                 <br />
               </div>
               <div>
-                {/* <label className="form__name" htmlFor="userName">
-                  Disease Name
-                </label> */}
-                <label htmlFor="name" className="lb">
-                  Email
+                <label htmlFor="nomineePhnNumber" className="lb">
+                  Nominee Phone Number
                 </label>
                 <input
                   type="text"
                   className="form__input"
+                  name="nomineePhnNumber"
                   id="name"
-                  placeholder="update your email..."
-                  value={updatedUserDetails.userEmail}
-                  onChange={handleChange}
-                  required=""
+                  placeholder="Set phone number..."
+                  onChange={(e) => {
+                    const { value } = e.target;
+                    setUpdatedUserDetails({
+                      ...updatedUserDetails,
+                      nomineePhnNumber: value,
+                    });
+                  }}
                 />
                 <br />
                 <br />
               </div>
               <div>
-                {/* <label className="form__name" htmlFor="userName">
-                  Disease Name
-                </label> */}
-                <label htmlFor="name" className="lb">
-                  Blood Group name
+                <label htmlFor="address" className="lb">
+                  Set your address
                 </label>
                 <input
                   type="text"
                   className="form__input"
-                  id="name"
-                  name="userBloodGroup"
-                  placeholder="update your name..."
-                  value={updatedUserDetails.userBloodGroup}
-                  onChange={handleChange}
-                  required=""
+                  value={updatedUserDetails.address}
+                  name="address"
+                  placeholder="set your address..."
+                  onChange={(e) => {
+                    const { value } = e.target;
+                    setUpdatedUserDetails({
+                      ...updatedUserDetails,
+                      address: value,
+                    });
+                  }}
                 />
                 <br />
                 <br />
               </div>
-              {/* <div>
-              </div> */}
-              <button
+
+              <a
                 className="accept"
-                // type="save"
-                type="submit"
-                // id="submitbtn"
-                // className="register"
-                onSubmit={handleSubmit}
+                onClick={() => {
+                  SendDetails();
+                }}
               >
                 Save &rarr;<i className="uil uil-expand-arrows"></i>
-              </button>
+              </a>
             </div>
           </form>
         </div>

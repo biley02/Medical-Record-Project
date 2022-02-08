@@ -14,6 +14,7 @@ import HospitalSignUp from "./components/HospitalSignUp";
 import HospitalProfile from "./hospitalComponents/profile";
 import HospitalPatient from "./hospitalComponents/HospitalPatient";
 import UserHospital from "./components/UserHospital";
+import CovidChecker from "./components/CovidChecker";
 
 function App() {
   return (
@@ -37,6 +38,9 @@ function App() {
           <UserSideComponent />
         </Route>
         <Route path="/user/hospital">
+          <UserSideComponent />
+        </Route>
+        <Route path="/user/covid-checker">
           <UserSideComponent />
         </Route>
         {/* hospital routes */}
