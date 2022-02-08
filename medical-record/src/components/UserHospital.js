@@ -4,8 +4,11 @@ import coverPhoto from "../img/CoverPhoto.png";
 import ProfilePic from "../img/ProfilePic.png";
 import camera from "../img/camera.png";
 import profileEditIcon from "../img/profile-edit-icon.png";
+import phoneIcon from "../img/phone.png";
+import mailIcon from "../img/mail.png";
 
 import "../styles/userProfile.css";
+import "../styles/hospital-details.css";
 import axios from "axios";
 import Loader from "../LoaderComponents/Loader";
 
@@ -40,8 +43,61 @@ const UserHospital = () => {
     <>
       {isLoading ? <Loader /> : ""}
       <div className="col-lg-8 col-sm-8 col-12 order-1 order-sm-2" id="pSec2">
-        <div id="sub1">
-          <div className="images">
+        <div id="sub2">
+          <h2>Hospital Detail</h2>
+          {/* <hr style={{margin: 'none',border: 'none', borderTop: '10px solid red', width: '5%'}}/> */}
+          <hr/>
+          <div className="hospDetails">
+            <img src={coverPhoto}/>
+            <h2>Assam Medical College</h2>
+            <h5>Dibrugarh</h5>
+            <p className="hospInfo">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Omnis amet, consequuntur ad rerum totam voluptas doloremque! Placeat quod, sequi, nemo, dolores ratione quo tempora sapiente nulla voluptatum reprehenderit atque! Necessitatibus quaerat cum fugiat vero quae nemo eos, omnis sunt minima?</p>
+            <div className="hospContactDetails">
+              <img src={phoneIcon}/>
+              <p>9876543210</p>
+            </div>
+            <div className="hospContactDetails">
+              <img src={mailIcon}/>
+              <p>hospital@gmail.com</p>
+            </div> 
+            <br/>
+          </div>
+          <div className="doctorsList">
+            <h3>Doctors list</h3>
+            <div className="doctorInfoCard">
+              <img src={ProfilePic}/>
+              <h5>Dr. Anusha Hazarika</h5>
+              <p>Cardiologist</p>
+              <button> View More</button>
+            </div>
+            <div className="doctorInfoCard">
+              <img src={ProfilePic}/>
+              <h5>Dr. Anusha Hazarika</h5>
+              <p>Cardiologist</p>
+              <button> View More</button>
+            </div>
+            <div className="doctorInfoCard">
+              <img src={ProfilePic}/>
+              <h5>Dr. Anusha Hazarika</h5>
+              <p>Cardiologist</p>
+              <button> View More</button>
+            </div>
+            <div className="doctorInfoCard">
+              <img src={ProfilePic}/>
+              <h5>Dr. Anusha Hazarika</h5>
+              <p>Cardiologist</p>
+              <button> View More</button>
+            </div>
+            <div className="doctorInfoCard">
+              <img src={ProfilePic}/>
+              <h5>Dr. Anusha Hazarika</h5>
+              <p>Cardiologist</p>
+              <button> View More</button>
+            </div>
+          </div>
+
+
+          {/* <div className="images">
             <img src={coverPhoto} id="coverImg" />
             {!user.profilePic ? (
               <a href="#">
@@ -84,7 +140,7 @@ const UserHospital = () => {
               Email :{user.email ? user.email : ""}
             </label>
             <br />
-          </div>
+          </div> */}
         </div>
       </div>
     </>

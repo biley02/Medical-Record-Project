@@ -1,0 +1,107 @@
+*{
+    margin: 0;
+}
+#sub2 {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    /* justify-content: space-between; */
+    /* height: 90vh; */
+    background: #ffffff;
+    box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    width: 100%;
+    padding: 15px 0;
+  }
+#sub2 hr{
+    border: none;
+    border-bottom: 4px solid grey;
+    width: 45%;
+    align-self: start;
+    margin: 2px 0;
+}
+#sub2>h2{
+    /* border-bottom: 5px solid grey; */
+    align-self: start;
+}
+.hospDetails{
+    width:95%;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #9edbfa;
+    margin: 20px 0;
+}
+
+.hospDetails img{
+    object-fit: fill;
+    width: 100%;
+    height: 45%;
+    margin-bottom: 15px;
+}
+
+h2, h5{
+    margin: 0;
+    margin-left: 20px;
+}
+
+.hospInfo{
+    margin-top: 16px;
+    margin-left: 20px;
+}
+.hospContactDetails{
+    display: flex;
+    margin-left: 20px;
+
+}
+.hospContactDetails img{
+    height: 25px;
+    width: 25px;
+    margin-right: 10px;
+}
+
+.doctorsList{
+    width:95%;
+    border-radius: 10px;
+    /* overflow: hidden; */
+    background-color: #9edbfa;
+    padding: 2%;
+    display: flex;
+    flex-wrap: wrap;
+}
+h3{
+    flex-basis: 100%;
+}
+.doctorInfoCard{
+    width: 23%;
+    height: 250px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 8px 8px;
+}
+
+.doctorInfoCard img{
+    height: 75px;
+    width: 75px;
+    border-radius: 50%;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.doctorInfoCard h5{
+    margin: 10px 0 5px;
+}
+
+button{
+    width: 60%;
+    height: 40px;
+    border-radius: 5px;
+    background-color: #019dfa;
+    color: white;
+    outline: none;
+    text-align: center;
+    border: none
+}
