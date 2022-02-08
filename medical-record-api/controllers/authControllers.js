@@ -221,7 +221,8 @@ module.exports.signup_post = async (req, res) => {
       errors["name"] || ""
     );
     //res.json(errors);
-    req.flash("error_msg", message);
+    // req.flash("error_msg", message);
+    console.log(errors);
     res.status(400).redirect("/user/signup");
   }
 };
