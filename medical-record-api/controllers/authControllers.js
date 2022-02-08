@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const Hospital = require("../models/Hospital");
+const Doctor = require("../models/Doctor");
 const jwt = require("jsonwebtoken");
 const { signupMail, passwordMail } = require("../config/nodemailer");
 const path = require("path");
@@ -148,6 +149,7 @@ module.exports.signup_get = (req, res) => {
 module.exports.login_get = (req, res) => {
   // console.log(req.cookies.jwt)
   const token = req.cookies.jwt;
+  console.log("jwt", token);
   if (token) {
     setError("success", false, "User already Loged in");
     return res.send(error_msg);
@@ -638,4 +640,41 @@ module.exports.picupload_post = async (req, res) => {
     }
   );
   res.redirect("/user/profile");
+};
+
+module.exports.bookappointment = async (req, res) => {
+  try {
+    const doctor = await Doctor.findById(req.params.id);
+    const user = req.user;
+    if (!doctor) {
+      setError("danger", true, "No doctor with the name exits");
+      return res.send(error_msg);
+    }
+    if (doctor.requests.includes(user._id)) {
+      setError(
+        "danger",
+        true,
+        "You have already applied for an appointment with the doctor"
+      );
+      return res.send(error_msg);
+    }
+
+    doctor.requests.push(user._id);
+    await doctor.save();
+    user.pendingRequests.push(doctor._id);
+    await user.save();
+
+    // console.log(user);
+    // console.log(doctor);
+
+    setError(
+      "success",
+      false,
+      "Appointment Booking done. Please wait till the doctor approves the request"
+    );
+    return res.send(error_msg);
+  } catch (err) {
+    setError("danger", true, "Error while booking appointment");
+    return res.send(error_msg);
+  }
 };

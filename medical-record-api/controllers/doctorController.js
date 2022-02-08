@@ -1,4 +1,5 @@
 const Doctor = require("../models/Doctor");
+const User = require("../models/User");
 const { handleErrors, generateShortId } = require("../utilities/Utilities");
 const crypto = require("crypto");
 
@@ -47,6 +48,17 @@ module.exports.public_profile = async (req, res) => {
   }
 };
 
+module.exports.login_get = (req, res) => {
+  // console.log(req.cookies.jwtDoc)
+  const token = req.cookies.jwtDoc;
+  if (token) {
+    setError("success", false, "Doctor already Loged in");
+    return res.send(error_msg);
+  }
+  setError("danger", true, "Doctor not loged in");
+  return res.send(error_msg);
+};
+
 module.exports.login_post = async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -62,9 +74,9 @@ module.exports.login_post = async (req, res) => {
         expiresIn: maxAge,
       }
     );
-    console.log(token);
+    console.log("jwtDoc", token);
 
-    res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
+    res.cookie("jwtDoc", token, { httpOnly: true, maxAge: maxAge * 1000 });
     console.log(doctor);
     setError("success", false, "successfully logged in");
     res.send(error_msg);
@@ -72,5 +84,36 @@ module.exports.login_post = async (req, res) => {
     setError("danger", true, "invalid credentials");
     // console.log(err)
     res.send(error_msg);
+  }
+};
+
+module.exports.accept_appointment = async (req, res) => {
+  try {
+    let user = await User.findById(req.params.id);
+    let doctor = req.doctor;
+    if (!doctor.requests.includes(user._id)) {
+      setError("danger", true, "User with the request doesnt exist");
+      return res.send(error_msg);
+    }
+    doctor.requests.remove(user._id);
+    //add the chat with doctor & user
+    await doctor.save();
+    console.log(doctor);
+    setError("success", false, "Accepted request");
+    return res.send(error_msg);
+  } catch (err) {
+    setError("danger", true, "Error while accepting appointment requests");
+    return res.send(error_msg);
+  }
+};
+
+module.exports.get_all_appointments = async (req, res) => {
+  try {
+    let doctor = req.doctor;
+    let appointments = await doctor.populate("requests");
+    res.send(appointments);
+  } catch (err) {
+    setError("danger", true, "Error while fetching all appointment requests");
+    return res.send(error_msg);
   }
 };

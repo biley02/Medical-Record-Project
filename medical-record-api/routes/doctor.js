@@ -58,4 +58,11 @@ router.get("/profile", requireDocAuth, doctorController.profile_get);
 router.get("/public/:id", doctorController.public_profile);
 router.post("/login", doctorController.login_post);
 
+router.get("/accept/:id", requireDocAuth, doctorController.accept_appointment);
+router.get(
+  "/appointments",
+  requireDocAuth,
+  doctorController.get_all_appointments
+);
+
 module.exports = router;
