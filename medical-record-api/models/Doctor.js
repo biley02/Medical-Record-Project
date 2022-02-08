@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Hospital = require("./Hospital");
+const User = require("./User");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
@@ -56,6 +57,12 @@ const DoctorSchema = new Schema({
   rating: {
     type: Number,
   },
+  requests: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
 
   // `date` must be of type Date. The default value is the current date
   docCreated: {

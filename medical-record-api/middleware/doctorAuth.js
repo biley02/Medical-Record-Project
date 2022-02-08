@@ -5,7 +5,7 @@ require("dotenv").config();
 
 const requireDocAuth = (req, res, next) => {
   try {
-    const token = req.cookies.jwt;
+    const token = req.cookies.jwtDoc;
     // console.log("tokens",token);
     // console.log("req",req)
     // check json web token exists & is verified
@@ -20,7 +20,7 @@ const requireDocAuth = (req, res, next) => {
           // if null then redirect to signup
           if (doctor == null) {
             console.log("doctor not found");
-            res.clearCookie("jwt");
+            res.clearCookie("jwtDoc");
             res.redirect("/doctor/signup");
             return;
           }
@@ -40,7 +40,7 @@ const requireDocAuth = (req, res, next) => {
 };
 
 const redirectDocIfLoggedIn = (req, res, next) => {
-  const token = req.cookies.jwt;
+  const token = req.cookies.jwtDoc;
   if (token) {
     console.log("already logged in");
     // req.flash("error_msg", "You are already logged in.");

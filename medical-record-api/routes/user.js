@@ -133,4 +133,7 @@ router.post(
   upload.single("profilePic"),
   authController.picupload_post
 );
+
+//user books a doctor
+router.post("/book/:id", requireAuth, authController.bookappointment);
 module.exports = router;
