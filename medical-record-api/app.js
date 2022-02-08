@@ -48,11 +48,11 @@ app.use(
 const indexRoutes = require("./routes/index");
 const userRoutes = require("./routes/user");
 const hospitalRoutes = require("./routes/hospital");
-
+const universityRoutes=require("./routes/university");
 app.use("/", indexRoutes);
 app.use("/user", userRoutes);
 app.use("/hospital", hospitalRoutes);
-
+app.use("/university", universityRoutes);
 // start the server in the port 3000 !
 app.listen(port, function () {
   console.log("Example app listening on port :", port);
